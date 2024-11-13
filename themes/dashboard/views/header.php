@@ -283,9 +283,9 @@
         <!--begin::Menu Nav-->
 
         <div class="text-center">
-          <img src="<?= base_url('assets/img/logo-2.png'); ?>" width="50px" class="img-fluid" alt="Logo">
+          <img src="<?= base_url('assets/img/logo-lab.jpg'); ?>" width="100px" class="img-fluid" alt="Logo">
           <h5 for="" class="text-center"><strong>
-              <?= $this->session->company->nm_perusahaan ?>
+              <!-- <?= $this->session->company->nm_perusahaan ?> -->
             </strong></h5>
         </div>
         <hr class="mb-0">
