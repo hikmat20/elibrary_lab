@@ -1519,7 +1519,7 @@ class Procedures extends Admin_Controller
 	public function printOut($id = null)
 	{
 		$mpdf 				= new Mpdf();
-		$mpdf->showImageErrors = true;
+		// $mpdf->showImageErrors = true;
 		$mpdf->curlAllowUnsafeSslRequests = true;
 		$procedure 			= $this->db->get_where('procedures', ['id' => $id])->row();
 		$flowDetail 		= $this->db->get_where('procedure_details', ['procedure_id' => $id, 'status' => '1'])->result();
@@ -1575,7 +1575,52 @@ class Procedures extends Admin_Controller
 		];
 
 		$this->template->set($Data);
+		$header = '<table border="1" width="100%">
+						<tr>
+							<td class="text-center text-middle" rowspan="4" style="padding: 10px;vertical-align:middle" width="120">
+								<img  width="120" src="' . base_url() . 'assets/img/logo-lab.png"/>
+							</td>
+							<td colspan="4" class="text-center">
+								<h3 class="bold">PROSES BISNIS</h3>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="4" height="50" style="vertical-align: middle;" class="text-center">
+								<h4>'. strtoupper($procedure->name). '</h4>
+							</td>
+						</tr>
+						<tr>
+							<td width="120" class="tx-12">No. Dockumen</td>
+							<td class="tx-12" width="200">: '. $procedure->nomor.'</td>
+							<td width="110" class="tx-12">Tgl. Efektif</td>
+							<td class="tx-12">: </td>
+						</tr>
+						<tr>
+							<td class="tx-12">Revisi</td>
+							<td class="tx-12">: '.(($procedure->revision_date) ? date_format(date_create($procedure->revision_date), 'd F Y') : '~'). '</td>
+							<td class="tx-12">Halaman</td>
+							<td class="tx-12">: {PAGENO} dari {nbpg}</td>
+							</tr>
+					</table>';
+
+		$mpdf->SetHTMLHeader($header,'',true);
+		$mpdf->SetWatermarkImage(base_url('assets/img/watermark-lab.png'),0.1);
+		$mpdf->showWatermarkImage = true;
+		$mpdf->AddPage(
+			'P',
+			'',
+			'',
+			'',
+			'',
+			10, // margin_left
+			10, // margin right
+			40, // margin top
+			10, // margin bottom
+			5, // margin header
+			5
+		);
 		$data = $this->template->load_view('printout');
+		$mpdf->SetHTMLFooter("<div class='text-center'><i style='font-size:11px;text-align:center'>-Uncontrolled document when downloaded or printed / Dokumen ini tidak terkendali saat diunduh atau dicetak-</i></div>");
 		$mpdf->WriteHTML($data);
 		$mpdf->Output();
 	}

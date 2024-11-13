@@ -9,7 +9,9 @@
   <style>
     *,
     body {
-      font-family: Arial, Helvetica, sans-serif;
+      /* font-family: Arial, Helvetica, sans-serif; */
+      padding: 0px;
+      margin: 0px;
     }
 
     table.table-data {
@@ -78,36 +80,56 @@
     .p-5 {
       padding: 5px;
     }
+
+    .tx-12 {
+      font-size: 12px;
+    }
+
+    .tx-13 {
+      font-size: 13px;
+    }
+
+    .tx-14 {
+      font-size: 14px;
+    }
+
+    .tx-15 {
+      font-size: 15px;
+    }
   </style>
 
 </head>
 
 <body>
 
-  <table border="1" width="100%">
+
+  <!-- <table border="1" width="100%">
     <tr>
-      <td rowspan="3" width="50%" class="text-center">
-        <h2><?= $company_name; ?></h2>
+      <td class="text-center" rowspan="4" style="padding: 10px;" width="120">
+        <img src="<?= base_url('assets/img/logo-lab.png'); ?>" width="110" height="80" alt="">
       </td>
-      <td width="120px">Nomor Dokumen</td>
-      <td><?= $procedure->nomor; ?></td>
+      <td colspan="4" class="text-center">
+        <h3 class="bold">PROSES BISNIS</h3>
+      </td>
     </tr>
     <tr>
-      <td>Revisi</td>
-      <td><?= ($procedure->revision) ?: '~'; ?></td>
-    </tr>
-    <tr>
-      <td>Tgl. Revisi</td>
-      <td><?= ($procedure->revision_date) ? date_format(date_create($procedure->revision_date), 'd F Y') : '~'; ?></td>
-    </tr>
-    <tr>
-      <td class="text-center" style="background-color: #000;color:#fff">
+      <td colspan="4" height="50" style="vertical-align: middle;" class="text-center">
         <h4><?= strtoupper($procedure->name); ?></h4>
       </td>
-      <td>Halaman</td>
-      <td>{PAGENO} of {nbpg}</td>
     </tr>
-  </table>
+    <tr>
+      <td width="120" class="tx-12">No. Dockumen</td>
+      <td class="tx-12">: </td>
+      <td width="110" class="tx-12">Tgl. Efektif</td>
+      <td class="tx-12">: </td>
+    </tr>
+    <tr>
+      <td class="tx-12">Revisi</td>
+      <td class="tx-12">: </td>
+      <td class="tx-12">Halaman</td>
+      <td class="tx-12">: </td>
+    </tr>
+  </table> -->
 
   <div class="">
     <!-- HEADER -->
@@ -283,6 +305,9 @@
           }
           ?>
         </td>
+      </tr>
+      <tr>
+        <td colspan="2" class="text-center"><i>-Divalidasi oleh Sistem sehingga tidak perlu membubuhkan tanda tangan-</i></td>
       </tr>
     </table>
   </div>
