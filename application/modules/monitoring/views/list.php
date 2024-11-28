@@ -14,6 +14,7 @@
     </div>
     <div class="card">
       <div class="pt-1 px-3 card-body">
+        
         <!-- PRODEDURES -->
         <table class="table table-hover datatable">
           <thead>
@@ -141,6 +142,7 @@
 
 <script>
   $(document).ready(function() {
+
     table = $('.datatable').DataTable({
       lengthChange: false
     })

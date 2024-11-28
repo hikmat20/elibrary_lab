@@ -210,7 +210,7 @@
      };
  </script>
  <!-- REQUIRED JS SCRIPTS -->
- <script src="<?= base_url('assets/plugins/jQuery/jquery-2.2.3.min.js'); ?>"></script>
+ <script src="<?= base_url('themes/dashboard/assets/js/jquery-3.3.1.min.js'); ?>"></script>
  <script src="<?= base_url(); ?>themes/dashboard/assets/plugins/global/plugins.bundle1036.js?"></script>
  <script src="<?= base_url(); ?>themes/dashboard/assets/plugins/custom/prismjs/prismjs.bundle1036.js?"></script>
  <script src="<?= base_url(); ?>themes/dashboard/assets/js/scripts.bundle1036.js?"></script>
