@@ -134,82 +134,77 @@
   <div class="">
     <!-- HEADER -->
 
-    <h3><strong>TUJUAN</strong></h3>
-    <table>
+    <h4><strong>TUJUAN</strong></h4>
+    <?= ($procedure->object); ?>
+    <br>
+
+    <h4><strong>RUANG LINGKUP</strong></h4>
+    <?= $procedure->scope; ?>
+    <br>
+
+    <h4><strong>DEFINISI</strong></h4>
+    <?= $procedure->define; ?>
+    <br>
+
+    <h4><strong>PERFORMA INDIKATOR</strong></h4>
+    <?= $procedure->performance; ?>
+    <br>
+
+    <h4>REFERENSI</h4>
+    <?php if ($ArrStd) : ?>
+      <?php foreach ($ArrStd as $std) : ?>
+        <h4><?= $std->name; ?></h4>
+        <ul>
+          <?php if ($ArrData['standards'][$std->requirement_id]) : ?>
+            <?php $n = 0;
+            foreach ($ArrData['standards'][$std->requirement_id] as $dtStd) : $n++; ?>
+              <li><?= $dtStd->chapter; ?></li>
+          <?php endforeach;
+          endif; ?>
+        </ul>
+        <br>
+      <?php endforeach; ?>
+    <?php else : ?>
+      ~ Not available data ~
+    <?php endif; ?>
+    <br>
+
+    <h4>SIPOCOR</h4>
+    <table width="100%">
       <tr>
-        <td>
-          <div class="">
-            <?= ($procedure->object); ?>
-          </div>
+        <td width="50%">
+          <h5 style="padding-bottom:10px;">1. Supplier</h5>
+          <p><?= $procedure->supplier; ?></p>
+          <br><br>
+          <h5 style="padding-bottom:10px;">3. Process</h5>
+          <?= $procedure->process; ?>
+          <br><br>
+           <h5 style="padding-bottom:10px;">5. Customer</h5>
+          <?= $procedure->customer; ?>
+          <br><br>
+          <h5 style="padding-bottom:10px;">7. Risk</h5>
+          <?= $procedure->risk; ?>
+          <br><br>
+        </td>
+        <td width="50%">
+          <h5 style="padding-bottom:10px;">2. Input</h5>
+          <?= $procedure->input; ?>
+          <br><br>
+          <h5 style="padding-bottom:10px;">4. Output</h5>
+          <?= $procedure->output; ?>
+          <br><br>
+          <h5 style="padding-bottom:10px;">6. Objective</h5>
+          <?= $procedure->objective; ?>
+          <br><br>
+          <h5 style="padding-bottom:10px;">8. Mitigation</h5>
+          <?= $procedure->mitigation; ?>
+          <br><br>
         </td>
       </tr>
     </table>
     <br>
 
-    <h3><strong>RUANG LINGKUP</strong></h3>
-    <table class="">
-      <tr>
-        <td>
-          <div class="">
-            <?= $procedure->scope; ?>
-          </div>
-        </td>
-      </tr>
-    </table>
-    <br>
-
-    <h3><strong>DEFINISI</strong></h3>
-    <table>
-      <tr>
-        <td>
-          <div class="">
-            <?= $procedure->define; ?>
-          </div>
-        </td>
-      </tr>
-    </table>
-    <br>
-
-    <h3><strong>PERFORMA INDIKATOR</strong></h3>
-    <table>
-      <tr>
-        <td>
-          <div class="">
-            <?= $procedure->performance; ?>
-          </div>
-        </td>
-      </tr>
-    </table>
-    <br>
-
-    <h3>REFERENSI</h3>
-    <table>
-      <tbody>
-        <tr>
-          <td>
-            <?php if ($ArrStd) : ?>
-              <?php foreach ($ArrStd as $std) : ?>
-                <h3><?= $std->name; ?></h3>
-                <ul>
-                  <?php if ($ArrData['standards'][$std->requirement_id]) : ?>
-                    <?php $n = 0;
-                    foreach ($ArrData['standards'][$std->requirement_id] as $dtStd) : $n++; ?>
-                      <li><?= $dtStd->chapter; ?></li>
-                  <?php endforeach;
-                  endif; ?>
-                </ul>
-                <br>
-              <?php endforeach; ?>
-            <?php else : ?>
-              <div class="text-center">~ Not available data ~</div>
-            <?php endif; ?>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <br>
-
-    <h3>FLOW PROCEDURE</h3>
+    <h4>FLOW PROCEDURE</h4>
     <?php if ($procedure->image_flow_1 || $procedure->image_flow_2 || $procedure->image_flow_3) : ?>
       <?php if ($procedure->image_flow_1) : ?>
         <img height="600px" src="<?= base_url("directory/FLOW_IMG/$procedure->company_id/$procedure->image_flow_1"); ?>" alt="image_flow_1" class="img-fluid">
@@ -221,15 +216,15 @@
         <img height="600px" src="<?= base_url("directory/FLOW_IMG/$procedure->company_id/$procedure->image_flow_3"); ?>" alt="image_flow_3" class="img-fluid">
       <?php endif; ?>
     <?php else : ?>
-      <p>~ Not available data ~</p>
+      ~ Not available data ~
     <?php endif; ?>
 
     <?php if ($procedure->link_video) : ?>
-      <h3>VIDEO</h3>
+      <h4>VIDEO</h4>
       <a href="<?= ($procedure->link_video); ?>">Link Video</a>
     <?php endif; ?>
     <br>
-    <h3>FLOW DETAIL</h3>
+    <h4>FLOW DETAIL</h4>
     <table class="table-data" style="font-size: 11px;">
       <thead>
         <tr class="table-secondary">
@@ -276,7 +271,7 @@
     </table>
 
     <br>
-    <h3>DATA APPROVAL</h3>
+    <h4>DATA APPROVAL</h4>
     <table class="table-data">
       <tr>
         <td class="text-left" width="180">Prepared By</td>
