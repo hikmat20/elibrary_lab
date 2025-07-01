@@ -101,12 +101,26 @@
 									<label for="" class="col-4 col-form-label font-weight-bold">Status</label>
 									<div class="col-8">
 										<select name="status" id="status" class="form-control select2">
-											<option value="PUB" <?= ($data->status == 'PUB') ? 'selected' : ''; ?>>Publish</option>
 											<option value="DFT" <?= ($data->status == 'DFT') ? 'selected' : ''; ?>>Draft</option>
+											<option value="PUB" <?= ($data->status == 'PUB') ? 'selected' : ''; ?>>Berlaku</option>
+											<option value="EXP" <?= ($data->status == 'EXP') ? 'selected' : ''; ?>>Dicabut</option>
+											<option value="CH" <?= ($data->status == 'CH') ? 'selected' : ''; ?>>Diubah</option>
 										</select>
 									</div>
 								</div>
-
+								<div id="reg_relate" class="mb-3 <?= ($data->regulation_relation)?'':'d-none' ; ?> row flex-nowrap">
+									<label for="" class="col-4 col-form-label font-weight-bold">Regulation Relate</label>
+									<div class="col-8">
+										<select name="regulation_relation" id="regulation_relation" class="form-control select2">
+											<option value=""></option>
+											<?php if ($listReg) foreach ($listReg as $reg):
+												$name = $reg->category_name . " " . $reg->nomenclature . (($reg->number) ? " No. " . $reg->number : '') . " " . $reg->year;
+											?>
+												<option value="<?= $reg->id; ?>" <?= ($reg->id == $data->regulation_relation) ? 'selected' : ''; ?>><?= $name; ?></option>
+											<?php endforeach; ?>
+										</select>
+									</div>
+								</div>
 							</div>
 
 							<!--  -->
@@ -329,6 +343,14 @@
 
 <script>
 	$(document).ready(function() {
+		$(document).on('change', '#status', function(e) {
+			if ($(this).val() == 'CH') {
+				$('#reg_relate').removeClass('d-none')
+			} else {
+				$('#reg_relate').addClass('d-none').find('select#regulation_relation').val('').change()
+			}
+		})
+
 		$(document).on('paste keypress', '.-numeric', function(e) {
 			const element = $(this)
 			element.removeClass('is-invalid')

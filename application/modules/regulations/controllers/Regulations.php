@@ -18,8 +18,8 @@ class Regulations extends Admin_Controller
 
 	public function index()
 	{
-		$data			= $this->db->get_where('regulations', ['status' => 'PUB'])->result();
-		$drafts			= $this->db->get_where('regulations', ['status' => 'DFT'])->result();
+		$data			= $this->db->where_in('status', ['PUB', 'EXP', 'CH'])->get('view_regulations')->result();
+		$drafts			= $this->db->get_where('view_regulations', ['status' => 'DFT'])->result();
 
 		$dataRegSjb 	= $this->db->get_where('regulation_subjects')->result();
 		$dataRegScp 	= $this->db->get_where('regulation_scopes')->result();
@@ -34,10 +34,24 @@ class Regulations extends Admin_Controller
 			$ArrRegScp[$dtRegScp->regulation_id][] = $dtRegScp;
 		}
 
+		$status = [
+			'PUB' => 'Berlaku',
+			'EXP' => 'Dicabut',
+			'CH' => 'Diubah',
+		];
+
+		$listReg 	= $this->db->get_where('view_regulations', ['status' => 'PUB'])->result();
+		$ArrReg = [];
+		foreach ($listReg as $reg) {
+			$ArrReg[$reg->id] = $reg->category_name . " " . $reg->nomenclature . (($reg->number) ? " No. " . $reg->number : '') . " " . $reg->year;
+		}
+
 		$this->template->set('data', $data);
 		$this->template->set('drafts', $drafts);
 		$this->template->set('ArrRegSjb', $ArrRegSjb);
+		$this->template->set('status', $status);
 		$this->template->set('ArrRegScp', $ArrRegScp);
+		$this->template->set('ArrReg', $ArrReg);
 		$this->template->render('index');
 	}
 
@@ -46,11 +60,13 @@ class Regulations extends Admin_Controller
 		$category 	= $this->db->get_where('regulation_category')->result();
 		$scopes 	= $this->db->get_where('scopes')->result();
 		$subjects 	= $this->db->get_where('subjects')->result();
+		$listReg 	= $this->db->get_where('view_regulations', ['status' => 'PUB'])->result();
 
 		$this->template->set([
 			'title' 	=> 'Add New Regulation',
 			'category' 	=> $category,
 			'scopes' 	=> $scopes,
+			'listReg' 	=> $listReg,
 			'subjects' 	=> $subjects,
 		]);
 		$this->template->render('add');
@@ -84,6 +100,9 @@ class Regulations extends Admin_Controller
 			$ArrPhar[$regPh->pasal_id][] = $regPh;
 		}
 
+		$listReg = $this->db->get_where('view_regulations', ['status' => 'PUB'])->result();
+
+
 		if ($Data) {
 			$this->template->set([
 				'title' 		=> 'Edit Regulation',
@@ -94,6 +113,7 @@ class Regulations extends Admin_Controller
 				'ArrRegSjb' 	=> $ArrRegSjb,
 				'ArrRegScp' 	=> $ArrRegScp,
 				'pasal' 		=> $pasal,
+				'listReg' 		=> $listReg,
 				'ArrPhar' 		=> $ArrPhar,
 			]);
 

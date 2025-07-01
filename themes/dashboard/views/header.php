@@ -9,7 +9,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
   <link rel="shortcut icon" href="<?= base_url(); ?>assets/img/logo.png" />
 
-  <script src="<?= base_url('themes/dashboard/assets/js/jquery-3.3.1.min.js'); ?>"></script>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
   <link href="<?= base_url(); ?>themes/dashboard/assets/plugins/global/plugins.bundle1036.css?v=2.1.1" rel="stylesheet" type="text/css" />
   <link href="<?= base_url(); ?>themes/dashboard/assets/plugins/custom/prismjs/prismjs.bundle1036.css?v=2.1.1" rel="stylesheet" type="text/css" />
@@ -19,8 +18,10 @@
   <link href="<?= base_url(); ?>themes/dashboard/assets/plugins/custom/datatables/datatables.bundle1036.css" rel="stylesheet" type="text/css" />
   <link href="<?= base_url(); ?>themes/dashboard/assets/plugins/custom/monthpicker/MonthPicker.css" rel="stylesheet" type="text/css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <script src="<?= base_url('assets/plugins/jQuery/jquery-2.2.3.min.js'); ?>"></script>
   <link href="<?= base_url(); ?>themes\dashboard\assets\plugins\custom\jquery-ui\jquery-ui.min.css" rel="stylesheet" type="text/css" />
   <link href="<?= base_url(); ?>themes\dashboard\assets\plugins\custom\summernote\summernote-bs4.min.css" rel="stylesheet" type="text/css" />
+
   <script src="<?= base_url('themes/dashboard/assets/plugins/custom/pdf/pdf.js'); ?>"></script>
   <script src="<?= base_url('themes/dashboard/assets/plugins/custom/pdf/pdf.worker.js'); ?>"></script>
 
@@ -142,10 +143,7 @@
       left: -300px;
       width: 300px;
     }
-  </style>
-
-
-  <style>
+ 
     .loaders {
       display: -webkit-box;
       display: -ms-flexbox;
@@ -282,9 +280,9 @@
         <!--begin::Menu Nav-->
 
         <div class="text-center">
-          <img src="<?= base_url('assets/img/logo-lab.jpg'); ?>" width="100px" class="img-fluid" alt="Logo">
+          <img src="<?= base_url('assets/img/logo-2.png'); ?>" width="50px" class="img-fluid" alt="Logo">
           <h5 for="" class="text-center"><strong>
-              <!-- <?= $this->session->company->nm_perusahaan ?> -->
+              <?= $this->session->company->nm_perusahaan ?>
             </strong></h5>
         </div>
         <hr class="mb-0">

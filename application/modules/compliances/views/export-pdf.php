@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pemenuhan Regulasi <?= $ArrReg[0]->nm_perusahaan; ?></title>
+  <title>Pemenuhan Regulasi</title>
   <style>
     *,
     body {
@@ -101,8 +101,8 @@
     <tr>
       <th width="100" class="text-left">Company</th>
       <td>: <?= $reference->nm_perusahaan; ?></td>
-      <th width="100" class="text-left">State</th>
-      <td>: <?= $reference->status; ?></td>
+      <th width="100" class="text-left"></th>
+      <td></td>
       <th width="100" class="text-left">Created On</th>
       <td width="100">: <?= $reference->sdate; ?></td>
     </tr>
@@ -180,7 +180,7 @@
               <td width="300">
                 <strong><?= $dt->pasal_name; ?></strong>
                 <br>
-                (<?= $dt->ayat; ?>) <?= $dt->description_ayat; ?>
+                <?= ($dt->ayat) ? "(" . $dt->ayat . ")" : '' ?> <?= ($dt->description_ayat); ?>
               </td>
               <td><?= $dt->compliance_desc; ?></td>
               <td class="text-center <?= ($dt->status == 'NCM') ? 'bg-red' : ''; ?>"><?= $status[$dt->status]; ?></td>

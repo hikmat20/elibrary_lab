@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'codeigniter/framework',
-        'pretty_version' => 'dev-master',
-        'version' => 'dev-master',
-        'reference' => '2c06bc432f4d5482436599db5634466e90a60606',
+        'pretty_version' => 'dev-develop',
+        'version' => 'dev-develop',
+        'reference' => '1ae5325f14dfb2548bd7d725f27bf504e4a2573c',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -11,9 +11,9 @@
     ),
     'versions' => array(
         'codeigniter/framework' => array(
-            'pretty_version' => 'dev-master',
-            'version' => 'dev-master',
-            'reference' => '2c06bc432f4d5482436599db5634466e90a60606',
+            'pretty_version' => 'dev-develop',
+            'version' => 'dev-develop',
+            'reference' => '1ae5325f14dfb2548bd7d725f27bf504e4a2573c',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

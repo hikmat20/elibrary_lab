@@ -75,6 +75,7 @@ $route['list/materi/(:any)'] = 'documents_list/materi/$1';
 
 /* MATERI GUIDES */
 $route['list/guides'] = 'documents_list/guides';
+$route['list/guides/view_file_guides/(:any)'] = 'documents_list/view_file_guides/$1';
 $route['list/guides/(:any)'] = 'documents_list/guides/$1';
 
 /* MATERI GUIDES */

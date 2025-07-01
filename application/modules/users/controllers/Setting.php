@@ -326,7 +326,7 @@ class Setting extends Admin_Controller
         $data['ip']     = $this->input->ip_address();
         $company_id     = $data['company_id'];
         unset($data['company_id']);
-
+    
         /**
          * This code will benchmark your server to determine how high of a cost you can
          * afford. You want to set the highest cost that you can without slowing down
@@ -345,15 +345,17 @@ class Setting extends Admin_Controller
         } while (($end - $start) < $timeTarget);
 
 
-        $options = [
-            'cost' => $cost,
-            'salt' => mcrypt_create_iv(22, MCRYPT_DEV_URANDOM)
-        ];
+        // $options = [
+        //     'cost' => $cost,
+        //     'salt' => mcrypt_create_iv(22, MCRYPT_DEV_URANDOM)
+        // ];
+       
         if ($data['password']) {
-            $data['password'] = password_hash($data['password'], PASSWORD_BCRYPT, $options);
+            $data['password'] = password_hash($data['password'], PASSWORD_BCRYPT);
         } else {
             unset($data['password']);
         }
+
         // $data['photo'] = null;
         if ($_FILES['profile_avatar']['name']) {
             $config['upload_path']          = './assets/img/avatar/';

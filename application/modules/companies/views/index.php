@@ -7,7 +7,7 @@
 					<div class="mt-4 float-right ">
 						<?php if ($this->session->company->id_perusahaan == '1') : ?>
 							<button type="button" class="btn btn-primary" id="addCompany" title="Add New Company">
-								<i class="fa fa-plus mr-1"></i>Add New Commpany
+								<i class="fa fa-plus mr-1"></i>Add New Company
 							</button>
 						<?php endif; ?>
 
@@ -68,20 +68,19 @@
 	</div>
 </div>
 <!-- Modal -->
+
 <div class="modal fade" id="modalView" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-	<div class="modal-dialog modal-dialog-centered modal-lg">
+	<div class="modal-dialog modal-xl">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="staticBackdropLabel">View Standard</h5>
+				<h5 class="modal-title" id="staticBackdropLabel"></h5>
 				<span class="close btn-cls" data-dismiss="modal" aria-label="Close"></span>
 			</div>
 			<div class="modal-body">
 			</div>
-			<div class="modal-footer justify-content-between">
-				<button type="button" class="btn btn-primary save w-100px"><i class="fa fa-save"></i>Save</button>
-				<div class="float-right">
-					<button type="button" class="btn btn-danger text-right" onclick="clear($('.modal-body'));setTimeout(()=>{$('.save').removeClass('d-none')},500)" data-dismiss="modal">Close</button>
-				</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary save min-w-100px"><i class="fa fa-save"></i>Save</button>
+				<button type="button" class="btn btn-danger text-right" onclick="clear($('.modal-body'));setTimeout(()=>{$('.save').removeClass('d-none')},500)" data-dismiss="modal"><i class="fa fa-times" aria-hidden="true"></i> Close</button>
 			</div>
 		</div>
 	</div>
@@ -104,9 +103,45 @@
 			// info: false
 		});
 
+		$(document).on('click', '#add-branch', function() {
+			let branchList, n = 0;
+			n = $('.card.branch').length + 1
+			branchList = `
+			<div class="card branch border-info mb-3">
+				<div class="card-header p-3">
+					<h4 class="card-title font-weight-bolder mb-0"><i class="fas fa-code-branch text-dark"></i> Branch #${n}</h4>
+				</div>
+				<div class="card-body p-4">
+					<div class="mb-3 row flex-nowrap">
+						<label for="" class="col-3 col-form-label font-weight-bold">Company Branch Name <span class="text-danger">*</span></label>
+						<div class="col">
+							<input type="text" name="branch[${n}][branch_name]" id="branch${n}" class="form-control required" placeholder="Branch Name">
+							<span class="invalid-feedback">Company Branch Name can't be empty</span>
+						</div>
+					</div>
+					<div class="mb-3 row flex-nowrap">
+						<label for="" class="col-3 col-form-label font-weight-bold">Address <span class="text-danger">*</span></label>
+						<div class="col">
+							<textarea name="branch[${n}][address]" id="branch${n}" class="form-control required" placeholder="Addrass"></textarea>
+							<span class="invalid-feedback">Address Branch can't be empty</span>
+						</div>
+					</div>
+					<div class="mb-3 row flex-nowrap">
+						<label for="" class="col-3 col-form-label font-weight-bold">City <span class="text-danger">*</span></label>
+						<div class="col-4">
+							<input type="text" name="branch[${n}][city]" id="branch${n}" class="form-control required" placeholder="City">
+							<span class="invalid-feedback">City Branch can't be empty</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			`;
+			$('div#branch-list').append(branchList)
+		})
+
 		$(document).on('click', '#addCompany', function() {
 			const url = siteurl + active_controller + 'add';
-			$('.modal-title').html('Add New Company')
+			$('.modal-title').html('<i class="fa fa-building text-dark" aria-hidden="true"></i> Add New Company')
 			$('#modalView').modal('show')
 			$('.modal-body').load(url)
 		})
@@ -130,14 +165,7 @@
 		})
 
 		$(document).on('click', '.save', function(e) {
-			const nm_perusahaan = $('#nm_perusahaan')
-			const alamat = $('#alamat')
-			const kota = $('#kota')
-			const inisial = $('#inisial')
-			validation(nm_perusahaan)
-			validation(alamat)
-			validation(kota)
-			validation(inisial)
+			validation($('.required'))
 			let formdata = new FormData($('#form-company')[0])
 			let btn = $(this)
 			$.ajax({
@@ -150,7 +178,7 @@
 				cache: false,
 				beforeSend: function() {
 					btn.attr('disabled', true)
-					btn.html('<i class="spinner spinner-border-sm"></i>Loading...')
+					btn.html('<i class="spinner spinner-border-sm mr-3"></i>Loading...')
 				},
 				complete: function() {
 					btn.attr('disabled', false)
@@ -217,7 +245,7 @@
 				cache: false,
 				beforeSend: function() {
 					btn.attr('disabled', true)
-					btn.html('<i class="spinner spinner-border-sm"></i>Loading...')
+					btn.html('<i class="spinner spinner-border-sm mr-3"></i>Loading...')
 				},
 				complete: function() {
 					btn.attr('disabled', false)
@@ -260,11 +288,17 @@
 	})
 
 	function validation(field) {
-		if (field.val() == '' || field.val() == null) {
-			field.addClass('is-invalid')
+		let err = 0;
+		$.each($('.required'), function(i, field) {
+			if ($(field).val() == '' || $(field).val() == null) {
+				$(field).addClass('is-invalid')
+				err++
+			} else {
+				$(field).removeClass('is-invalid')
+			}
+		})
+		if (err > 0) {
 			exit();
-		} else {
-			field.removeClass('is-invalid')
 		}
 	}
 

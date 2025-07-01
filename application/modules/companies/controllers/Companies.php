@@ -42,19 +42,56 @@ class Companies extends Admin_Controller
 
     public function save()
     {
-        $data       = $this->input->post();
+        try {
+            $post       = $this->input->post();
+            $data       = $post;
+            $branch     = isset($data['branch']) ? $data['branch'] : '';
+            unset($data['branch']);
+            $dataBranch = [];
+            $this->db->trans_begin();
+            if ($data) {
+                if (isset($data['id_perusahaan']) && $data['id_perusahaan']) {
+                    $data['modified_at'] = date('Y-m-d H:i:s');
+                    $data['modified_by'] = $this->auth->user_id();
+                    $this->db->update('companies', $data, ['id_perusahaan' => $data['id_perusahaan']]);
+                } else {
+                    $data['created_at'] = date('Y-m-d H:i:s');
+                    $data['created_by'] = $this->auth->user_id();
+                    $this->db->insert('companies', $data);
+                }
 
-        $this->db->trans_begin();
-        if ($data) {
-            if (isset($data['id_perusahaan']) && $data['id_perusahaan']) {
-                $data['modified_at'] = date('Y-m-d H:i:s');
-                $data['modified_by'] = $this->auth->user_id();
-                $this->db->update('companies', $data, ['id_perusahaan' => $data['id_perusahaan']]);
+                /* Branch */
+                if ($branch) foreach ($branch as $k => $val) {
+                    $dataBranch = [
+                        'branch_name' => $val['branch_name'],
+                        'branch_name' => $val['branch_name'],
+                        'branch_address' => $val['address'],
+                        'branch_city' => $val['city'],
+                    ];
+
+
+                    if (isset($val['id'])) {
+                        $dataBranch['company_id'] = $data['id_perusahaan'];
+                        $dataBranch['modified_at'] = date('Y-m-d H:i:s');
+                        $dataBranch['modified_by'] = $this->auth->user_id();
+                        $this->db->update('company_branch', $dataBranch, ['id' => $val['id']]);
+                    } else {
+                        $dataBranch['company_id'] = ($data['id_perusahaan']) ?: $this->db->insert_id('companies');
+                        $dataBranch['created_at'] = date('Y-m-d H:i:s');
+                        $dataBranch['created_by'] = $this->auth->user_id();
+                        $this->db->insert('company_branch', $dataBranch);
+                    }
+                }
             } else {
-                $data['created_at'] = date('Y-m-d H:i:s');
-                $data['created_by'] = $this->auth->user_id();
-                $this->db->insert('companies', $data);
+                $this->db->trans_rollback();
+                $return        = array(
+                    'status'        => 0,
+                    'msg'            => 'Data not valid. Please Try Again!'
+                );
+                echo json_encode($return);
+                return false;
             }
+
             if ($this->db->trans_status() === FALSE) {
                 $this->db->trans_rollback();
                 $return        = array(
@@ -68,13 +105,14 @@ class Companies extends Admin_Controller
                     'msg'            => 'Data company successfull saved. Thanks you.'
                 );
             }
-        } else {
-            $this->db->trans_commit();
+        } catch (\Throwable $th) {
+            $this->db->trans_rollback();
             $return        = array(
                 'status'        => 0,
-                'msg'            => 'Data not valid. Please Try Again!'
+                'msg'            => $th->getMessage(),
             );
         }
+
         echo json_encode($return);
     }
 
@@ -82,15 +120,15 @@ class Companies extends Admin_Controller
     public function edit($id = null)
     {
         $data = $this->db->get_where('companies', ['id_perusahaan' => $id])->row();
-        $this->template->set('data', $data);
-        $this->template->render('edit');
+        $branch = $this->db->get_where('company_branch', ['company_id' => $id])->result();
+        $this->template->render('edit', ['data' => $data, 'branch' => $branch]);
     }
 
     public function view($id = null)
     {
         $data = $this->db->get_where('companies', ['id_perusahaan' => $id])->row();
-        $this->template->set('data', $data);
-        $this->template->render('view');
+        $branch = $this->db->get_where('company_branch', ['company_id' => $id])->result();
+        $this->template->render('view', ['data' => $data, 'branch' => $branch]);
     }
 
     public function load_data()

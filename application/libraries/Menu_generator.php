@@ -388,7 +388,7 @@ class Menu_generator
 	public function show_menus_new($type = 1)
 	{
 		$html = '';
-		$group = $this->ci->session->group;
+		$group 		= $this->ci->session->group;
 		$company    = $this->ci->session->company->id_perusahaan;
 		$ArrMenu	= array();
 		// if ($group->role == '1') {
@@ -411,21 +411,20 @@ class Menu_generator
 				$ArrMenu[$key]['Menu']['icon']		= $val['icon'];
 				$ArrMenu[$key]['Menu']['flag_new']	= $val['flag_new'];
 			}
-
 			$childs = array();
 
 			foreach ($ArrMenu as &$item) {
 				$childs[$item['Menu']['parent_id']][] = &$item['Menu'];
 				unset($item);
 			}
-
+			
 			foreach ($ArrMenu as &$item) {
 				if (isset($childs[$item['Menu']['id']])) {
 					$item['Menu']['child'] = $childs[$item['Menu']['id']];
 					unset($childs[$item['Menu']['id']]);
 				}
 			}
-
+			
 			//	pr($childs);exit;
 			//	menu that has no parent, append it as parent
 			if (count($childs) > 0) {

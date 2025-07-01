@@ -47,8 +47,8 @@
 									<tr class="text-center">
 										<th class="p-2" width="40">No.</th>
 										<th class="p-2 text-left">Nama</th>
-										<th class="p-2" width="100">Status</th>
-										<th class="p-2" width="100">Action</th>
+										<th class="p-2" width="130">Status</th>
+										<th class="p-2" width="70">Action</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -92,8 +92,8 @@
 									<tr class="text-center">
 										<th class="p-2" width="40">No.</th>
 										<th class="p-2 text-left">Nama</th>
-										<th class="p-2" width="100">Status</th>
-										<th class="p-2" width="100">Action</th>
+										<th class="p-2" width="130">Status</th>
+										<th class="p-2" width="70">Action</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -124,8 +124,8 @@
 									<tr class="text-center">
 										<th class="p-2" width="40">No.</th>
 										<th class="p-2 text-left">Nama</th>
-										<th class="p-2" width="100">Status</th>
-										<th class="p-2" width="100">Action</th>
+										<th class="p-2" width="130">Status</th>
+										<th class="p-2" width="70">Action</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -158,8 +158,8 @@
 									<tr class="text-center">
 										<th class="p-2" width="40">No.</th>
 										<th class="p-2 text-left">Nama</th>
-										<th class="p-2" width="150">Status</th>
-										<th class="p-2" width="100">Action</th>
+										<th class="p-2" width="130">Status</th>
+										<th class="p-2" width="70">Action</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -194,8 +194,8 @@
 										<th class="p-2" width="40">No.</th>
 										<th class="p-2 text-left">Nama</th>
 										<th class="p-2 text-left">Reason</th>
-										<th class="p-2" width="100">Status</th>
-										<th class="p-2" width="100">Action</th>
+										<th class="p-2" width="130">Status</th>
+										<th class="p-2" width="70">Action</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -230,8 +230,8 @@
 									<tr class="text-center">
 										<th class="p-2" width="40">No.</th>
 										<th class="p-2 text-left">Nama</th>
-										<th class="p-2" width="100">Status</th>
-										<th class="p-2" width="100">Action</th>
+										<th class="p-2" width="130">Status</th>
+										<th class="p-2" width="70">Action</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -262,8 +262,8 @@
 									<tr class="text-center">
 										<th class="p-2" width="40">No.</th>
 										<th class="p-2 text-left">Nama</th>
-										<th class="p-2" width="100">Status</th>
-										<th class="p-2" width="100">Action</th>
+										<th class="p-2" width="130">Status</th>
+										<th class="p-2" width="70">Action</th>
 									</tr>
 								</thead>
 								<tbody>

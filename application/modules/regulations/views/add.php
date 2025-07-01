@@ -94,8 +94,23 @@
 									<label for="" class="col-4 col-form-label font-weight-bold">Status</label>
 									<div class="col-8">
 										<select name="status" id="status" class="form-control select2">
-											<option value="PUB">Publish</option>
 											<option value="DFT">Draft</option>
+											<option value="PUB">Berlaku</option>
+											<option value="EXP">Dicabut</option>
+											<option value="CH">Diubah</option>
+										</select>
+									</div>
+								</div>
+								<div id="reg_relate" class="mb-3 row d-none flex-nowrap">
+									<label for="" class="col-4 col-form-label font-weight-bold">Regulation Relate</label>
+									<div class="col-8">
+										<select name="regulation_relation" id="regulation_relation" class="form-control select2">
+											<option value=""></option>
+											<?php if ($listReg) foreach ($listReg as $reg):
+												$name = $reg->category_name . " " . $reg->nomenclature . (($reg->number) ? " No. " . $reg->number : '') . " " . $reg->year;
+											?>
+												<option value="<?= $reg->id; ?>"><?= $name; ?></option>
+											<?php endforeach; ?>
 										</select>
 									</div>
 								</div>
@@ -205,7 +220,14 @@
 
 <script>
 	$(document).ready(function() {
-
+		$(document).on('change', '#status', function(e) {
+			if ($(this).val() == 'CH') {
+				$('#reg_relate').removeClass('d-none')
+			} else {
+				$('#reg_relate').addClass('d-none').find('select#regulation_relation').val('').change()
+			}
+		})
+		
 		$(document).on('paste keypress', '.-numeric', function(e) {
 			const element = $(this)
 			element.removeClass('is-invalid')

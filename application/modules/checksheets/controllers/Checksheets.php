@@ -1,5 +1,7 @@
 <?php
+
 defined('BASEPATH') or exit('No direct script access allowed');
+use Mpdf\Mpdf;
 
 class Checksheets extends Admin_Controller
 {
@@ -349,11 +351,50 @@ class Checksheets extends Admin_Controller
 							$item['modified_by'] = $this->auth->user_id();
 							$item['modified_at'] = date('Y-m-d H:i:s');
 							$this->db->update('checksheet_data_items', $item, ['id' => $item['id']]);
+							$id_item = $item['id'];
+							$check_checksheet = $this->db->select('checksheet_data_number,number')->from('checksheet_process_data')
+								->join('checksheet_process_dir', 'checksheet_process_data.dir_id = checksheet_process_dir.id')
+								->where(['checksheet_process_dir.status' => '1', 'checksheet_process_data.checksheet_data_number' => $data['number'], 'YEAR(checksheet_process_data.periode)' => date('Y')])
+								->get()->result();
+
+							if (count($check_checksheet) > 0) {
+								unset($item['modified_by']);
+								unset($item['modified_at']);
+								unset($item['checksheet_data_number']);
+								unset($item['id']);
+								foreach ($check_checksheet as $insert_item) {
+									$where = ['checksheet_item_id' => $id_item, 'checksheet_process_data_number' => $insert_item->number];
+									$this->db->update('checksheet_process_details', $item, $where);
+								}
+							}
+
+							// $this->db->update('checksheet_process_details', [
+							// 	'item_name' => $item['item_name'],
+							// 	'standard_check' => $item['standard_check'],
+							// 	'check_type' => $item['check_type'],
+							// ], ['checkheet_item_id' => $item['id']]);
+
 						} else {
 							$item['created_by'] = $this->auth->user_id();
 							$item['created_at'] = date('Y-m-d H:i:s');
 							$item['checksheet_data_number'] = $data['number'];
 							$this->db->insert('checksheet_data_items', $item);
+							$id_item = $this->db->insert_id();
+							$check_checksheet = $this->db->select('checksheet_data_number,number')->from('checksheet_process_data')
+								->join('checksheet_process_dir', 'checksheet_process_data.dir_id = checksheet_process_dir.id')
+								->where(['checksheet_process_dir.status' => '1', 'checksheet_process_data.checksheet_data_number' => $data['number'], 'YEAR(checksheet_process_data.periode)' => date('Y')])
+								->get()->result();
+
+							if (count($check_checksheet) > 0) {
+								unset($item['created_by']);
+								unset($item['created_at']);
+								unset($item['checksheet_data_number']);
+								foreach ($check_checksheet as $insert_item) {
+									$item['checksheet_item_id'] = $id_item;
+									$item['checksheet_process_data_number'] = $insert_item->number;
+									$this->db->insert('checksheet_process_details', $item);
+								}
+							}
 						}
 					}
 				}
@@ -529,11 +570,11 @@ class Checksheets extends Admin_Controller
 	/* ===================== */
 	public function print_document()
 	{
-		$this->load->library(array('Mpdf'));
+		
 		$folder = $_GET['p'];
 		$file = $_GET['f'];
 
-		$mpdf = new mPDF('', '', '', '', '', '', '', '', '', '');
+		$mpdf = new Mpdf();
 		$mpdf->SetImportUse();
 		$pagecount = $mpdf->SetSourceFile('directory/' . $folder . '/' . $file);
 		$tplId = $mpdf->ImportPage($pagecount);

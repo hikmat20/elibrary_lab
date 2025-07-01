@@ -20,14 +20,14 @@
 
 <!-- STANDARD -->
 <div class="d-flex justify-content-between align-items-center mb-3">
-  <h4 class="">List Standard</h4>
+  <h4 class="font-weight-bolder"><i class="fa fa-list-alt text-primary" aria-hidden="true"></i> List Standard</h4>
 </div>
 
 <table id="tableStandard" class="table table-sm table-condensed table-bordered">
   <thead class="text-center ">
     <tr class="table-light">
-      <th class="py-2" width="50">No</th>
-      <th class="py-2 text-start" width="350">Standard Name</th>
+      <th class="py-2" width="30">No</th>
+      <th class="py-2 text-start">Standard Name</th>
     </tr>
   </thead>
   <tbody>
@@ -54,13 +54,13 @@
 
 <!-- REGULATIONS -->
 <div class="d-flex justify-content-between align-items-center mb-3">
-  <h4 class="">List Regulations</h4>
+  <h4 class="font-weight-bolder"><i class="fa fa-list-alt text-primary" aria-hidden="true"></i> List Regulations</h4>
 </div>
 
 <table id="tableRegulations" class="table table-sm table-condensed table-bordered">
   <thead class="text-center ">
     <tr class="table-light">
-      <th class="py-2" width="50">No</th>
+      <th class="py-2" width="30">No</th>
       <th class="py-2">Regulations Name</th>
     </tr>
   </thead>

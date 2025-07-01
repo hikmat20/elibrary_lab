@@ -1,3 +1,8 @@
+<style>
+	.modal {
+		overflow: auto !important;
+	}
+</style>
 <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
 	<div class="d-flex flex-column-fluid">
 		<div class="container">
@@ -58,10 +63,25 @@
 				</div>
 				<div class="modal-body"></div>
 				<div class="modal-footer">
-					<!-- <button type="submit" class="btn btn-primary" id="save"><i class="fa fa-save"></i>Save</button> -->
 					<button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times"></i>Close</button>
 				</div>
 			</form>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="modalView" tabindex="-1" aria-labelledby="" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id=""></h5>
+				<span class="btn-close" data-dismiss="modal" aria-label="Close">
+					<div class="fa fa-times"></div>
+				</span>
+			</div>
+			<div class="modal-body"></div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times"></i>Close</button>
+			</div>
 		</div>
 	</div>
 </div>
@@ -76,6 +96,28 @@
 			// info: false
 		});
 
+		$(document).on('click', '.view-procedure', function() {
+			let id = $(this).data('id')
+			$('#modalView').modal('show')
+			$('#modalView .modal-dialog').css("max-width", "70%")
+			$('#modalView .modal-title').text('View Procedure')
+			$.ajax({
+				url: siteurl + 'procedures/view/' + id,
+				type: 'POST',
+				success: function(result) {
+					if (result) {
+						$('#modalView .modal-body').html(result);
+						let download = `<a href="${siteurl+active_controller}download/${id}" target="_blank" class="btn btn-sm btn-info"><i class="fa fa-download"></i>Download</a>`
+						$('#modalView .modal-body').prepend(download);
+					}
+				},
+				error: function() {
+					Swal.fire('Error!', 'Server timeout. Please try again!', 'error', 5000)
+				}
+			})
+
+		})
+
 		$(document).on('click', '.view', function() {
 			let id = $(this).data('id')
 			$.ajax({
@@ -83,10 +125,10 @@
 				type: 'GET',
 				success: function(result) {
 					if (result) {
-						$('.modal-title').text('View Cross Reference (Pasal to Proses)')
-						$('.modal-body').html(result);
 						$('#modalForm').modal('show')
-						$('.modal-dialog').css("max-width", "90%")
+						$('#modalForm .modal-title').text('View Cross Reference (Pasal to Proses)')
+						$('#modalForm .modal-body').html(result);
+						$('#modalForm .modal-dialog').css("max-width", "90%")
 					} else {
 						Swal.fire('Warning', 'Data not valid. Please try again!', 'warning', 3000)
 					}
@@ -104,7 +146,6 @@
 			$('#modalForm').modal('show')
 			$('.modal-dialog').attr("style", false)
 		})
-
 
 		$(document).on('click', '.delete', function() {
 			let id = $(this).data('id')

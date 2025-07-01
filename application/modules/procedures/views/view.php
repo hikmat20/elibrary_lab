@@ -1,6 +1,6 @@
 <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
   <div class="d-flex flex-column-fluid">
-    <div class="container">
+    <div class="">
 
       <!-- DEFINE -->
       <table class="table table-bordered rounded-lg mb-6">
@@ -223,7 +223,7 @@
         <thead>
           <tr class="table-secondary">
             <th>
-              <h3>FLOW DETAIL</h3>
+              <h3>PROSES TERKAIT</h3>
             </th>
           </tr>
         </thead>

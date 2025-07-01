@@ -13,23 +13,25 @@
 				<div class="card-body">
 					<div class="tab-content mt-3">
 						<div class="tab-pane fade active show" id="Published" role="tabpanel" aria-labelledby="Published-tab">
-							<table id="example1" class="table table-bordered table-sm table-condensed table-hover datatable">
+							<table id="example1" class="table table-bordered table-sm table-hover display">
 								<thead class="text-center table-light">
 									<tr class="text-center">
-										<th width="3%">No.</th>
-										<th class="text-left">Company Name</th>
-										<th width="150">Action</th>
+										<th width="30">No.</th>
+										<th width="200" class="text-left">Company Name</th>
+										<th class="text-left">Branch</th>
+										<th width="100">Action</th>
 									</tr>
 								</thead>
 								<tbody>
-									<?php if (isset($data) && $data) :
+									<?php if (isset($list) && $list) :
 										$n = 0;
-										foreach ($data as $dt) : $n++; ?>
+										foreach ($list as $dt) : $n++; ?>
 											<tr class="">
 												<td><?= $n; ?></td>
 												<td class="text-left"><?= $dt->nm_perusahaan; ?></td>
+												<td class="text-left"><?= ($dt->branch_name) ?: 'Main Company'; ?></td>
 												<td class="text-center">
-													<a href="<?= base_url($this->uri->segment(1) . "/lists/" . $dt->id); ?>" class="btn btn-sm btn-icon rounded-circle btn-warning detail" data-id="<?= $dt->id; ?>" title="Edit Data"><i class="fa fa-arrow-circle-right"></i></a>
+													<a href="<?= base_url($this->uri->segment(1) . "?b=" . $dt->id); ?>" class="btn btn-sm btn-icon btn-warning detail" data-id="<?= $dt->id; ?>" title="Edit Data"><i class="fa fa-arrow-circle-right"></i></a>
 												</td>
 											</tr>
 									<?php endforeach;

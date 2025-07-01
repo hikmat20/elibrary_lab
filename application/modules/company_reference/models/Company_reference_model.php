@@ -78,7 +78,9 @@ class Company_reference_model extends BF_Model
       $Data['modified_at'] = date('Y-m-d H:i:s');
       $this->db->update('references', $Data, ['id' => $Data['id']]);
     } else {
-      $checkData = $this->db->get_where('references', ['company_id' => $Data['company_id']])->num_rows();
+
+      /* Check Axist Data */
+      $checkData = $this->db->get_where('references', ['company_id' => $Data['company_id'], 'branch_id' => $Data['branch_id']])->num_rows();
       if ($checkData > 0) {
         return ['axist' => 1];
       }
@@ -88,15 +90,15 @@ class Company_reference_model extends BF_Model
       $Data['created_at'] = date('Y-m-d H:i:s');
 
       $this->db->insert('references', $Data);
-      $Id = $this->db->order_by('id', 'DESC')->get_where('references')->row()->id;
+      // $Id = $this->db->order_by('id', 'DESC')->get_where('references')->row()->id;
+      $Id = $this->db->insert_id('references');
     }
 
     /* List Standard */
     if ($DataStd) {
-
       foreach ($DataStd as $std) {
         if (isset($std['id'])) {
-          $std['reference_id'] = $Id;
+          // $std['reference_id'] = $Id;
           $std['modified_by'] = $this->auth->user_id();
           $std['modified_at'] = date('Y-m-d H:i:s');
           $this->db->update('ref_standards', $std, ['id' => $std['id']]);
@@ -116,11 +118,12 @@ class Company_reference_model extends BF_Model
         $DataReg['modified_at'] = date('Y-m-d H:i:s');
         $this->db->update('ref_regulations', $DataReg, ['id' => $DataReg['id']]);
       } else {
+      
         foreach ($DataReg as $reg) {
           $reg['reference_id'] = $Id;
-          $reg['created_by'] = $this->auth->user_id();
-          $reg['created_at'] = date('Y-m-d H:i:s');
-
+          $reg['subject']     = $reg['subject'];
+          $reg['created_by']  = $this->auth->user_id();
+          $reg['created_at']  = date('Y-m-d H:i:s');
           $this->db->insert('ref_regulations', $reg);
         }
       }

@@ -1,6 +1,8 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
+use Mpdf\Mpdf;
+
 class Process_checksheets extends Admin_Controller
 {
 	/*
@@ -13,15 +15,18 @@ class Process_checksheets extends Admin_Controller
 		parent::__construct();
 		$this->load->library('upload');
 		$this->template->set('title', 'MASTER CHECKSHEET');
+
+		date_default_timezone_set('Asia/Jakarta');
 	}
 	private function getNumber()
 	{
-		$last_number 	= $this->db->select('MAX(RIGHT(number,3)) as number')->from('checksheet_process_data')->get()->row();
-		$counter 		= 1;
-		if ($last_number->number) {
-			$counter = $last_number->number + 1;
-		}
-		$new_number = "CK" . date('y') . "-" . sprintf("%03d", $counter);
+		// $last_number 	= $this->db->select('MAX(number) as number_max')->from('checksheet_process_data')->like('number', 'CK'.date('y').'-', 'both	')->get()->row();
+		$last_number = $this->db->query('SELECT MAX(number) AS number_max FROM checksheet_process_data WHERE `number` LIKE "%CK' . date('y') . '-%"')->row();
+
+		$angkaUrut2		= $last_number->number_max;
+		$urutan2		= (int)substr($angkaUrut2, 5, 5);
+		$urutan2++;
+		$new_number = "CK" . date('y') . "-" . sprintf("%05d", $urutan2);
 		return $new_number;
 	}
 
@@ -181,7 +186,10 @@ class Process_checksheets extends Admin_Controller
 		if ($id) {
 			$sheet 		= $this->db->get_where('checksheet_process_data', ['id' => $id])->row();
 			$dataDir 	= $this->db->get_where('view_checksheet_process_dir', ['id' => $sheet->dir_id])->row();
-			$items 		= $this->db->get_where('checksheet_process_details', ['checksheet_process_data_number' => $sheet->number])->result();
+			// $items 		= $this->db->get_where('checksheet_process_details', ['checksheet_process_data_number' => $sheet->number])->result();
+			$items 		= $this->db->get_where('checksheet_data_items', ['checksheet_data_number' => $sheet->checksheet_data_number])->result();
+			// $items 		= $this->db->get_where('checksheet_process_details', ['checksheet_process_data_number' => $sheet->number])->result();
+			$items 		= $this->db->get_where('checksheet_data_items', ['checksheet_data_number' => $sheet->checksheet_data_number])->result();
 
 			$fExecution 	= [
 				'1' => 'Once Time',
@@ -932,10 +940,16 @@ class Process_checksheets extends Admin_Controller
 			'3' => 'Monthly',
 		];
 		$sheet  	= $this->db->get_where('checksheet_process_data', ['id' => $_GET['sheet']])->row();
+		// $details	= $this->db->get_where('checksheet_data_items', ['checksheet_data_number' => $sheet->checksheet_data_number])->result();
 		$details	= $this->db->get_where('checksheet_process_details', ['checksheet_process_data_number' => $sheet->number])->result();
 
+		// $ArrProcess = [];
+		// if ($detailsProcess) {
+		// 	foreach ($detailsProcess as $dtl) {
+		// 		$ArrProcess[$dtl->checksheet_item_id] = $dtl;
+		// 	}
+		// }
 		$weekOfMonth = '';
-
 		$width = $count = $name_col = '';
 		if ($sheet->frequency_execution == 1) {
 			$width 		= '100%';
@@ -983,11 +997,11 @@ class Process_checksheets extends Admin_Controller
 		$notes			= $this->db->get_where('checksheet_notes', ['data_id' => $sheet->id])->result();
 		$execution		= $this->db->get_where('checksheet_execution', ['item_id' => $sheet->id])->row();
 		$execution_date	= $this->db->get_where('checksheet_execution_date', ['item_id' => $sheet->id])->row();
-		$ArrNote = '';
+
+		$ArrNote = [];
 		foreach ($notes as $note) {
 			$ArrNote[$note->item_id] = $note;
 		}
-
 		$this->template->set([
 			'data' 			=> $sheet,
 			'width' 		=> $width,
@@ -998,6 +1012,7 @@ class Process_checksheets extends Admin_Controller
 			'fChecking' 	=> $fChecking,
 			'details' 		=> $details,
 			'ArrNote' 		=> $ArrNote,
+			// 'ArrProcess' 	=> $ArrProcess,
 			'execution' 	=> ($execution) ?: [],
 			'checking_date' => ($execution_date) ?: [],
 			'weekOfMonth' 	=> $weekOfMonth,
@@ -1008,65 +1023,159 @@ class Process_checksheets extends Admin_Controller
 
 	public function save_process_checksheet()
 	{
-		$post 	= $this->input->post();
+		$config['upload_path'] = './assets/images/directory/checksheet/'; //path folder
+		$config['allowed_types'] = 'gif|jpg|png|jpeg|bmp|pdf|webp'; //type yang dapat diakses bisa anda sesuaikan
+		$config['max_size'] = 100000000; // Maximum file size in kilobytes (2MB).
+		$config['encrypt_name'] = TRUE; // Encrypt the uploaded file's name.
+		$config['remove_spaces'] = TRUE; // Remove spaces from the file name.
 
+		$this->load->library('upload', $config);
+		$this->upload->initialize($config);
+
+		$post 	= $this->input->post();
 		$this->db->trans_begin();
 		if ($post['id']) {
-			if (isset($post['detail'])) foreach ($post['detail'] as $dt) {
-				$field 			= $dt['field'];
-				$fieldNote 		= "note" . $field;
-				$fieldDate 		= "date" . $field;
-				$fieldChecker 	= "day" . $field;
+			if (isset($post['detail'])) {
+				$nn = 1;
+				foreach ($post['detail'] as $dt) {
+					$field 			= $dt['field'];
+					$fieldNote 		= "note" . $field;
+					$fieldDate 		= "date" . $field;
+					$fieldChecker 	= "day" . $field;
+					$fieldBukti 	= "bukti_" . $field;
 
-				/* UPDATE DETAIL */
-				if (isset($dt["n" . $field])) {
-					$this->db->update('checksheet_process_details', [
-						"n" . $field => $dt["n" . $field]
-					], ['id' => $dt['id']]);
+					/* UPDATE DETAIL */
+					if (isset($dt["n" . $field])) {
+						$this->db->update('checksheet_process_details', [
+							"n" . $field => $dt["n" . $field]
+						], ['id' => $dt['id']]);
 
-					/* NOTES */
-					if ($dt["n" . $field] == 'no') {
-						$checkNote 	= $this->db->get_where('checksheet_notes', ['data_id' => $post['id'], 'item_id' => $dt['id']])->row();
-						$dataNote 	= [
-							'data_id'	=> $post['id'],
-							'item_id'	=> $dt['id'],
-							$fieldNote 	=> $dt[$fieldNote]
-						];
+						/* NOTES */
+						if ($dt["n" . $field] == 'no') {
+							$checkNote 	= $this->db->get_where('checksheet_notes', ['data_id' => $post['id'], 'item_id' => $dt['id']])->row();
 
-						if (!$checkNote) {
-							$this->db->insert('checksheet_notes', $dataNote);
-						} else {
-							$this->db->update('checksheet_notes', $dataNote, ['data_id' => $post['id'], 'item_id' => $dt['id']]);
+							$upload_bukti = '';
+							if (!empty($checkNote)) {
+								if ($_FILES['bukti' . $nn . $field]['name'] !== '') {
+									$files = $_FILES['bukti' . $nn . $field];
+									$file_count = count($files['name']);
+
+									$_FILES['bukti' . $nn . $field]['name'] = $files['name'];
+									$_FILES['bukti' . $nn . $field]['type'] = $files['type'];
+									$_FILES['bukti' . $nn . $field]['tmp_name'] = $files['tmp_name'];
+									$_FILES['bukti' . $nn . $field]['error'] = $files['error'];
+									$_FILES['bukti' . $nn . $field]['size'] = $files['size'];
+									$this->upload->do_upload('bukti' . $nn . $field);
+									$data = $this->upload->data();
+									$upload_bukti = 'assets/images/directory/checksheet/' . $data['file_name'];
+								}
+							} else {
+								$files = $_FILES['bukti' . $nn . $field];
+								$file_count = count($files['name']);
+
+								$_FILES['bukti' . $nn . $field]['name'] = $files['name'];
+								$_FILES['bukti' . $nn . $field]['type'] = $files['type'];
+								$_FILES['bukti' . $nn . $field]['tmp_name'] = $files['tmp_name'];
+								$_FILES['bukti' . $nn . $field]['error'] = $files['error'];
+								$_FILES['bukti' . $nn . $field]['size'] = $files['size'];
+								$this->upload->do_upload('bukti' . $nn . $field);
+								$data = $this->upload->data();
+								$upload_bukti = 'assets/images/directory/checksheet/' . $data['file_name'];
+							}
+
+							$dataNote 	= [
+								'data_id'	=> $post['id'],
+								'item_id'	=> $dt['id'],
+								$fieldNote 	=> (isset($dt[$fieldNote]) ? $dt[$fieldNote] : null),
+								$fieldBukti => $upload_bukti
+							];
+
+							if (!$checkNote) {
+								$this->db->insert('checksheet_notes', $dataNote);
+							} else {
+								$this->db->update('checksheet_notes', $dataNote, ['data_id' => $post['id'], 'item_id' => $dt['id']]);
+							}
+						} else if ($dt["n" . $field] == 'yes') {
+
+							$checkNote 	= $this->db->get_where('checksheet_notes', ['data_id' => $post['id'], 'item_id' => $dt['id']])->row_array();
+
+							$upload_bukti = '';
+
+							if (!empty($checkNote)) {
+								$upload_bukti = $checkNote['bukti_' . $field];
+
+								if ($_FILES['bukti' . $nn . $field]['name'] !== '') {
+									$files = $_FILES['bukti' . $nn . $field];
+									$file_count = count($files['name']);
+
+									$_FILES['bukti' . $nn . $field]['name'] = $files['name'];
+									$_FILES['bukti' . $nn . $field]['type'] = $files['type'];
+									$_FILES['bukti' . $nn . $field]['tmp_name'] = $files['tmp_name'];
+									$_FILES['bukti' . $nn . $field]['error'] = $files['error'];
+									$_FILES['bukti' . $nn . $field]['size'] = $files['size'];
+									$this->upload->do_upload('bukti' . $nn . $field);
+									$data = $this->upload->data();
+									$upload_bukti = 'assets/images/directory/checksheet/' . $data['file_name'];
+								}
+							} else {
+								$files = $_FILES['bukti' . $nn . $field];
+								$file_count = count($files['name']);
+
+								$_FILES['bukti' . $nn . $field]['name'] = $files['name'];
+								$_FILES['bukti' . $nn . $field]['type'] = $files['type'];
+								$_FILES['bukti' . $nn . $field]['tmp_name'] = $files['tmp_name'];
+								$_FILES['bukti' . $nn . $field]['error'] = $files['error'];
+								$_FILES['bukti' . $nn . $field]['size'] = $files['size'];
+								$this->upload->do_upload('bukti' . $nn . $field);
+								$data = $this->upload->data();
+								$upload_bukti = 'assets/images/directory/checksheet/' . $data['file_name'];
+							}
+							// } else {
+							// }
+
+							if (empty($checkNote)) {
+								$insert_notes = $this->db->insert('checksheet_notes', ['data_id' => $post['id'], 'item_id' => $dt['id'], $fieldNote => null, 'bukti_' . $field => $upload_bukti]);
+								if (!$insert_notes) {
+									print_r($this->db->error($insert_notes));
+									exit;
+								}
+							} else {
+								$update_notes = $this->db->update('checksheet_notes', [$fieldNote => null, 'bukti_' . $field => $upload_bukti], ['data_id' => $post['id'], 'item_id' => $dt['id']]);
+								if (!$update_notes) {
+									print_r($this->db->error($update_notes));
+									exit;
+								}
+							}
 						}
-					} else if ($dt["n" . $field] == 'yes') {
-						$this->db->update('checksheet_notes', [$fieldNote 	=> null], ['data_id' => $post['id'], 'item_id' => $dt['id']]);
 					}
-				}
 
-				/* CHECKING DATE */
-				$checkDate 	= $this->db->get_where('checksheet_execution_date', ['data_id' => $post['id']])->row();
-				$dataDate 	= [
-					'data_id'	=> $post['id'],
-					$fieldDate 	=> date('Y-m-d H:i:s')
-				];
+					/* CHECKING DATE */
+					$checkDate 	= $this->db->get_where('checksheet_execution_date', ['data_id' => $post['id']])->row();
+					$dataDate 	= [
+						'data_id'	=> $post['id'],
+						$fieldDate 	=> date('Y-m-d H:i:s')
+					];
 
-				if (!$checkDate) {
-					$this->db->insert('checksheet_execution_date', $dataDate);
-				} else {
-					$this->db->update('checksheet_execution_date', $dataDate, ['data_id' => $post['id']]);
-				}
+					if (!$checkDate) {
+						$this->db->insert('checksheet_execution_date', $dataDate);
+					} else {
+						$this->db->update('checksheet_execution_date', $dataDate, ['data_id' => $post['id']]);
+					}
 
-				/* CHECKER */
-				$checkBy 	= $this->db->get_where('checksheet_execution', ['data_id' => $post['id']])->row();
-				$dataChecker 	= [
-					'data_id' => $post['id'],
-					$fieldChecker 	=> $this->auth->user_id()
-				];
+					/* CHECKER */
+					$checkBy 	= $this->db->get_where('checksheet_execution', ['data_id' => $post['id']])->row();
+					$dataChecker 	= [
+						'data_id' => $post['id'],
+						$fieldChecker 	=> $this->auth->user_id()
+					];
 
-				if (!$checkBy) {
-					$this->db->insert('checksheet_execution', $dataChecker);
-				} else {
-					$this->db->update('checksheet_execution', $dataChecker, ['data_id' => $post['id'], 'item_id' => $dt['id']]);
+					if (!$checkBy) {
+						$this->db->insert('checksheet_execution', $dataChecker);
+					} else {
+						$this->db->update('checksheet_execution', $dataChecker, ['data_id' => $post['id'], 'item_id' => $dt['id']]);
+					}
+
+					$nn++;
 				}
 			}
 			$this->db->update('checksheet_process_data', [
@@ -1293,7 +1402,7 @@ class Process_checksheets extends Admin_Controller
 		$folder = $_GET['p'];
 		$file = $_GET['f'];
 
-		$mpdf = new mPDF('', '', '', '', '', '', '', '', '', '');
+		$mpdf = new Mpdf();
 		$mpdf->SetImportUse();
 		$pagecount = $mpdf->SetSourceFile('directory/' . $folder . '/' . $file);
 		$tplId = $mpdf->ImportPage($pagecount);

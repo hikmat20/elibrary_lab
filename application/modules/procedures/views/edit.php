@@ -350,12 +350,12 @@
 									<div class="card border-0 mb-3" style="border-radius: 10px;">
 										<div class="card-header bg-light border-0 py-4 cursor-pointer" role="tab" id="sectionFlowDetail" style="border-radius: 10px;">
 											<h4 class="mb-0 font-weight-bolder" data-toggle="collapse" data-parent="#accProcedure" href="#flowDetail" aria-expanded="true" aria-controls="flowDetail">
-												FLOW DETAIL
+												PROSES TERKAIT
 											</h4>
 										</div>
 										<div id="flowDetail" class="collapse in" role="tabpanel" aria-labelledby="sectionFlowDetail">
 											<div class="card-body">
-												<button type="button" class="btn btn-primary btn-sm mb-3" id="add_flow" data-id="<?= $data->id; ?>"><i class="fa fa-plus mr-2"></i>Add Flow</button>
+												<button type="button" class="btn btn-primary btn-sm mb-3" id="add_flow" data-id="<?= $data->id; ?>"><i class="fa fa-plus mr-2"></i>Tambah Proses</button>
 												<table class="table table-sm table-bordered">
 													<thead class="text-center ">
 														<tr class="table-light">

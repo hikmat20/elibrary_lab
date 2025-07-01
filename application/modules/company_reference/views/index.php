@@ -28,8 +28,9 @@
 							<table class="table table-bordered table-sm table-hover datatable">
 								<thead class="text-center table-light">
 									<tr class="text-center">
-										<!-- <th width="50">No.</th> -->
+										<th width="50">No.</th>
 										<th class="text-left p-2" width="150">Company</th>
+										<th class="text-left p-2" width="150">Branch</th>
 										<th class="p-2" width="150">Standard</th>
 										<th class="p-2">Regulation</th>
 										<th class="p-2" width="150">Action</th>
@@ -40,25 +41,33 @@
 										$n = 0;
 										foreach ($data as $dt) : $n++; ?>
 											<tr class="text-center p-2">
-												<!-- <td><?= $n; ?></td> -->
+												<td class="align-top"><?= $n; ?></td>
 												<td class="text-left p-2" style="vertical-align: top;"><?= $dt->nm_perusahaan; ?></td>
+												<td class="text-left p-2" style="vertical-align: top;"><?= ($dt->branch_name) ?: 'Main Company'; ?></td>
 												<td class="p-2" style="vertical-align: top;">
 													<?php if (isset($ArrStd[$dt->id])) : ?>
-														<?= implode(",<br>", $ArrStd[$dt->id]); ?>
+														<?= implode(",<br>", array_slice($ArrStd[$dt->id], 0, 5)); ?>
+														<br>
+														<?php if (count($ArrStd[$dt->id]) - 5 > 0): ?>
+															<button type="button" class="btn btn-link">More <?= count($ArrStd[$dt->id]) - 5; ?>+</button>
+														<?php endif; ?>
+													<?php endif; ?>
+												</td>
+												<td class="p-2 text-left" style="vertical-align: top;">
+													<?php if (isset($ArrReg[$dt->id])) : ?>
+														<ul class="text-left mb-0 pl-5">
+															<?php foreach (array_slice($ArrReg[$dt->id], 0, 3) as $reg) : ?>
+																<li><?= $reg; ?></li>
+															<?php endforeach; ?>
+														</ul>
+														<?php if (count($ArrReg[$dt->id]) - 3 > 0): ?>
+															<button type="button" class="btn btn-link">More <?= count($ArrReg[$dt->id]) - 3; ?>+</button>
+														<?php endif; ?>
 													<?php endif; ?>
 												</td>
 												<td class="p-2" style="vertical-align: top;">
-													<ul class="text-left">
-														<?php if (isset($ArrReg[$dt->id])) : ?>
-															<?php foreach ($ArrReg[$dt->id] as $reg) : ?>
-																<li><?= $reg; ?></li>
-															<?php endforeach; ?>
-														<?php endif; ?>
-													</ul>
-												</td>
-												<td class="p-2" style="vertical-align: top;">
 													<button type="button" class="btn btn-xs btn-icon rounded-circle btn-info view" data-id="<?= $dt->id; ?>" title="View Data"><i class="fa fa-search"></i></button>
-													<a href="<?= base_url($this->uri->segment(1) . '/edit/' . $dt->id); ?>" class="btn btn-xs btn-icon rounded-circle btn-warning edit" data-id="<?= $dt->id; ?>" title="View Data"><i class="fa fa-edit"></i></a>
+													<a href="<?= base_url($this->uri->segment(1) . '/edit/' . $dt->id.'/'.$dt->branch_id); ?>" class="btn btn-xs btn-icon rounded-circle btn-warning edit" data-id="<?= $dt->id; ?>" title="View Data"><i class="fa fa-edit"></i></a>
 													<button type="button" class="btn btn-xs btn-icon rounded-circle btn-danger delete" data-id="<?= $dt->id; ?>" title="View Data"><i class="fa fa-trash"></i></button>
 												</td>
 											</tr>
@@ -107,7 +116,7 @@
 </div>
 <!-- Modal -->
 <div class="modal fade" id="modalView" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-	<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+	<div class="modal-dialog modal-dialog-scrollable modal-lg">
 		<div class="modal-content">
 			<div class="modal-header">
 				<h5 class="modal-title" id="staticBackdropLabel"></h5>
@@ -116,7 +125,8 @@
 			<div class="modal-body">
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+				<button type="button" id="save" class="btn btn-primary min-w-100px save"><i class="fa fa-save"></i>Save</button>
+				<button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times" aria-hidden="true"></i> Close</button>
 			</div>
 		</div>
 	</div>
@@ -201,26 +211,28 @@
 
 		$(document).on('click', '#save', function(e) {
 			$('#company_id').next('span').find('span.select2-selection').removeClass('is-invalid')
-			$('#sdate').removeClass('is-invalid')
-
+			$('#branch_id').next('span').find('span.select2-selection').removeClass('is-invalid')
 			const company_id = $('#company_id').val()
-			const sdate = $('#sdate').val()
+			const branch = $('#branch_id').val()
 
 			if (!company_id) {
 				$('#company_id').next('span').find('span.select2-selection').addClass('is-invalid')
-				$('body,html').animate({
-					scrollTop: $("#company_id").offset().top - 220
-				}, 1000);
-
+				// $('body,html').animate({
+				// 	scrollTop: $("#company_id").offset().top - 220
+				// }, 1000);
 				return false;
 			}
 
-			if (!sdate) {
-				$('#sdate').addClass('is-invalid')
-				$('body,html').animate({
-					scrollTop: $("#sdate").offset().top - 210
-				}, 1000);
-				return false;
+			// typeof(variable) != "undefined"
+			if (typeof(branch) !== "undefined") {
+				console.log(branch);
+				if (!branch) {
+					$('#branch_id').next('span').find('span.select2-selection').addClass('is-invalid')
+					// $('body,html').animate({
+					// 	scrollTop: $("#branch_id").offset().top - 220
+					// }, 1000);
+					return false;
+				}
 			}
 
 			let formdata = new FormData($('#form-reference')[0])

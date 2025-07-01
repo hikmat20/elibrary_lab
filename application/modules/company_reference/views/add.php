@@ -2,9 +2,8 @@
 	<div class="row">
 		<div class="col-md-10">
 			<div class="mb-3 row flex-nowrap">
-				<label for="" class="col-3 col-form-label font-weight-bold">Select Copmany</label>
+				<label for="" class="col-3 col-form-label font-weight-bold">Select Company</label>
 				<div class="col-9">
-					<!-- <label class="font-weight-bolder col-form-label"><?= $this->session->company->nm_perusahaan; ?></label> -->
 					<select name="company_id" id="company_id" class="form-control select2">
 						<option value=""></option>
 						<?php foreach ($Companies as $comp) : ?>
@@ -13,12 +12,21 @@
 					</select>
 				</div>
 			</div>
-			<div class="mb-3 row flex-nowrap">
-				<label for="" class="col-3 col-form-label font-weight-bold"></label>
-				<div class="col-6">
-					<button type="button" id="save" class="btn btn-primary w-100px save"><i class="fa fa-save"></i>Save</button>
+
+			<!-- Branch -->
+			<?php if ($branch): ?>
+				<div class="mb-3 row flex-nowrap">
+					<label for="" class="col-3 col-form-label font-weight-bold">Select Branch</label>
+					<div class="col-9">
+						<select name="branch_id" id="branch_id" class="form-control select2">
+							<option value=""></option>
+							<?php foreach ($branch as $b) : ?>
+								<option value="<?= $b->id; ?>"><?= $b->branch_name; ?></option>
+							<?php endforeach; ?>
+						</select>
+					</div>
 				</div>
-			</div>
+			<?php endif; ?>
 		</div>
 	</div>
 </form>

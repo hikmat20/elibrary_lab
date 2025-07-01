@@ -36,7 +36,7 @@
 							</div>
 							<hr>
 							<button type="button" class="btn btn-primary mb-5" id="save_detail"><i class="fa fa-save"></i>Save</button>
-							<a href="<?= base_url($this->uri->segment(1)); ?>" class="btn btn-danger mb-5"><i class="fa fa-reply"></i>Back</a>
+							<a href="<?= base_url($this->session->previous_page); ?>" class="btn btn-danger mb-5"><i class="fa fa-reply"></i>Back</a>
 
 							<table class="table datatable table-bordered table-sm">
 								<thead>

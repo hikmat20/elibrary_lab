@@ -1,121 +1,170 @@
-<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
-	<div class="d-flex flex-column-fluid">
-		<div class="container">
-			<form id="form-chapter">
-				<div class="card card-stretch shadow card-custom">
-					<div class="card-header justify-content-between d-flex align-items-center">
-						<h2 class="m-0"><i class="fa fa-plus mr-2"></i><?= $title; ?></h2>
-						<a href="<?= base_url($this->uri->segment(1)); ?>" class="btn btn-danger"><i class="fa fa-reply"></i>Back</a>
-					</div>
+<div class="content container d-flex flex-column flex-column-fluid" id="kt_content">
+	<form id="form-chapter">
+		<div class="card card-stretch shadow card-custom">
+			<div class="card-header justify-content-between d-flex align-items-center">
+				<h2 class="m-0"><i class="fa fa-plus mr-2"></i><?= $title; ?></h2>
+				<a href="<?= base_url($this->uri->segment(1)); ?>" class="btn btn-danger"><i
+						class="fa fa-reply"></i>Back</a>
+			</div>
 
-					<div class="card-body">
-						<div class="row">
-							<div class="col-md-10">
-								<div class="mb-3 row flex-nowrap">
-									<label for="" class="col-2  h6 col-form-label font-weight-bold">Company</label>
-									<div class="col-6">:
-										<input type="hidden" name="id" value="<?= $Data->id; ?>">
-										<input type="hidden" name="company_id" value="<?= $Data->company_id; ?>">
-										<label for="" class="col-form-label font-weight-bolder h6 "><?= $Data->nm_perusahaan; ?></label>
-										<!-- <select name="company_id" id="status" class="form-control select2">
+			<div class="card-body">
+				<div class="row flex-nowrap">
+					<label for="" class="col-2  h6 col-form-label font-weight-bold">Company</label>
+					<div class="col-6">:
+						<input type="hidden" name="id" value="<?= $Data->id; ?>">
+						<input type="hidden" name="company_id" value="<?= $Data->company_id; ?>">
+						<label for=""
+							class="col-form-label font-weight-bolder h6 "><?= $Data->nm_perusahaan; ?></label>
+						<!-- <select name="company_id" id="status" class="form-control select2">
 											<option value=""></option>
 											<?php foreach ($Companies as $comp) : ?>
 												<option value="<?= $comp->id_perusahaan; ?>" <?= ($comp->id_perusahaan == $Data->company_id) ? 'selected' : ''; ?>><?= $comp->nm_perusahaan; ?></option>
 											<?php endforeach; ?>
 										</select> -->
-									</div>
+					</div>
+				</div>
+
+				<div class="row flex-nowrap">
+					<label for="" class="col-2 h6 col-form-label font-weight-bold">Branch Company</label>
+					<div class="col-6">:
+						<label for="" class="col-form-label font-weight-bolder h6 "><?= $Data->branch_name; ?></label>
+					</div>
+				</div>
+
+
+				<!-- STANDARD -->
+				<hr>
+				<div class="d-flex justify-content-between align-items-center mb-3">
+					<h4 class="font-weight-bolder"><i class="fa fa-list-alt text-primary" aria-hidden="true"></i> List Standard</h4>
+				</div>
+
+				<table id="tableStandard" class="table table-sm table-condensed table-bordered">
+					<thead class="text-center ">
+						<tr class="table-light">
+							<th class="py-2" width="50">No</th>
+							<th class="py-2 text-start">Standard Name</th>
+							<th class="py-2" width="50">Action</th>
+						</tr>
+					</thead>
+					<tbody>
+						<?php if (isset($datStd)) : ?>
+							<?php $n = 0;
+							foreach ($datStd as $std) : $n++; ?>
+								<tr>
+									<td class="text-center"><?= $n; ?>
+									</td>
+									<td class="">
+										<span class="dataIdStd d-none"><?= $std->standard_id; ?></span>
+										<?= $std->name; ?>
+									</td>
+									<td class="text-center">
+										<button type="button" class="btn btn-danger btn-icon btn-xs del-row-std"
+											data-id="<?= $std->id; ?>"><i class="fa fa-trash"
+												aria-hidden="true"></i></button>
+									</td>
+								</tr>
+							<?php endforeach; ?>
+						<?php else : ?>
+							<tr class="empty">
+								<td colspan="2" class="text-center text-muted">~ No data avilable ~</td>
+							</tr>
+						<?php endif; ?>
+					</tbody>
+				</table>
+				<button type="button" class="btn btn-success btn-sm mb-10" id="add_standard"><i
+						class="fa fa-plus mr-2"></i>Add Standard</button>
+				<hr>
+				<!-- REGULATIONS -->
+				<div class="d-flex justify-content-between align-items-center mb-3">
+					<h4 class="font-weight-bolder"><i class="fa fa-list-alt text-primary" aria-hidden="true"></i> List Regulations</h4>
+					<button type="button" class="btn btn-sm btn-success" id="new-compliance"><i
+							class="fa fa-plus" aria-hidden="true"></i> New Compliance</button>
+				</div>
+
+				<?php if ($subjects) foreach ($subjects as $k => $s): $k++; ?>
+
+					<div id="accSub" role="tablist" aria-multiselectable="true">
+						<div class="card mb-3 border-primary overflow-hidden" style="border-radius: 10px;">
+							<div class="card-header bg-light p-4 border-0 cursor-pointer" role="tab" id="sectionDetail">
+								<h5 class="mb-0 text-primary font-weight-bolder" data-toggle="collapse" data-parent="#accSub" href="#sub<?= $k; ?>" aria-expanded="true" aria-controls="sub<?= $k; ?>">
+									<?= $k . ". " . $s->name; ?>
+								</h5>
+							</div>
+
+							<div id="sub<?= $k; ?>" class="collapse" role="tabpanel" aria-labelledby="sectionDetail">
+								<div class="card-body p-4">
+									<table id="tableRegulations<?= $k; ?>" class="table rounded-lg boreder table-sm table-condensed table-bordered">
+										<thead class="text-center ">
+											<tr class="bg-light">
+												<th class="py-2" width="50">No</th>
+												<th class="py-2">Regulations Name</th>
+												<th class="py-2" width="50">Action</th>
+											</tr>
+										</thead>
+										<tbody>
+											<?php if (isset($ArrReg[$s->id])) : ?>
+												<?php $n = 0;
+												foreach ($ArrReg[$s->id] as $reg) : $n++; ?>
+													<tr>
+														<td class="text-center"><?= $n; ?></td>
+														<td class="">
+															<span class="dataIdReg d-none"><?= $reg->regulation_id; ?></span>
+															<?= $reg->name; ?>
+														</td>
+														<td class="text-center">
+															<button type="button" class="btn btn-danger btn-icon btn-xs del-row-reg"
+																data-id="<?= $reg->id; ?>" data-row="<?= $k; ?>"><i class="fa fa-trash"
+																	aria-hidden="true"></i></button>
+														</td>
+													</tr>
+												<?php endforeach; ?>
+											<?php else : ?>
+												<tr class="empty">
+													<td colspan="2" class="text-center text-muted">~ No data avilable ~</td>
+												</tr>
+											<?php endif; ?>
+										</tbody>
+									</table>
+									<button type="button" class="btn btn-success btn-sm add_regulation" data-sub_id="<?= $s->id; ?>" data-subject="<?= $s->subject_id; ?>" data-row="<?= $k; ?>"><i class="fa fa-plus font-size-base "></i>Add Regulations</button>
 								</div>
 							</div>
 						</div>
-
-
-						<!-- STANDARD -->
-						<hr>
-						<div class="d-flex justify-content-between align-items-center mb-3">
-							<h4 class="">List Standard</h4>
-						</div>
-
-						<table id="tableStandard" class="table table-sm table-condensed table-bordered">
-							<thead class="text-center ">
-								<tr class="table-light">
-									<th class="py-2" width="50">No</th>
-									<th class="py-2 text-start">Standard Name</th>
-									<th class="py-2" width="50">Action</th>
-								</tr>
-							</thead>
-							<tbody>
-								<?php if (isset($datStd)) : ?>
-									<?php $n = 0;
-									foreach ($datStd as $std) : $n++; ?>
-										<tr>
-											<td class="text-center"><?= $n; ?>
-											</td>
-											<td class="">
-												<span class="dataIdStd d-none"><?= $std->standard_id; ?></span>
-												<?= $std->name; ?>
-											</td>
-											<td class="text-center">
-												<button type="button" class="btn btn-danger btn-icon btn-xs del-row-std" data-id="<?= $std->id; ?>"><i class="fa fa-trash" aria-hidden="true"></i></button>
-											</td>
-										</tr>
-									<?php endforeach; ?>
-								<?php else : ?>
-									<tr class="empty">
-										<td colspan="2" class="text-center text-muted">~ No data avilable ~</td>
-									</tr>
-								<?php endif; ?>
-							</tbody>
-						</table>
-						<button type="button" class="btn btn-success btn-sm" id="add_standard"><i class="fa fa-plus mr-2"></i>Add Standard</button>
-						<br>
-						<br>
-						<hr>
-						<!-- REGULATIONS -->
-						<div class="d-flex justify-content-between align-items-center mb-3">
-							<h4 class="">List Regulations</h4>
-						</div>
-
-						<table id="tableRegulations" class="table table-sm table-condensed table-bordered">
-							<thead class="text-center ">
-								<tr class="table-light">
-									<th class="py-2" width="50">No</th>
-									<th class="py-2">Regulations Name</th>
-									<th class="py-2" width="50">Action</th>
-								</tr>
-							</thead>
-							<tbody>
-								<?php if (isset($dataReg)) : ?>
-									<?php $n = 0;
-									foreach ($dataReg as $reg) : $n++; ?>
-										<tr>
-											<td class="text-center"><?= $n; ?></td>
-											<td class="">
-												<span class="dataIdReg d-none"><?= $reg->regulation_id; ?></span>
-												<?= $reg->name; ?>
-											</td>
-											<td class="text-center">
-												<button type="button" class="btn btn-danger btn-icon btn-xs del-row-reg" data-id="<?= $reg->id; ?>"><i class="fa fa-trash" aria-hidden="true"></i></button>
-											</td>
-										</tr>
-									<?php endforeach; ?>
-								<?php else : ?>
-									<tr class="empty">
-										<td colspan="2" class="text-center text-muted">~ No data avilable ~</td>
-									</tr>
-								<?php endif; ?>
-							</tbody>
-						</table>
-						<button type="button" class="btn btn-success btn-sm" id="add_regulation"><i class="fa fa-plus mr-2"></i>Add Regulations</button>
 					</div>
-					<div class="card-footer justify-content-between d-flex">
-						<button type="submit" class="btn btn-primary w-100px save"><i class="fa fa-save"></i>Save</button>
-						<a href="<?= base_url($this->uri->segment(1)); ?>" class="btn btn-danger"><i class="fa fa-reply"></i>Back</a>
-					</div>
-				</div>
-			</form>
+				<?php endforeach; ?>
+			</div>
+			<div class="card-footer justify-content-between d-flex">
+				<button type="submit" class="btn btn-primary min-w-100px save"><i
+						class="fa fa-save"></i>Save</button>
+				<a href="<?= base_url($this->uri->segment(1)); ?>" class="btn btn-danger"><i
+						class="fa fa-reply"></i>Back</a>
+			</div>
 		</div>
-	</div>
+	</form>
 </div>
+
+<!-- Modal -->
+<div class="modal fade" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+	<form id="">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title"></h5>
+					<button type="button" class="btn btn-link btn-xs btn-icon" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true"><i class="fa fa-times" aria-hidden="true"></i></span>
+					</button>
+				</div>
+				<div class="modal-body">
+				</div>
+				<div class="modal-footer">
+					<button id="modal-save" class="btn btn-primary"><i class="fas fa-save"></i> Save</button>
+					<button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fa fa-times"
+							aria-hidden="true"></i> Close</button>
+				</div>
+			</div>
+		</div>
+	</form>
+</div>
+
 <style>
 	.select2-selection--single {
 		height: 100% !important;
@@ -127,6 +176,7 @@
 		white-space: normal !important;
 	}
 </style>
+
 <script>
 	$(document).ready(function() {
 		$('.select2').select2({
@@ -149,7 +199,7 @@
 				cache: false,
 				beforeSend: function() {
 					btn.attr('disabled', true)
-					btn.html('<i class="spinner spinner-border-sm"></i>Loading...')
+					btn.html('<i class="spinner spinner-border-sm mr-4"></i>Loading...')
 				},
 				complete: function() {
 					btn.attr('disabled', false)
@@ -161,11 +211,13 @@
 							title: 'Success!',
 							icon: 'success',
 							text: result.msg,
-							timer: 2000
+							timer: 1500
+						}).then(() => {
+							location.reload()
 						})
-						$('#modelId').modal('hide')
-						location.href = siteurl + active_controller + 'edit/' + result.id
-						console.log(result);
+						// $('#modelId').modal('hide')
+						// location.href = siteurl + active_controller + 'edit/' + result.id
+						// console.log(result);
 					} else {
 						Swal.fire({
 							title: 'Warning!',
@@ -245,10 +297,13 @@
 							},
 							dataType: 'JSON',
 							beforeSend: function() {
-								btn.html('<span class="spinner-border spinner-border-sm"></span>').prop('disabled', true)
+								btn.html(
+									'<span class="spinner-border spinner-border-sm"></span>'
+								).prop('disabled', true)
 							},
 							complete: function() {
-								btn.html('<span class="fa fa-trash"></span>').prop('disabled', false)
+								btn.html('<span class="fa fa-trash"></span>').prop(
+									'disabled', false)
 							},
 							success: function(result) {
 								if (result.status == 1) {
@@ -263,7 +318,8 @@
 								}
 							},
 							error: function() {
-								Swal.fire('Error!', 'Server timeout. Error!', 'error', 1500)
+								Swal.fire('Error!', 'Server timeout. Error!', 'error',
+									1500)
 							}
 						})
 					}
@@ -279,23 +335,30 @@
 			selectStd('.selectStd', '.dataIdStd')
 		})
 
-		$(document).on('click', '#add_regulation', function() {
-			const row = $('table#tableRegulations tbody tr.empty').length
-			const num = $('table#tableRegulations tbody tr.add').length + 1
+		$(document).on('click', '.add_regulation', function() {
+			const n = $(this).data('row')
+			const row = $('table#tableRegulations' + n + ' tbody tr.empty').length
+			const num = $('table#tableRegulations' + n + ' tbody tr.add').length + 1
+			const subId = $(this).data('sub_id')
+			const subject = $(this).data('subject')
+			const ArrRegulation = <?= $ArrRegulation; ?>;
 			var html = `
 			<tr class="add">
 				<td class="text-center" style="vertical-align:middle;">
-					<small class="fa fa-plus text-sm"></small>
+					<small class="fa fa-plus text-light-dark"></small>
+					<input type="hidden" name="regulations[` + num + `-` + subId + `][subject]" value="${subId}">
 				</td>
 				<td>
-					<select class="form-control select2 selectReg" name="regulations[` + num + `][regulation_id]">
-						<option value=""></option>
-						<?php if ($regulations) : ?>
-							<?php foreach ($regulations as $reg) : ?>
-								<option value="<?= $reg->id; ?>"><?= $reg->name; ?></option>
-							<?php endforeach; ?>
-						<?php endif; ?>
-					</select>
+					<select class="form-control select2 selectReg" data-row="${n}" name="regulations[` + num + `-` + subId + `][regulation_id]">
+						<option value=""></option>`;
+
+			if (ArrRegulation) {
+				$.each(ArrRegulation[subject], function(i, r) {
+					html += `<option value="${i}">${r}</option>`;
+				})
+			}
+
+			html += `</select>
 				</td>
 				<td class="text-center" style="vertical-align:middle;">
 					<button type="button" class="btn btn-danger btn-icon btn-xs del-row-reg"><i class="fa fa-trash" aria-hidden="true"></i></button>
@@ -304,23 +367,25 @@
 			`;
 
 			if (row == 1) {
-				$('table#tableRegulations tbody').html(html)
+				$('table#tableRegulations' + n + ' tbody').html(html)
 			} else {
-				$('table#tableRegulations tbody').append(html)
+				$('table#tableRegulations' + n + ' tbody').append(html)
 			}
 			$('.select2').select2({
 				placeholder: 'Choose an option',
 				allowClear: true,
-				width: '550px'
+				width: '100%'
 			})
-			selectStd('.selectReg', '.dataIdReg')
+			selectStd('table#tableRegulations' + n + ' tbody .selectReg', 'table#tableRegulations' + n + ' tbody .dataIdReg')
 		})
 
 		$(document).on('change', '.selectReg', function() {
-			selectStd('.selectReg', '.dataIdReg')
+			const n = $(this).data('row')
+			selectStd('table#tableRegulations' + n + ' tbody .selectReg', 'table#tableRegulations' + n + ' tbody .dataIdReg')
 		})
 
 		$(document).on('click', '.del-row-reg', function() {
+			const n = $(this).data('row')
 			const id = $(this).data('id')
 			const btn = $(this)
 
@@ -340,10 +405,13 @@
 							},
 							dataType: 'JSON',
 							beforeSend: function() {
-								btn.html('<span class="spinner-border spinner-border-sm"></span>').prop('disabled', true)
+								btn.html(
+									'<span class="spinner-border spinner-border-sm"></span>'
+								).prop('disabled', true)
 							},
 							complete: function() {
-								btn.html('<span class="fa fa-trash"></span>').prop('disabled', false)
+								btn.html('<span class="fa fa-trash"></span>').prop(
+									'disabled', false)
 							},
 							success: function(result) {
 								if (result.status == 1) {
@@ -358,7 +426,8 @@
 								}
 							},
 							error: function() {
-								Swal.fire('Error!', 'Server timeout. Error!', 'error', 1500)
+								Swal.fire('Error!', 'Server timeout. Error!', 'error',
+									1500)
 							}
 						})
 					}
@@ -372,9 +441,69 @@
 				}, 500);
 			}
 
-			selectStd('.selectReg', '.dataIdReg')
+			selectStd('table#tableRegulations' + n + ' tbody .selectReg', 'table#tableRegulations' + n + ' tbody .dataIdReg')
 		})
 
+		/* New Compliance */
+		$(document).on('click', '#new-compliance', function() {
+			const branch = "<?= ($this->uri->segment(4)) ?: null; ?>";
+			$('#modelId').modal()
+			$('#modelId .modal-body').html('')
+			$('#modelId form').attr('id', 'form-subject')
+			$('#modelId .modal-title').html('Select Subject Regulation')
+			$('#modelId .modal-body').load(siteurl + active_controller + 'select_subjects/' + branch)
+		})
+
+		$(document).on('submit', '#form-subject', function(e) {
+			e.preventDefault();
+			let formdata = new FormData($(this)[0])
+			let btn = $('#modal-save')
+			$.ajax({
+				url: siteurl + active_controller + 'save_subject',
+				data: formdata,
+				type: 'POST',
+				dataType: 'JSON',
+				processData: false,
+				contentType: false,
+				cache: false,
+				beforeSend: function() {
+					btn.attr('disabled', true)
+					btn.html('<i class="spinner spinner-border-sm mr-4"></i> Loading...')
+				},
+				complete: function() {
+					btn.attr('disabled', false)
+					btn.html('<i class="fa fa-save"></i>Save')
+				},
+				success: function(result) {
+					if (result.status == 1) {
+						Swal.fire({
+							title: 'Success!',
+							icon: 'success',
+							text: result.msg,
+							timer: 2000
+						})
+						// $('#modelId').modal('hide')
+						// location.href = siteurl + active_controller + 'edit/' + result.id
+						location.reload()
+					} else {
+						Swal.fire({
+							title: 'Warning!',
+							icon: 'warning',
+							text: result.msg,
+							timer: 2000
+						})
+					}
+				},
+				error: function(result) {
+					Swal.fire({
+						title: 'Error!',
+						icon: 'error',
+						text: result.statusText + " " + result.msg,
+						timer: 3000
+					})
+				}
+			})
+		})
 	})
 
 	function selectStd(s, d) {

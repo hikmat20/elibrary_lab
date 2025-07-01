@@ -49,7 +49,9 @@
 						$explode = explode(',', $Procedure[$dtl->id]);
 						if (isset($explode) && $explode) {
 							foreach ($explode as $exp) {
-								echo isset($list_procedure[$exp]) ? (($ArrProcedures[$exp] == 'PUB') ? "<a href='" . base_url($this->uri->segment(1) . '/download/' . $exp) . "'>" . $list_procedure[$exp] . "</a>" : $list_procedure[$exp]) : '';
+								// echo isset($list_procedure[$exp]) ? (($ArrProcedures[$exp] == 'PUB') ? "<a href='" . base_url($this->uri->segment(1) . '/download/' . $exp) . "'>" . $list_procedure[$exp] . "</a>" : $list_procedure[$exp]) : '';
+								echo isset($list_procedure[$exp]) ? $list_procedure[$exp]: '';
+								// echo "<button type='button' class='btn btn-xs btn-primary'>sdsd</button>";
 							}
 						}
 					}

@@ -1,6 +1,7 @@
 <?php
 
 use Mpdf\Tag\Details;
+use Mpdf\Mpdf;
 
 if (!defined('BASEPATH')) exit('No direct script access allowed');
 
@@ -176,7 +177,7 @@ class Cross_reference extends Admin_Controller
 		$list_procedure = [];
 		$ArrProcedures = [];
 		foreach ($procedures as $pro) {
-			$list_procedure[$pro->id] = "<span class='badge " . $status[$pro->status] . " m-1'>" . $pro->name . "</span>";
+			$list_procedure[$pro->id] = "<span style='cursor:pointer' title='View Process' class='badge view-procedure "  . $status[$pro->status] . " m-1' data-id='$pro->id'> " . $pro->name . "<sup> (". ($pro->status).")</sup></span>";
 			$ArrProcedures[$pro->id] = $pro->status;
 		}
 
@@ -448,7 +449,7 @@ class Cross_reference extends Admin_Controller
 
 		$data = $this->load->view('printout_procedure', $Data, TRUE);
 		$mpdf->WriteHTML($data);
-		$mpdf->Output();
-		// $mpdf->Output(trim($procedure->name) . ".pdf", 'D');
+		// $mpdf->Output();
+		$mpdf->Output(trim($procedure->name) . ".pdf", 'D');
 	}
 }

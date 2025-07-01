@@ -210,7 +210,7 @@
      };
  </script>
  <!-- REQUIRED JS SCRIPTS -->
- <script src="<?= base_url('themes/dashboard/assets/js/jquery-3.3.1.min.js'); ?>"></script>
+ <script src="<?= base_url('assets/plugins/jQuery/jquery-2.2.3.min.js'); ?>"></script>
  <script src="<?= base_url(); ?>themes/dashboard/assets/plugins/global/plugins.bundle1036.js?"></script>
  <script src="<?= base_url(); ?>themes/dashboard/assets/plugins/custom/prismjs/prismjs.bundle1036.js?"></script>
  <script src="<?= base_url(); ?>themes/dashboard/assets/js/scripts.bundle1036.js?"></script>
@@ -300,7 +300,6 @@
                              c++;
                          }
                      });
-                     console.log(c);
 
                      if (c == 0) {
                          var name = $(this).attr('name');
@@ -310,24 +309,22 @@
                          //  $(this).parents('div.form-group').addClass('validated')
                          $(this).addClass('is-invalid').focus()
                          count = count + 1;
-                         console.log(name);
                      }
                  }
 
                  if ((node == 'INPUT' && type == 'text') || (node == 'INPUT' && type == 'password') || (node == 'SELECT') || (node == 'TEXTAREA') || (node == 'INPUT' && type == 'date') || (node == 'INPUT' && type == 'file')) {
-                     console.log(($(this).val() == null || $(this).val() == '') && ($(this).is(':disabled') == true));
                      if (($(this).val() == null || $(this).val() == '')) {
                          const id = $(this).prop('id')
                          $(this).addClass('is-invalid').focus()
                          $('span[aria-labelledby=select2-' + id + '-container].select2-selection').css('border-color', 'red');
+                         $('span.select2-selection.select2-selection--multiple').css('border-color', 'red');
                          count = count + 1;
-                         console.log($(this));
                          //  console.log(name);
                      }
                  }
              }
          });
-
+         console.log(count);
          if (count == 0) {
              return success;
          } else {

@@ -311,13 +311,13 @@
 									<div class="card shadow- border-0 mb-3" style="border-radius: 10px;">
 										<div class="card-header bg-light border-0 py-4 cursor-pointer" role="tab" id="sectionFlowDetail" style="border-radius: 10px;">
 											<h4 class="mb-0 font-weight-bolder" data-toggle="collapse" data-parent="#accProcedure" href="#flowDetail" aria-expanded="true" aria-controls="flowDetail">
-												FLOW DETAIL
+												PROSES TERKAIT
 											</h4>
 										</div>
 										<div id="flowDetail" class="collapse in" role="tabpanel" aria-labelledby="sectionFlowDetail">
 											<div class="card-body">
 												<div class="d-flex justify-content-between align-items-center mb-3">
-													<button type="button" class="btn btn-primary btn-sm" id="add_flow"><i class="fa fa-plus mr-2"></i>Add Flow</button>
+													<button type="button" class="btn btn-primary btn-sm" id="add_flow"><i class="fa fa-plus mr-2"></i>Tambah Proses</button>
 												</div>
 												<table class="table table-sm table-condensed table-bordered">
 													<thead class="text-center ">

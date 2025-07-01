@@ -1,5 +1,7 @@
 <?php
 
+use Mpdf\Mpdf;
+
 if (!defined('BASEPATH')) exit('No direct script access allowed');
 
 /*
@@ -48,6 +50,12 @@ class Compliances extends Admin_Controller
             $reviews     = $this->db->get_where('compilation_reviews', ['reference_id' => $reference->id])->result();
             $summary     = $this->db->order_by('last_review', 'DESC')->get_where('compilation_reviews', ['reference_id' => $reference->id])->row();
             $users       = $this->db->get_where('view_users', ['company_id' => $this->company, 'status' => 'ACT'])->result();
+            // $ArrSub = [];
+            // if($subjects) foreach($subjects as $sub){
+            //     $ArrSub[$sub->id][];
+            // }
+            // $ArrSub = [];
+
         }
 
         $ArrUsers = [];
@@ -69,33 +77,49 @@ class Compliances extends Admin_Controller
 
     public function index()
     {
-        $ArrUsers = [];
-        $regulations = '';
-        $reference = '';
-        $reviews = '';
-        $summary = '';
-        $reference = $this->db->get_where('view_references', ['company_id' => $this->company, 'status' => 'OPN'])->row();
+        if (isset($_GET['b']) && $_GET['b']) {
+            $ArrUsers = [];
+            $regulations = '';
+            $reference = '';
+            $reviews = '';
+            $summary = '';
 
-        if ($reference) {
-            $regulations = $this->db->get_where('view_ref_regulations', ['reference_id' => $reference->id])->result();
-            $reviews     = $this->db->get_where('compilation_reviews', ['reference_id' => $reference->id])->result();
-            $users       = $this->db->get_where('view_users', ['company_id' => $this->company, 'status' => 'ACT'])->result();
-            $summary     = $this->db->order_by('last_review', 'DESC')->get_where('compilation_reviews', ['reference_id' => $reference->id])->row();
+            $reference = $this->db->get_where('view_references', ['id' => $_GET['b']])->row();
+            if ($reference) {
+                $regulations    = $this->db->get_where('view_ref_regulations', ['reference_id' => $reference->id])->result();
+                $reviews        = $this->db->get_where('compilation_reviews', ['reference_id' => $reference->id])->result();
+                $users          = $this->db->get_where('view_users', ['company_id' => $this->company, 'status' => 'ACT'])->result();
+                $summary        = $this->db->order_by('last_review', 'DESC')->get_where('compilation_reviews', ['reference_id' => $reference->id])->row();
+                $subjects       = $this->db->get_where('view_compliance_subjects', ['reference_id' => $reference->id])->result();
 
-            foreach ($users as $usr) {
-                $ArrUsers[$usr->id_user] = $usr->full_name;
+                foreach ($users as $usr) {
+                    $ArrUsers[$usr->id_user] = $usr->full_name;
+                }
+
+                $ArrReg = [];
+                foreach ($regulations as $reg) {
+                    $ArrReg[$reg->subject][] = $reg;
+                }
             }
+
+            $this->template->set([
+                'regulations'   => $regulations ?: [],
+                'reference'     => $reference ?: [],
+                'reviews'       => $reviews ?: [],
+                'summary'       => $summary ?: '',
+                'ArrUsers'      => $ArrUsers,
+                'subjects'      => $subjects,
+                'ArrReg'        => $ArrReg,
+            ]);
+            $this->template->render('list');
+        } else {
+            $listCompliance = $this->db->get_where('view_references', ['company_id' => $this->company])->result();
+            $ArrList = [];
+            if ($listCompliance) foreach ($listCompliance as $k => $v) {
+                $ArrList[] = $v;
+            }
+            $this->template->render('index', ['list' => $ArrList]);
         }
-
-        $this->template->set([
-            'regulations'   => $regulations ?: [],
-            'reference'     => $reference ?: [],
-            'reviews'       => $reviews ?: [],
-            'summary'       => $summary ?: '',
-            'ArrUsers'       => $ArrUsers,
-        ]);
-
-        $this->template->render('list');
     }
 
     public function lists($id = null)
@@ -127,7 +151,7 @@ class Compliances extends Admin_Controller
             if ($compliance) {
                 $data            = $this->db->get_where('view_regulation_paragraphs', ['regulation_id' => $compliance->regulation_id])->result();
                 /* data phoaragraph */
-                $complianceDtl       = $this->db->get_where('compliance_details', ['regulation_id' => $compliance->regulation_id])->result();
+                $complianceDtl       = $this->db->get_where('compliance_details', ['regulation_id' => $compliance->regulation_id, 'reference_id' => $compliance->reference_id])->result();
                 foreach ($complianceDtl as $dtl) {
                     $ArrCompl[$dtl->prgh_id] = $dtl;
                 }
@@ -339,7 +363,10 @@ class Compliances extends Admin_Controller
             $NAP = (isset($ArrStatus['NAP'])) ? count($ArrStatus['NAP']) : 0;
 
             $this->db->update('ref_regulations', [
-                'last_update' => date('Y-m-d H:i:s'), 'total_compliance' => $CMP, 'total_not_compliance' => $NCM, 'total_not_applicable' => $NAP
+                'last_update' => date('Y-m-d H:i:s'),
+                'total_compliance' => $CMP,
+                'total_not_compliance' => $NCM,
+                'total_not_applicable' => $NAP
             ], ['id' => $data['compliance_id']]);
 
             if ($this->db->trans_status() === FALSE) {
@@ -719,10 +746,68 @@ class Compliances extends Admin_Controller
         }
     }
 
+    public function review($subject = null)
+    {
+        if ($subject) {
+            // $reference      = $this->db->get_where('view_references', ['id' => $id])->row();
+            $regulations    = $this->db->get_where('view_compliance_details', ['subject' => $subject])->result();
+            $users          = $this->db->get_where('view_users', ['company_id' => $this->company, 'status' => 'ACT'])->result();
+
+            $cat            = [
+                'OPP' => 'Peluang',
+                'RSK' => 'Resiko'
+            ];
+
+            $status            = [
+                'CMP' => '<span class="badge badge-success">Compliance</span>',
+                'NCM' => '<span class="badge badge-danger">Not Compliance</span>',
+                'NAP' => '<span class="badge badge-secondary">Not Applicable</span>'
+            ];
+
+            $ArrReg         = [];
+            $ArrOpports     = [];
+            $ArrUsers       = [];
+
+            foreach ($regulations as $reg) {
+                $ArrReg[$reg->regulation_id][] = $reg;
+            }
+
+            foreach ($users as $usr) {
+                $ArrUsers[$usr->id_user] = $usr->full_name;
+            }
+
+            $Data = [
+                'regulations'   => $regulations,
+                'ArrReg'        => $ArrReg,
+                'ArrOpports'    => $ArrOpports,
+                'cat'           => $cat,
+                'ArrUsers'      => $ArrUsers,
+                'status'        => $status,
+            ];
+
+            $this->template->set($Data);
+            $this->template->render('compilation');
+        }
+    }
+
+    public function history($subject = null)
+    {
+        if ($subject) {
+            $review    = $this->db->get_where('compilation_reviews', ['subject' => $subject])->result();
+            $Data = [
+                'review'   => $review,
+            ];
+
+            $this->template->set($Data);
+            $this->template->render('history-review');
+        }
+    }
+
     public function save_review()
     {
         $mpdf           = new Mpdf();
         $id             = $this->input->post('id');
+        $subject        = $this->input->post('subject');
         $rand_text      = uniqid(date('YmdHis-'));
 
         // create pdf
@@ -752,7 +837,7 @@ class Compliances extends Admin_Controller
 
         if ($id) {
             $reference      = $this->db->get_where('view_references', ['id' => $id])->row();
-            $regulations    = $this->db->get_where('view_compliance_details', ['reference_id' => $reference->id])->result();
+            $regulations    = $this->db->get_where('view_compliance_details', ['reference_id' => $reference->id, 'subject' => $subject])->result();
             $opports        = $this->db->get_where('view_comp_opports', ['reference_id' => $reference->id])->result();
             $users          = $this->db->get_where('view_users', ['company_id' => $this->company, 'status' => 'ACT'])->result();
             $summary        = $this->db->order_by('last_review', 'DESC')->get_where('compilation_reviews', ['reference_id' => $reference->id])->row();
@@ -810,19 +895,20 @@ class Compliances extends Admin_Controller
                 'summary'       => $summary,
                 'status'        => $status,
             ];
+
             $page           = $this->load->view('export-pdf', $Data, TRUE);
             // $mpdf->Output();
             $this->db->trans_begin();
-
             // update review
             $Review = [
                 'reference_id'           => $id,
                 'company_id'             => $reference->company_id,
                 'last_review'            => date('Y-m-d H:i:s'),
                 'reference_id'           => $id,
+                'subject'                => $subject,
                 'total_compliance'       => $TC,
                 'total_not_compliance'   => $TNC,
-                'total_not_applicable'       => $TNA,
+                'total_not_applicable'   => $TNA,
                 'document'               => $rand_text . '.pdf',
             ];
 
@@ -909,10 +995,11 @@ class Compliances extends Admin_Controller
             $regulations    = $this->db->get_where('view_compliance_details', $where)->result();
             $opports        = $this->db->get_where('view_comp_opports', ['reference_id' => $reference->id])->result();
             $users          = $this->db->get_where('view_users', ['company_id' => $this->company, 'status' => 'ACT'])->result();
-            // $summary        = $this->db->order_by('last_review', 'DESC')->get_where('compilation_reviews', ['reference_id' => $reference->id])->row();
+            $subject        = $this->db->get_where('view_compliance_subjects', ['company_id' => $this->company])->result();
+
             $TC             = $TNC = $TNA = 0;
             foreach ($regulations as $reg) {
-                $ArrReg[$reg->regulation_category][] = $reg;
+                // $ArrReg[$reg->regulation_category][] = $reg;
                 if ($reg->status == 'CMP') {
                     $TC++;
                 }
@@ -946,7 +1033,7 @@ class Compliances extends Admin_Controller
             $ArrUsers       = [];
 
             foreach ($regulations as $reg) {
-                $ArrReg[$reg->regulation_id][] = $reg;
+                $ArrReg[$reg->subject][] = $reg;
             }
 
             foreach ($opports as $opr) {
@@ -966,6 +1053,7 @@ class Compliances extends Admin_Controller
                 'ArrUsers'      => $ArrUsers,
                 'summary'       => $summary,
                 'status'        => $status,
+                'subject'        => $subject,
             ];
 
             $page           = $this->load->view('export-pdf', $Data, TRUE);

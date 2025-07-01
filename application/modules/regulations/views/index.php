@@ -29,21 +29,25 @@
 									<tr class="text-center">
 										<th class="p-2" width="50">No.</th>
 										<th class="p-2 text-left">Regulation Name</th>
-										<th class="p-2 text-center" width="70">Year</th>
-										<th class="p-2" width="150">Subject</th>
+										<th class="p-2 text-center">About</th>
 										<th class="p-2" width="170">Category</th>
 										<th class="p-2" width="100">Last Update</th>
+										<th class="p-2" width="100">Status</th>
+										<th class="p-2" width="">Description</th>
 										<th class="p-2" width="90">Action</th>
 									</tr>
 								</thead>
 								<tbody>
+
 									<?php if (isset($data) && $data) :
 										$n = 0;
-										foreach ($data as $dt) : $n++; ?>
+										foreach ($data as $dt) : $n++;
+											$name = $dt->category_name . " " . $dt->nomenclature . (($dt->number) ? " No. " . $dt->number : '') . " " . $dt->year;
+									?>
 											<tr>
 												<td class="p-2 text-center"><?= $n; ?></td>
-												<td class="p-2"><?= $dt->name; ?></td>
-												<td class="p-2 text-center"><?= $dt->year; ?></td>
+												<td class="p-2"><?= $name; ?></td>
+												<td class="p-2 text"><?= $dt->about; ?></td>
 												<td class="p-2 text-center">
 													<?php if (isset($ArrRegSjb[$dt->id])) : ?>
 														<?php foreach ($ArrRegSjb[$dt->id] as $sbj) : ?>
@@ -51,15 +55,22 @@
 														<?php endforeach; ?>
 													<?php endif; ?>
 												</td>
-												<td class="p-2 text-center">
+												<!-- <td class="p-2 text-center">
 													<?php if (isset($ArrRegScp[$dt->id])) : ?>
 														<?php foreach ($ArrRegScp[$dt->id] as $scp) : ?>
 															<span class="label label-success label-inline mb-1"><?= $scp->scope_name; ?></span>
 														<?php endforeach; ?>
 													<?php endif; ?>
+												</td> -->
+												<td class="text-center"><?= ($dt->modified_at) ?: $dt->created_at; ?></td>
+												<td class="text-center">
+													<span class="label <?= ($dt->status == 'PUB') ? 'label-success' : (($dt->status == 'EXP') ? 'label-danger' : 'label-info'); ?> label-inline"><?= $status[$dt->status] ?></span>
 												</td>
 												<td class="text-center">
-													<?= ($dt->modified_at) ?: $dt->created_at; ?>
+													<?= ($dt->revision_desc); ?>
+													<?php if ($dt->status == 'CH'): ?>
+														<button type="button" data-id="<?= $dt->regulation_relation; ?>" class="btn btn-link view"><?= $ArrReg[$dt->regulation_relation]; ?></button>
+													<?php endif; ?>
 												</td>
 												<td class="text-center p-2">
 													<button type="button" class="btn btn-xs btn-icon btn-info view" data-id="<?= $dt->id; ?>" data-toggle="tooltip" title="View Data"><i class="fa fa-search"></i></button>

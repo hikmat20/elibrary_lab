@@ -7,7 +7,7 @@
 					<h2 class="">New Checksheet</h2>
 				</div>
 				<div class="card-body overflow-auto">
-					<form id="form-checksheet">
+					<form id="form-checksheet" enctype="multipart/form-data">
 						<div class="row mb-3">
 							<label for="" class="col-md-2 control-label">Checksheet Name</label>
 							<div class="col-md-4">:
@@ -50,7 +50,7 @@
 						<hr>
 						<h5>List Checksheets</h5>
 						<div class="table-responsive" style="overflow-x:auto;">
-							<table class="table table-bordered" style="width:<?= $width; ?>;">
+							<table class="table table-bordered">
 								<thead class="table-light">
 									<tr>
 										<th rowspan="2" class="p-2" width="50">No</th>
@@ -60,12 +60,20 @@
 									</tr>
 									<tr>
 										<?php for ($i = 1; $i <= $count; $i++) {
-											$weekend="";
-											$tanggalkolom=date("Y-m",strtotime($data->periode))."-".$i;
-											if(date('w', strtotime($tanggalkolom)) % 6 == 0) $weekend="table-danger";
-											if($data->frequency_checking!=1) $weekend="";
-											?>
-											<th class="text-center <?=$weekend?> <?= $i < (date('d')) ? 'ds-none' : ''; ?>  <?= ($weekOfMonth) && ($weekOfMonth == $i) ? 'bg-light-warning' : (($exec == 3 && $i == date('d')) ? 'bg-light-warning' : (($exec == 5 && $i == date('m')) ? 'bg-light-warning' : '')); ?>"><?= ($exec != 5) ? $name_col . " " . $i : $name_col[$i]; ?></th>
+											if(
+												($fChecking[$data->frequency_checking] == 'Daily' && $i == date('d')) || 
+												($fChecking[$data->frequency_checking] == 'Weekly' && $i == $weekOfMonth) ||
+												($fChecking[$data->frequency_checking] == 'Monthly' && $i == date('m'))
+											) {
+
+											
+											$weekend = "";
+											$tanggalkolom = date("Y-m", strtotime($data->periode)) . "-" . $i;
+											if (date('w', strtotime($tanggalkolom)) % 6 == 0) $weekend = "table-danger";
+											if ($data->frequency_checking != 1) $weekend = "";
+										?>
+											<th class="text-center <?= $weekend ?> <?= $i < (date('d')) ? 'ds-none' : ''; ?>  <?= ($weekOfMonth) && ($weekOfMonth == $i) ? 'bg-light-warning' : (($exec == 3 && $i == date('d')) ? 'bg-light-warning' : (($exec == 5 && $i == date('m')) ? 'bg-light-warning' : '')); ?>"><?= ($exec != 5) ? $name_col . " " . $i : $name_col[$i]; ?></th>
+										<?php } ?>
 										<?php } ?>
 									</tr>
 								</thead>
@@ -75,26 +83,34 @@
 										<tr>
 											<td>
 												<?= $n; ?>
-												<input type="hidden" name="detail[<?= $n; ?>][id]" value="<?= $it->id; ?>">
 											</td>
 											<td><?= $it->item_name; ?></td>
 											<td><?= $it->standard_check; ?></td>
-											<?php for ($i = 1; $i <= $count; $i++) : 
-											$weekend="";
-											$tanggalkolom=date("Y-m",strtotime($data->periode))."-".$i;
-											if(date('w', strtotime($tanggalkolom)) % 6 == 0) $weekend="table-danger";
-											if($data->frequency_checking!=1) $weekend="";											
+											<?php for ($i = 1; $i <= $count; $i++) :
+												if(
+													($fChecking[$data->frequency_checking] == 'Daily' && $i == date('d')) || 
+													($fChecking[$data->frequency_checking] == 'Weekly' && $i == $weekOfMonth) ||
+													($fChecking[$data->frequency_checking] == 'Monthly' && $i == date('m'))
+												) {
+													
+												$weekend = "";
+												$tanggalkolom = date("Y-m", strtotime($data->periode)) . "-" . $i;
+												if (date('w', strtotime($tanggalkolom)) % 6 == 0) $weekend = "table-danger";
+												if ($data->frequency_checking != 1) $weekend = "";
 											?>
 												<?php $nn = "n" . $i; ?>
 												<?php $Nn = "note" . $i; ?>
-												<input type="hidden" name="detail[<?= $n; ?>][field]" value="<?= $i; ?>" <?= ($weekOfMonth) ? (($weekOfMonth != $i) ? 'disabled' : '') : ($exec == 3 && $i != (date('d')) ? 'disabled' : (($exec == 5) && ($i != (date('m'))) ? 'disabled' : '')); ?>>
-												<td class="<?=$weekend?> <?= ($weekOfMonth) && ($weekOfMonth == $i) ? 'bg-light-warning' : (($exec == 3 && $i == date('d')) ? 'bg-light-warning' : (($exec == 5 && $i == date('m')) ? 'bg-light-warning' : '')); ?>">
+												<?php $NBukti = "bukti_" . $i; ?>
+												<input type="hidden" name="detail[<?= $n . "_" . $i; ?>][id]" value="<?= $it->id; ?>" <?= ($weekOfMonth) ? (($weekOfMonth != $i) ? 'disabled' : '') : ($exec == 3 && ($i != date('d')) ? 'disabled' : (($exec == 5) && ($i != (date('m'))) ? 'disabled' : '')); ?>>
+												<input type="hidden" name="detail[<?= $n . "_" . $i; ?>][field]" value="<?= $i; ?>" <?= ($weekOfMonth) ? (($weekOfMonth != $i) ? 'disabled' : '') : ($exec == 3 && ($i != date('d')) ? 'disabled' : (($exec == 5) && ($i != (date('m'))) ? 'disabled' : '')); ?>>
+												<td class="<?= $weekend ?> <?= ($weekOfMonth) && ($weekOfMonth == $i) ? 'bg-light-warning' : (($exec == 3 && $i == date('d')) ? 'bg-light-warning' : (($exec == 5 && $i == date('m')) ? 'bg-light-warning' : '')); ?>">
+													<br>
 													<?php if ($it->check_type == 'boolean') : ?>
 														<div class="" id="r_<?= $n . '_c_' . $i; ?>">
 															<div class="d-flex justify-content-start align-items-center gap-4">
 																<div class="form-check form-check-custom form-check-solid mr-10">
 																	<label class="form-check-label font-weight-bolder text-dark">
-																		<input class="form-check-input yes required" type="radio" value="yes" <?= ($weekOfMonth) ? (($weekOfMonth != $i) ? 'disabled' : '') : ($exec == 3 && $i != (date('d')) ? 'disabled' : (($exec == 5) && ($i != (date('m'))) ? 'disabled' : '')); ?> name="detail[<?= $n; ?>][n<?= $i; ?>]" data-row="<?= $n . $i; ?>" id="boolean_<?= $i . $n; ?>" <?= ($it->$nn == 'yes') ? 'checked' : ''; ?>>
+																		<input class="form-check-input yes required" type="radio" value="yes" <?= ($weekOfMonth) ? (($weekOfMonth != $i) ? 'disabled' : '') : ($exec == 3 && ($i != date('d')) ? 'disabled' : (($exec == 5) && ($i != (date('m'))) ? 'disabled' : '')); ?> name="detail[<?= $n . "_" . $i; ?>][n<?= $i; ?>]" data-row="<?= $n . $i; ?>" id="boolean_<?= $i . $n; ?>" <?= ($it->$nn == 'yes') ? 'checked' : ''; ?> >
 																		Yes
 																		<span class="invalid-feedback font-weight-normal">
 																			<i class="text-danger fa fa-exclamation-circle"></i>
@@ -103,7 +119,7 @@
 																</div>
 																<div class="form-check form-check-custom form-check-danger form-check-solid mr-10">
 																	<label class="form-check-label font-weight-bolder text">
-																		<input class="form-check-input no required" type="radio" value="no" <?= ($weekOfMonth) ? (($weekOfMonth != $i) ? 'disabled' : '') : ($exec == 3 && $i != (date('d')) ? 'disabled' : (($exec == 5) && ($i != (date('m'))) ? 'disabled' : '')); ?> name="detail[<?= $n; ?>][n<?= $i; ?>]" data-row="<?= $n . $i; ?>" id="boolean_<?= $i . $n; ?>" <?= ($it->$nn == 'no') ? 'checked' : ''; ?>>
+																		<input class="form-check-input no required" type="radio" value="no" <?= ($weekOfMonth) ? (($weekOfMonth != $i) ? 'disabled' : '') : ($exec == 3 && ($i != date('d')) ? 'disabled' : (($exec == 5) && ($i != (date('m'))) ? 'disabled' : '')); ?> name="detail[<?= $n . "_" . $i; ?>][n<?= $i; ?>]" data-row="<?= $n . $i; ?>" id="boolean_<?= $i . $n; ?>" <?= ($it->$nn == 'no') ? 'checked' : ''; ?>>
 																		No
 																		<span class="invalid-feedback font-weight-normal">
 																			<i class="text-danger fa fa-exclamation-circle fa-md"></i>
@@ -111,26 +127,38 @@
 																	</label>
 																</div>
 															</div>
-															<textarea type="text" name="detail[<?= $n; ?>][note<?= $i; ?>]" id="note<?= $n . $i; ?>" <?= ($weekOfMonth) ? (($weekOfMonth != $i) ? 'disabled' : ((!$it->$nn || $it->$nn == 'yes') ? 'disabled' : '')) : ($i != (date('d')) ? 'disabled' : ((!$it->$nn || $it->$nn == 'yes') ? 'disabled' : '')); ?> class="form-control <?= $i == (date('d')) ? 'required' : ''; ?>" placeholder="Reason"><?= isset($ArrNote[$it->id]) ? $ArrNote[$it->id]->$Nn : ''; ?></textarea>
+															<textarea type="text" name="detail[<?= $n . "_" . $i; ?>][note<?= $i; ?>]" id="note<?= $n . $i; ?>" <?= ($weekOfMonth) ? (($weekOfMonth != $i) ? 'disabled' : ((!$it->$nn || $it->$nn == 'yes') ? 'disabled' : '')) : ($i != (date('d')) ? 'disabled' : ((!$it->$nn || $it->$nn == 'yes') ? 'disabled' : '')); ?> class="form-control <?= $i == (date('d')) ? 'required' : ''; ?>" placeholder="Reason"><?= isset($ArrNote[$it->id]) ? $ArrNote[$it->id]->$Nn : ''; ?></textarea>
+															<br>
+															<span style="font-weight: bold;">Bukti</span>
+															<input type="file" name="bukti<?= $n.$i ?>" class="form-control">
+															<?php 
+															if(isset($ArrNote[$it->id]->$NBukti)){
+																if($ArrNote[$it->id]->$NBukti !== '' && file_exists($ArrNote[$it->id]->$NBukti)) {
+																	echo '<br>';
+																	echo '<a href="'.base_url($ArrNote[$it->id]->$NBukti).'" class="btn btn-sm btn-primary" target="_blank"><i class="fa fa-file"></i> Document</a>';
+																}
+															}
+															?>
 															<span class="invalid-feedback">Can not be empty</span>
 														</div>
 													<?php else : ?>
-														<textarea name="detail[<?= $n; ?>][n<?= $i; ?>]" id="r_<?= $n . '_c_' . $i; ?>" <?= ($weekOfMonth) ? (($weekOfMonth != $i) ? 'disabled' : '') : ($exec == 3 && $i != (date('d')) ? 'disabled' : ($exec == 5 && $i != (date('m')) ? 'disabled' : '')); ?> class="form-control <?= $i == (date('d')) ? 'required' : ''; ?>" placeholder="Result"><?= ($it->$nn) ?: ''; ?></textarea>
+														<textarea name="detail[<?= $n . "_" . $i; ?>][n<?= $i; ?>]" id="r_<?= $n . '_c_' . $i; ?>" <?= ($weekOfMonth) ? (($weekOfMonth != $i) ? 'disabled' : '') : ($exec == 3 && $i != (date('d')) ? 'disabled' : ($exec == 5 && $i != (date('m')) ? 'disabled' : '')); ?> class="form-control <?= $i == (date('d')) ? 'required' : ''; ?>" placeholder="Result"><?= ($it->$nn) ?: ''; ?></textarea>
 														<span class="invalid-feedback">Can not be empty</span>
 													<?php endif; ?>
-												</td>
-											<?php endfor; ?>
+												</td> <?php
+												}
+											 endfor; ?>
 										</tr>
 									<?php endforeach; ?>
 								</tbody>
 							</table>
 						</div>
+						<hr>
+						<div class="text-right">
+							<button type="submit" class="btn btn-primary" id="save"><i class="fa fa-save"></i> Save</button>
+							<a href="<?= base_url($this->uri->segment(1) . '/?p=' . $data->process_id . '&sub=' . $data->sub_id . '&checksheet=' . $data->dir_id); ?>" class="btn btn-danger"><i class="fa fa-reply"></i> Back</a>
+						</div>
 					</form>
-					<hr>
-					<div class="text-right">
-						<button type="button" class="btn btn-primary" id="save"><i class="fa fa-save"></i> Save</button>
-						<a href="<?= base_url($this->uri->segment(1) . '/?p=' . $data->process_id . '&sub=' . $data->sub_id . '&checksheet=' . $data->dir_id); ?>" class="btn btn-danger"><i class="fa fa-reply"></i> Back</a>
-					</div>
 				</div>
 			</div>
 		</div>
@@ -161,7 +189,9 @@
 
 		$('.datatable').DataTable()
 
-		$(document).on('click', '#save', function() {
+		$(document).on('submit', '#form-checksheet', function(e) {
+			e.preventDefault();
+
 			var valid = 0;
 			var validText = 0;
 			// for (let r = 1; r <= count ; r++) {
@@ -194,6 +224,7 @@
 			// }
 
 			const formdata = new FormData($('#form-checksheet')[0])
+			// var formdata = $('#form-checksheet').serialize();
 
 			const isValid = getValidation('#form-checksheet')
 

@@ -47,7 +47,7 @@
                 <td>
                   <strong><?= $dt->pasal_name; ?></strong>
                   <br>
-                  (<?= $dt->ayat; ?>) <?= $dt->description_ayat; ?>
+                  <?= ($dt->ayat) ? "(" . $dt->ayat . ") " : ''; ?><?= $dt->description_ayat; ?>
                 </td>
                 <td><?= ($dt->compliance_desc) ?: ''; ?></td>
                 <td class="text-center"><?= ($dt->status) ? $status[$dt->status] : ''; ?></td>
@@ -60,10 +60,12 @@
   </div>
 </div>
 
-<div class="text-center">
-  <button type="button" class="btn btn-primary btn-lg w-250px" data-id="<?= $reference->id; ?>" id="process_compilation"><i class="fa fa-sync"></i>Process</button>
-  <!-- <button type="button" class="btn btn-danger btn-lg w-150px"><i class="fa fa-times"></i>Cancel</button> -->
-</div>
+<?php if (isset($dt)): ?>
+  <div class="text-center">
+    <button type="button" class="btn btn-primary btn-lg w-250px" data-subject="<?= isset($dt) ? $dt->subject : ''; ?>" data-id="<?= isset($dt) ? $dt->reference_id : ''; ?>" id="process_compilation"><i class="fa fa-sync"></i>Process</button>
+    <!-- <button type="button" class="btn btn-danger btn-lg w-150px"><i class="fa fa-times"></i>Cancel</button> -->
+  </div>
+<?php endif; ?>
 
 <script>
   $('.select2').select2({

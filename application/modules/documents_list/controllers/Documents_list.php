@@ -415,14 +415,18 @@ class Documents_list extends Admin_Controller
 
 	public function view_guides($id = null)
 	{
-		$data 			= $this->db->get_where('view_guides_detail_data', ['id' => $id])->row();
-		$file 			= './directory/MASTER_GUIDES/' . $data->company_id . '/' . $data->document;
+		$data 			= $this->db->get_where('guide_documents', ['guide_detail_data_id' => $id,'status'=>'1'])->result();
+		$ArrDoc = [];
+		foreach ($data as $d) {
+			$ArrDoc[$d->file_type][] = $d;
+		}
+		$file 			= './directory/MASTER_GUIDES/' . $this->company . '/';
 		$methode 		= ['INS' => 'Insitu', 'LAB' => 'Inlab'];
-
 		$this->template->set([
 			'data' 		=> $data,
+			'ArrDoc'	=> $ArrDoc,
 			'file'		=> $file,
-			'methode'		=> $methode
+			'methode'	=> $methode
 		]);
 
 		$this->template->render('guides/view_guides');
@@ -443,6 +447,20 @@ class Documents_list extends Admin_Controller
 	public function show_file_guides($id = null)
 	{
 		$file 			= $this->db->get_where('guide_detail_data', ['id' => $id])->row();
+		$array 			= explode('.', $file->document);
+		$extension 		= end($array);
+
+		$this->template->set([
+			'file' 		=> $file,
+			'ext' 		=> $extension
+		]);
+
+		$this->template->render('guides/show');
+	}
+
+	public function view_file_guides($id = null)
+	{
+		$file 			= $this->db->get_where('guide_documents', ['id' => $id])->row();
 		$array 			= explode('.', $file->document);
 		$extension 		= end($array);
 
