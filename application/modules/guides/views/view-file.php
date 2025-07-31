@@ -61,18 +61,16 @@
 		<table class="table table-sm">
 			<thead class="table-light">
 				<tr>
-					<th class="text-center py-1">Sub Alat <span class="text-danger">*</span></th>
-					<th class="text-center py-1">Rentang Ukur <span class="text-danger">*</span></th>
-					<th class="text-center py-1">Ketidakpastian</th>
+					<th class="text-center py-1">Parameter <span class="text-danger">*</span></th>
+					
 				</tr>
 			</thead>
 			<tbody>
-				<?php if ($ArrCombine) : ?>
-					<?php foreach ($ArrCombine as $k => $rm) : reset($ArrCombine) ?>
+				<?php if ($ArrSubTools) : ?>
+					<?php foreach ($ArrSubTools as $rm) :  ?>
 						<tr>
-							<td class="text-center"><?= (isset($ArrSubTools[$k]) && $ArrSubTools[$k] ? $ArrSubTools[$k] : ''); ?></td>
-							<td class="text-center"><?= $k; ?></td>
-							<td class="text-center"><?= $rm; ?></td>
+							<td class="text-center"><?= $rm ?></td>
+							
 						</tr>
 				<?php endforeach;
 				endif; ?>

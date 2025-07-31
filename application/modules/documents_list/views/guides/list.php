@@ -60,10 +60,11 @@
                                         <thead>
                                             <tr>
                                                 <th>#</th>
-                                                <th>Jenis Alat</th>
-                                                <th>Kelompok</th>
-                                                <th>Rentang Ukur</th>
-                                                <th>Metode</th>
+                                                <th>Parameter</th>
+                                                <th>Produk Uji</th>
+                                                <th>Standar Metode</th>
+                                                <th>Bidang Penguji</th>
+                                                <th>Nomor IK</th>
                                                 <th>Terbit</th>
                                                 <th>Opsi</th>
                                             </tr>
@@ -85,6 +86,9 @@
                                                     </td>
                                                     <td style="vertical-align: top;" class="text-dark">
                                                         <?php if ($list->methode) foreach (json_decode($list->methode) as $mth) echo "<span class='badge badge-success'>$methode[$mth]</span> "; ?>
+                                                    </td>
+                                                     <td style="vertical-align: top;" class="text-dark">
+                                                        <?= $list->number; ?>
                                                     </td>
                                                     <td style="vertical-align: top;" class="text-dark">
                                                         <?= $list->publish_date; ?>

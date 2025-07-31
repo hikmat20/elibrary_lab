@@ -11,13 +11,13 @@
 						<div class="row">
 							<div class="col-md-6">
 								<div class="row mb-3">
-									<label class="col-4 col-form-label">Nomor <span>*</span></label>
+									<label class="col-4 col-form-label">Nomor IK <span>*</span></label>
 									<div class="col-8">
-										<input type="text" name="number" id="number" placeholder="Nomor" class="form-control">
+										<input type="text" name="number" id="number" placeholder="Nomor IK" class="form-control">
 									</div>
 								</div>
 								<div class="row mb-3">
-									<label class="col-4 col-form-label">Kelompok <span class="text-danger">*</span></label>
+									<label class="col-4 col-form-label">Bidang Pengujian <span class="text-danger">*</span></label>
 									<div class="col-8">
 										<select name="group_id" id="group_id" class="form-control select2">
 											<option value=""></option>
@@ -28,13 +28,13 @@
 									</div>
 								</div>
 								<div class="row mb-3">
-									<label class="col-4 col-form-label">Jenis Alat <span class="text-danger">*</span></label>
+									<label class="col-4 col-form-label">Produk Uji <span class="text-danger">*</span></label>
 									<div class="col-8">
-										<input type="text" name="name" id="name" placeholder="Jenis Alat" class="form-control">
+										<input type="text" name="name" id="name" placeholder="Produk Uji" class="form-control">
 									</div>
 								</div>
 								<div class="row mb-3">
-									<label class="col-4 col-form-label">Metode <span class="text-danger">*</span></label>
+									<label class="col-4 col-form-label">Teknik Pengujian <span class="text-danger">*</span></label>
 									<div class="col-8">
 										<select name="methode[]" id="methode" data-allow-clear="true" multiple="multiple" class="form-select select2">
 											<option value="INS">Insitu</option>
@@ -43,7 +43,7 @@
 									</div>
 								</div>
 								<div class="row mb-3">
-									<label class="col-4 col-form-label">Reference <span class="text-danger">*</span></label>
+									<label class="col-4 col-form-label">Standar Metode <span class="text-danger">*</span></label>
 									<div class="col-8">
 										<select name="reference[]" id="reference" data-allow-clear="true" multiple="multiple" class="form-select select2">
 											<option value=""></option>
@@ -77,17 +77,15 @@
 									<table id="list-range" class="table table-bordered table-sm table-condensed">
 										<thead class="table-light">
 											<tr>
-												<th class="text-center py-1">Sub Alat <span class="text-danger">*</span></th>
-												<th class="text-center py-1">Rentang Ukur <span class="text-danger">*</span></th>
-												<th class="text-center py-1">Ketidakpastian</th>
-												<th class="text-center py-1">Opsi</th>
+												<th class="text-center py-1">Parameter <span class="text-danger">*</span></th>
+
 											</tr>
 										</thead>
 										<tbody>
 											<tr>
 												<td><input type="text" name="sub_tools[]" placeholder="Name" class="form-control border-0 mb-0 p-1"></td>
-												<td><input type="text" name="range_measure[]" placeholder="0mm - 0mm" class="form-control border-0 mb-0 p-1"></td>
-												<td><input type="text" name="uncertainty[]" placeholder="0mm" class="form-control border-0 mb-0 p-1"></td>
+												<td><input style="display:none" value="-" type="text" name="range_measure[]" placeholder="0mm - 0mm" class="form-control border-0 mb-0 p-1"></td>
+												<td><input style="display:none" value="-" type="text" name="uncertainty[]" placeholder="0mm" class="form-control border-0 mb-0 p-1"></td>
 												<td></td>
 											</tr>
 										</tbody>
@@ -597,10 +595,10 @@
 				<input type="text" name="sub_tools[]" placeholder="Name" class="form-control border-0 mb-0 p-1">
 			</td>
 			<td>
-				<input type="text" name="range_measure[]" placeholder="0mm - 0mm" class="form-control border-0 mb-0 p-1">
+				<input style="display:none" type="text" value="-" name="range_measure[]" placeholder="0mm - 0mm" class="form-control border-0 mb-0 p-1">
 			</td>
 			<td>
-				<input type="text" name="uncertainty[]" placeholder="0mm" class="form-control border-0 mb-0 p-1">
+				<input style="display:none" type="text" value="-" name="uncertainty[]" placeholder="0mm" class="form-control border-0 mb-0 p-1">
 			</td>
 			<td class="text-center"><button type="button" class="btn btn-xs btn-light-danger btn-icon remove-range-list"><i class="fa fa-times fa-sm"></i></button></td>
 		</tr>

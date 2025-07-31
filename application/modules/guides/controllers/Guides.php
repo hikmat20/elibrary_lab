@@ -58,7 +58,7 @@ class Guides extends Admin_Controller
 		foreach ($references as $ref) {
 			$ArrRef[$ref->id] = $ref->alias;
 		}
-
+		
 		$this->template->set([
 			'data' 				=> $dirs,
 			'details' 			=> $details,

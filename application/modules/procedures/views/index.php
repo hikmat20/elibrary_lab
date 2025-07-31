@@ -46,7 +46,9 @@
 								<thead class="text-center table-light">
 									<tr class="text-center">
 										<th class="p-2" width="40">No.</th>
+										<th class="p-2 text-left">Nomor</th>
 										<th class="p-2 text-left">Nama</th>
+										<th class="p-2 text-left">Revisi</th>
 										<th class="p-2" width="130">Status</th>
 										<th class="p-2" width="70">Action</th>
 									</tr>
@@ -58,8 +60,15 @@
 											<tr class="text-center">
 												<td class="p-2"><?= $n; ?></td>
 												<td class="p-2 text-left">
+													<h6 class="my-0"><?= $draft->nomor; ?></h6>
+												</td>
+												<td class="p-2 text-left">
 													<h6 class="my-0"><?= $draft->name; ?></h6>
 												</td>
+												<td class="p-2 text-left">
+													<h6 class="my-0"><?= $draft->revision; ?></h6>
+												</td>
+												
 												<td class="p-2"><?= $status[$draft->status]; ?></td>
 												<td class="p-2">
 													<a href="<?= base_url($this->uri->segment(1) . '/printout/' . $draft->id); ?>" target="_blank" class="btn btn-xs btn-icon btn-light print" data-status="<?= $draft->status; ?>" data-id="<?= $draft->id; ?>" data-toggle="tooltip" title="Print Data"><i class="fa fa-print"></i></a>
@@ -225,11 +234,15 @@
 
 						<!-- Published -->
 						<div class="tab-pane fade" id="published" role="tabpanel" aria-labelledby="published-tab">
+							<a class="btn btn-success" href="<?= base_url($this->uri->segment(1) . '/export_publish_excel/'); ?>">Export Daftar Induk</a>
 							<table id="example1" class="table datatable table-bordered table-sm table-condensed table-hover datatable">
 								<thead class="text-center table-light">
 									<tr class="text-center">
 										<th class="p-2" width="40">No.</th>
+										<th class="p-2 text-left">Nomor</th>
 										<th class="p-2 text-left">Nama</th>
+										<th class="p-2 text-left">Revisi</th>
+										<th class="p-2 text-left">Tgl Publish</th>
 										<th class="p-2" width="130">Status</th>
 										<th class="p-2" width="70">Action</th>
 									</tr>
@@ -241,7 +254,16 @@
 											<tr class="text-center">
 												<td class="p-2"><?= $n; ?></td>
 												<td class="p-2 text-left">
+													<h6 class="my-0"><?= $dt->nomor; ?></h6>
+												</td>
+												<td class="p-2 text-left">
 													<h6 class="my-0"><?= $dt->name; ?></h6>
+												</td>
+												<td class="p-2 text-left">
+													<h6 class="my-0"><?= $dt->revision; ?></h6>
+												</td>
+												<td class="p-2 text-left">
+													<h6 class="my-0"><?= $dt->approved_at; ?></h6>
 												</td>
 												<td class="p-2"><?= $status[$dt->status]; ?></td>
 												<td class="p-2">

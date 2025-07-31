@@ -13,7 +13,7 @@
 				</a>
 				<ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
 					<li class="breadcrumb-item text-muted">
-						<a href="<?= base_url('list/procedures/'); ?>" class="text-muted">PROSEDUR, FORM, IK DAN RECORD</a>
+						<a href="<?= base_url('list/procedures/'); ?>" class="text-muted">PROSEDUR</a>
 					</li>
 					<li class="breadcrumb-item text-muted">
 						<span class="text-muted"><?= $procedure[0]->name; ?></span>

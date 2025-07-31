@@ -9,7 +9,9 @@
   <style>
     *,
     body {
-      font-family: Arial, Helvetica, sans-serif;
+      /* font-family: Arial, Helvetica, sans-serif; */
+      padding: 0px;
+      margin: 0px;
     }
 
     table.table-data {
@@ -78,37 +80,56 @@
     .p-5 {
       padding: 5px;
     }
+
+    .tx-12 {
+      font-size: 12px;
+    }
+
+    .tx-13 {
+      font-size: 13px;
+    }
+
+    .tx-14 {
+      font-size: 14px;
+    }
+
+    .tx-15 {
+      font-size: 15px;
+    }
   </style>
 
 </head>
 
 <body>
 
-  <table border="1" width="100%">
+
+  <!-- <table border="1" width="100%">
     <tr>
-      <td rowspan="3" width="50%" class="text-center">
-        <h2><?= $company_name; ?></h2>
+      <td class="text-center" rowspan="4" style="padding: 10px;" width="120">
+        <img src="<?= base_url('assets/img/logo-lab.png'); ?>" width="110" height="80" alt="">
       </td>
-      <td width="120px">Nomor Dokumen</td>
-      <td><?= $procedure->nomor; ?></td>
-    </tr>
-    <tr>
-      <td>Revisi</td>
-      <td><?= ($procedure->revision) ?: '~'; ?></td>
-    </tr>
-    <tr>
-      <td>Tgl. Revisi</td>
-      <td><?= ($procedure->revision_date) ? date_format(date_create($procedure->revision_date), 'd F Y') : '~'; ?>
+      <td colspan="4" class="text-center">
+        <h3 class="bold">PROSES BISNIS</h3>
       </td>
     </tr>
     <tr>
-      <td class="text-center" style="background-color: #000;color:#fff">
+      <td colspan="4" height="50" style="vertical-align: middle;" class="text-center">
         <h4><?= strtoupper($procedure->name); ?></h4>
       </td>
-      <td>Halaman</td>
-      <td>{PAGENO} of {nbpg}</td>
     </tr>
-  </table>
+    <tr>
+      <td width="120" class="tx-12">No. Dockumen</td>
+      <td class="tx-12">: </td>
+      <td width="110" class="tx-12">Tgl. Efektif</td>
+      <td class="tx-12">: </td>
+    </tr>
+    <tr>
+      <td class="tx-12">Revisi</td>
+      <td class="tx-12">: </td>
+      <td class="tx-12">Halaman</td>
+      <td class="tx-12">: </td>
+    </tr>
+  </table> -->
 
   <div class="">
     <!-- HEADER -->
@@ -158,7 +179,7 @@
           <h5 style="padding-bottom:10px;">3. Process</h5>
           <?= $procedure->process; ?>
           <br><br>
-          <h5 style="padding-bottom:10px;">5. Customer</h5>
+           <h5 style="padding-bottom:10px;">5. Customer</h5>
           <?= $procedure->customer; ?>
           <br><br>
           <h5 style="padding-bottom:10px;">7. Risk</h5>
@@ -186,16 +207,13 @@
     <h4>FLOW PROCEDURE</h4>
     <?php if ($procedure->image_flow_1 || $procedure->image_flow_2 || $procedure->image_flow_3) : ?>
       <?php if ($procedure->image_flow_1) : ?>
-        <img height="600px" src="<?= base_url("directory/FLOW_IMG/$procedure->company_id/$procedure->image_flow_1"); ?>"
-          alt="image_flow_1" class="img-fluid">
+        <img height="600px" src="<?= base_url("directory/FLOW_IMG/$procedure->company_id/$procedure->image_flow_1"); ?>" alt="image_flow_1" class="img-fluid">
       <?php endif; ?>
       <?php if ($procedure->image_flow_2) : ?>
-        <img height="600px" src="<?= base_url("directory/FLOW_IMG/$procedure->company_id/$procedure->image_flow_2"); ?>"
-          alt="image_flow_2" class="img-fluid">
+        <img height="600px" src="<?= base_url("directory/FLOW_IMG/$procedure->company_id/$procedure->image_flow_2"); ?>" alt="image_flow_2" class="img-fluid">
       <?php endif; ?>
       <?php if ($procedure->image_flow_3) : ?>
-        <img height="600px" src="<?= base_url("directory/FLOW_IMG/$procedure->company_id/$procedure->image_flow_3"); ?>"
-          alt="image_flow_3" class="img-fluid">
+        <img height="600px" src="<?= base_url("directory/FLOW_IMG/$procedure->company_id/$procedure->image_flow_3"); ?>" alt="image_flow_3" class="img-fluid">
       <?php endif; ?>
     <?php else : ?>
       ~ Not available data ~
@@ -206,7 +224,7 @@
       <a href="<?= ($procedure->link_video); ?>">Link Video</a>
     <?php endif; ?>
     <br>
-    <h3>PROSES TERKAIT</h3>
+    <h4>FLOW DETAIL</h4>
     <table class="table-data" style="font-size: 11px;">
       <thead>
         <tr class="table-secondary">
@@ -253,7 +271,7 @@
     </table>
 
     <br>
-    <h3>DATA APPROVAL</h3>
+    <h4>DATA APPROVAL</h4>
     <table class="table-data">
       <tr>
         <td class="text-left" width="180">Prepared By</td>
@@ -282,6 +300,9 @@
           }
           ?>
         </td>
+      </tr>
+      <tr>
+        <td colspan="2" class="text-center"><i>-Divalidasi oleh Sistem sehingga tidak perlu membubuhkan tanda tangan-</i></td>
       </tr>
     </table>
   </div>

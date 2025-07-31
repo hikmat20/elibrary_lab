@@ -93,9 +93,8 @@
 									<table id="list-range" class="table table-bordered table-sm table-condensed">
 										<thead class="table-light">
 											<tr>
-												<th class="text-center py-1">Sub Alat <span class="text-danger">*</span></th>
-												<th class="text-center py-1">Rentang Ukur <span class="text-danger">*</span></th>
-												<th class="text-center py-1">Ketidakpastian</th>
+												<th class="text-left py-1">Parameter <span class="text-danger">*</span></th>
+											
 												<th class="text-center py-1">Opsi</th>
 											</tr>
 										</thead>
@@ -104,8 +103,8 @@
 												<?php foreach ($ArrRange as $k => $rm) : ?>
 													<tr>
 														<td><input type="text" name="sub_tools[]" value="<?= (isset($ArrSubTools[$k]) && $ArrSubTools[$k] ? $ArrSubTools[$k] : ''); ?>" class="form-control border-0 mb-0 p-1"></td>
-														<td><input type="text" name="range_measure[]" value="<?= $rm; ?>" placeholder="0mm - 0mm" class="form-control border-0 mb-0 p-1"></td>
-														<td><input type="text" name="uncertainty[]" value="<?= ($ArrUncert[$k]); ?>" placeholder="0mm" class="form-control border-0 mb-0 p-1"></td>
+														<td style="display:none"><input type="text" name="range_measure[]" value="<?= $rm; ?>" placeholder="0mm - 0mm" class="form-control border-0 mb-0 p-1"></td>
+														<td style="display:none"><input type="text" name="uncertainty[]" value="<?= ($ArrUncert[$k]); ?>" placeholder="0mm" class="form-control border-0 mb-0 p-1"></td>
 														<td class="text-center"><button type="button" class="btn btn-icon btn-xs btn-light-danger remove-range-list"><i class="fa fa-times fa-sm"></i></button></td>
 													</tr>
 											<?php endforeach;
@@ -763,10 +762,10 @@
 				<input type="text" name="sub_tools[]" placeholder="Name" class="form-control border-0 mb-0 p-1">
 			</td>
 			<td>
-				<input type="text" name="range_measure[]" placeholder="0mm - 0mm" class="form-control border-0 mb-0 p-1">
+				<input style="display:none" type="text" value="-" name="range_measure[]" placeholder="0mm - 0mm" class="form-control border-0 mb-0 p-1">
 			</td>
 			<td>
-				<input type="text" name="uncertainty[]" placeholder="0mm" class="form-control border-0 mb-0 p-1">
+				<input style="display:none" type="text" value="-" name="uncertainty[]" placeholder="0mm" class="form-control border-0 mb-0 p-1">
 			</td>
 			<td class="text-center"><button type="button" class="btn btn-xs btn-light-danger btn-icon remove-range-list"><i class="fa fa-times fa-sm"></i></button></td>
 		</tr>

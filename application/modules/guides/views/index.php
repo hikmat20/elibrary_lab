@@ -205,18 +205,23 @@
 									<table class="table py-0 table-sm nowrap table-hover datatable">
 										<thead>
 											<tr>
-												<th class="py-2" width="100">Kelompok</th>
-												<th class="py-2">Jenis Alat</th>
-												<th class="py-2">Sub Alat</th>
-												<th class="py-2">Rentang Ukur</th>
-												<th class="py-2">Ketidakpastian</th>
-												<th class="py-2" width="150">Dokumen Standar</th>
+												<th class="py-2">Nomor Dokumen</th>
+												<th class="py-2" width="100">Bidang Pengujian</th>
+												<th class="py-2">Produk Uji</th>
+												<th class="py-2">Parameter</th>
+												<th class="py-2" width="150">Standar Metode</th>
+												<th class="py-2">Teknik Pengujian</th>
 												<th class="py-2 text-center" width="100">Opsi</th>
 											</tr>
 										</thead>
 										<tbody>
 											<?php if (isset($details_data)) : foreach ($details_data as $dtDtl) : ?>
 													<tr>
+														<td style="vertical-align: top;">
+															<ul style="list-style-type:none ;" class="px-0">
+																<?=$dtDtl->number?>
+															</ul>
+														</td>
 														<td style="vertical-align: top;"><?= $dtDtl->group_name; ?></td>
 														<td style="vertical-align: top;"><?= $dtDtl->guide_detail_data_name; ?></td>
 														<td style="vertical-align: top;">
@@ -229,26 +234,21 @@
 															<?php endif; ?>
 														</td>
 														<td style="vertical-align: top;">
-															<ul style="list-style-type:none  ;" class="px-0">
-																<?php foreach (json_decode($dtDtl->range_measure) as $range) : ?>
-																	<li class="px-0"><?= $range; ?></li>
-																<?php endforeach; ?>
-															</ul>
-														</td>
-														<td style="vertical-align: top;">
-															<ul style="list-style-type:none ;" class="px-0">
-																<?php if (isset($dtDtl->uncertainty)) foreach (json_decode($dtDtl->uncertainty) as $uc) : ?>
-																	<li class="px-0"><?= $uc; ?></li>
-																<?php endforeach; ?>
-															</ul>
-														</td>
-														<td style="vertical-align: top;">
 															<ul style="list-style-type: none;" class="px-0">
 																<?php foreach (json_decode($dtDtl->reference) as $ref) : ?>
 																	<li class="px-0"><?= $ArrRef[$ref]; ?></li>
 																<?php endforeach; ?>
 															</ul>
 														</td>
+														<td style="vertical-align: top;">
+															<ul style="list-style-type:none  ;" class="px-0">
+																<?php foreach (json_decode($dtDtl->range_measure) as $range) : ?>
+																	<li class="px-0"><?= $range; ?></li>
+																<?php endforeach; ?>
+															</ul>
+														</td>
+														
+														
 														<td class="text-center">
 															<button type="button" class="btn btn-xs btn-icon btn-info view-file" data-guide_detail_id="<?= $sub; ?>" data-id="<?= $dtDtl->id; ?>"><i class="fa fa-eye"></i></button>
 															<a href="<?= base_url($this->uri->segment(1) . '/?d=' . $selected . '&sub=' . $sub . '&edit=' . $dtDtl->id); ?>" class="btn btn-xs btn-icon btn-warning" data-guide_detail_id="<?= $sub; ?>" data-id="<?= $dtDtl->id; ?>"><i class="fa fa-edit"></i></a>

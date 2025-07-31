@@ -19,8 +19,8 @@
 									<img src="<?= base_url('assets/images/dashboard/prosedur.png'); ?>" alt="List Procedure" class="img-fluid" style="height: 150px;">
 								</div>
 								<h6 class="card-title text-center d-flex align-items-center m-auto" style="min-height: 60px;">
-									<a href="<?= base_url('/list/procedures/'); ?>" class="text-hover-primary" title="PROSEDUR, FORM, IK DAN RECORDS">
-										<span class="card-label m-0 text-dark text-center font-weight-bolder">PROSEDUR, FORM, IK DAN RECORD</span>
+									<a href="<?= base_url('/list/procedures/'); ?>" class="text-hover-primary" title="PPROSEDUR">
+										<span class="card-label m-0 text-dark text-center font-weight-bolder">PROSEDUR</span>
 									</a>
 								</h6>
 							</div>
@@ -33,13 +33,13 @@
 								</div>
 								<h6 class="card-title text-center d-flex align-items-center m-auto" style="min-height: 60px;">
 									<a href="<?= base_url('/list/compliances'); ?>" class="text-hover-primary" title="PEMENUHAN">
-										<span class="card-label m-0 text-dark text-center font-weight-bolder">PEMENUHAN</span>
+										<span class="card-label m-0 text-dark text-center font-weight-bolder">INSTRUKSI KERJA</span>
 									</a>
 								</h6>
 							</div>
 						</div>
 
-						<div class="col-md-2 col-md-3 mb-5">
+						<!-- <div class="col-md-2 col-md-3 mb-5">
 							<div class="card border-0 shadow-lg " style="border-radius: 30px 5px 30px 5px;background-color: rgba(255, 255, 255, 0.50);">
 								<div class="card-body pb-1 d-flex justify-content-center align-items-center" style="min-height: 120px;">
 									<img src="<?= base_url('assets/images/dashboard/training.png'); ?>" alt="MATERI TRAINING" class="img-fluid" style="height: 150px;">
@@ -47,6 +47,19 @@
 								<h6 class="card-title text-center d-flex align-items-center m-auto" style="min-height: 60px;">
 									<a href="<?= base_url('/list/materi'); ?>" class="text-hover-primary" title="MATERI TRAINING">
 										<span class="card-label m-0 text-dark text-center font-weight-bolder">MATERI TRAINING</span>
+									</a>
+								</h6>
+							</div>
+						</div> -->
+
+						<div class="col-md-2 col-md-3 mb-5">
+							<div class="card border-0 shadow-lg " style="border-radius: 30px 5px 30px 5px;background-color: rgba(255, 255, 255, 0.50);">
+								<div class="card-body pb-1 d-flex justify-content-center align-items-center" style="min-height: 120px;">
+									<img src="<?= base_url('assets/images/dashboard/training.png'); ?>" alt="MASTR FORM" class="img-fluid" style="height: 150px;">
+								</div>
+								<h6 class="card-title text-center d-flex align-items-center m-auto" style="min-height: 60px;">
+									<a href="<?= base_url('/master_form'); ?>" class="text-hover-primary" title="Master Form">
+										<span class="card-label m-0 text-dark text-center font-weight-bolder">MASTR FORM</span>
 									</a>
 								</h6>
 							</div>
@@ -59,7 +72,7 @@
 								</div>
 								<h6 class="card-title text-center d-flex align-items-center m-auto" style="min-height: 60px;">
 									<a href="<?= base_url('/list/guides'); ?>" class="text-hover-primary" title="MASTER IK">
-										<span class="card-label m-0 text-dark text-center font-weight-bolder">MASTER IK</span>
+										<span class="card-label m-0 text-dark text-center font-weight-bolder">REKAMAN</span>
 									</a>
 								</h6>
 							</div>

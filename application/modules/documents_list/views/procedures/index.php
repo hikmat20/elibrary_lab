@@ -7,13 +7,13 @@
 				</a>
 				<ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
 					<li class="breadcrumb-item text-muted">
-						<a href="" class="text-muted">PROSEDUR, FORM, IK DAN RECORD</a>
+						<a href="" class="text-muted">PROSEDUR</a>
 					</li>
 				</ul>
 			</div>
 			<a href="<?= base_url('dashboard'); ?>" class="btn btn-primary btn-sm btn-icon mb-3"><i class="fa fa-arrow-left"></i></a>
 
-			<h1 class="text-white fa-3x">PROSEDUR, FORM, IK DAN RECORD</h1>
+			<h1 class="text-white fa-3x">PROSEDUR</h1>
 			<div class="row mb-10">
 				<div class="col-md-4">
 					<input type="text" name="serarch" id="search" placeholder="Pencarian" class="form-control rounded form-control-sm">

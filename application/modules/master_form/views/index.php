@@ -23,24 +23,11 @@
 
 					<div class="card-body">
 						<!-- Nav tabs -->
-						<ul class="nav nav-tabs nav-pills border-0 mb-5" id="myTab" role="tablist">
-							<li class="nav-item" role="presentation">
-								<button class="nav-link active" id="procedures-tab" data-toggle="tab" data-target="#procedures" type="button" role="tab" aria-controls="procedures" aria-selected="true">PROCEDURE</button>
-							</li>
-							<li class="nav-item" role="presentation">
-								<button class="nav-link" id="form-tab" data-toggle="tab" data-target="#form" type="button" role="tab" aria-controls="form" aria-selected="false">FORM</button>
-							</li>
-							<li class="nav-item" role="presentation">
-								<button class="nav-link" id="guides-tab" data-toggle="tab" data-target="#guides" type="button" role="tab" aria-controls="guides" aria-selected="false">IK</button>
-							</li>
-							<!-- <li class="nav-item" role="presentation">
-								<button class="nav-link" id="records-tab" data-toggle="tab" data-target="#records" type="button" role="tab" aria-controls="records" aria-selected="false">RECORD</button>
-							</li> -->
-						</ul>
+						
 
 						<!-- Tab panes -->
 						<div class="tab-content p-3 rounded-lg border">
-							<div class="tab-pane fade show active" id="procedures" role="tabpanel" aria-labelledby="procedures-tab">
+							<div class="tab-pane fade " id="procedures" role="tabpanel" aria-labelledby="procedures-tab">
 								<div id="accProcedure" role="tablist" aria-multiselectable="true">
 
 									<!--  DETAIL PROSES-->
@@ -555,7 +542,7 @@
 
 							</div>
 
-							<div class="tab-pane fade" id="form" role="tabpanel" aria-labelledby="form-tab">
+							<div class="tab-pane fade show active" id="form" role="tabpanel" aria-labelledby="form-tab">
 								<button type="button" class="btn btn-primary mb-3" id="add_form"><i class="fa fa-plus"></i> Add Form</button>
 								<div id="form-data-content">
 									<table class="table datatable table-bordered table-hover">
