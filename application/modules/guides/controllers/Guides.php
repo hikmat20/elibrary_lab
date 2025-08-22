@@ -28,7 +28,7 @@ class Guides extends Admin_Controller
 		$details_data 			= 0;
 		$dirs 	  				= $this->db->get_where('guides', ['status' => '1', 'company_id' => $this->company])->result();
 		$references 	 		= $this->db->get_where('view_standards', ['status' => 'PUB'])->result();
-
+		$guides='';
 		if ((isset($_GET['d']) && ($_GET['d'])) && (isset($_GET['sub']) && ($_GET['sub'])) && (isset($_GET['edit']) && ($_GET['edit']))) {
 			$id = $_GET['edit'];
 			redirect("guides/edit_file/$id");
@@ -53,7 +53,6 @@ class Guides extends Admin_Controller
 		}
 
 
-
 		$ArrRef = [];
 		foreach ($references as $ref) {
 			$ArrRef[$ref->id] = $ref->alias;
@@ -70,7 +69,25 @@ class Guides extends Admin_Controller
 			'ArrRef'  			=> $ArrRef,
 		]);
 
-		$this->template->render('index');
+		if(!$guides){
+			$this->template->render('index');
+			return;
+		}
+
+		switch ($guides->name) {
+			case 'IKM':
+				 $this->template->render('index_ikm');
+				break;
+			case 'IKK':
+				$this->template->render('index_ikk');
+				break;
+			case 'IKA':
+				return $this->template->render('index_ika');
+				break;
+			default:
+				$this->template->render('index');
+		}
+		
 	}
 
 	public function save_dir()
@@ -311,8 +328,27 @@ class Guides extends Admin_Controller
 				'references' 		=> $references,
 				'detail' 			=> $detail
 			]);
+			$guides	= $this->db->get_where('guides', ['id' => $detail->guide_id, 'company_id' => $this->company, 'status' => '1'])->row();
 
-			$this->template->render('form');
+			
+
+			switch ($guides->name ) {
+				case 'IKM':
+					$this->template->render('form_ikm');
+					break;
+				case 'IKK':
+					$this->template->render('form_ikk');
+					break;
+				case 'IKA':
+					$this->template->render('form_ika');
+					break;
+				default:
+					$this->template->render('form');
+			}
+
+
+		
+
 		} else {
 			echo "<h1>404 | Not Found!</h1>";
 		}
@@ -351,11 +387,11 @@ class Guides extends Admin_Controller
 				$this->db->trans_begin();
 				$check = $this->db->get_where('guide_detail_data', ['id' => $id])->num_rows();
 				
-				$data['sub_tools']		= json_encode($data['sub_tools']);
-				$data['range_measure']	= json_encode($data['range_measure']);
-				$data['uncertainty']	= json_encode($data['uncertainty']);
-				$data['methode']		= json_encode($data['methode']);
-				$data['reference']		= json_encode($data['reference']);
+				$data['sub_tools']		= isset($data['sub_tools']) ? json_encode($data['sub_tools']) : '';
+				$data['range_measure']	= isset($data['range_measure']) ? json_encode($data['range_measure']) : '';
+				$data['uncertainty']	= isset($data['uncertainty']) ? json_encode($data['uncertainty']) : '';
+				$data['methode']		= isset($data['methode']) ? json_encode($data['methode']): '';
+				$data['reference']		= isset($data['reference']) ? json_encode($data['reference']) : '';
 
 				unset($data['documents']);
 				if (intval($check) == '0') {
@@ -510,6 +546,7 @@ class Guides extends Admin_Controller
 			$DocSERTCAL 	= $this->db->get_where('guide_documents', ['guide_detail_data_id' => $id, 'file_type' => '7', 'status' => '1'])->result();
 			$DocCEK 		= $this->db->get_where('guide_documents', ['guide_detail_data_id' => $id, 'file_type' => '8', 'status' => '1'])->result();
 			$DocVID 		= $this->db->get_where('guide_documents', ['guide_detail_data_id' => $id, 'file_type' => '9', 'status' => '1'])->result();
+			$guides	= $this->db->get_where('guides', ['id' => $detail->guide_id, 'company_id' => $this->company, 'status' => '1'])->row();
 			$ArrRange = [];
 			$ArrUncert = [];
 			$ArrUncert = [];
@@ -536,8 +573,20 @@ class Guides extends Admin_Controller
 				'ArrUncert' 		=> $ArrUncert,
 				'ArrSubTools' 		=> $ArrSubTools,
 			]);
-
-			$this->template->render('edit');
+			
+			switch ($guides->name ) {
+				case 'IKM':
+					$this->template->render('edit_ikm');
+					break;
+				case 'IKK':
+					$this->template->render('edit_ikk');
+					break;
+				case 'IKA':
+					$this->template->render('edit_ika');
+					break;
+				default:
+					$this->template->render('edit');
+			}
 		} else {
 			echo "Data not found";
 		}
@@ -712,5 +761,138 @@ class Guides extends Admin_Controller
 		$newfile = 'directory/' . $folder . '/' . $file;
 		$mpdf->Output($newfile, 'F');
 		$mpdf->Output();
+	}
+
+	function export_publish_excel($guide_detail_id){
+		$dataPub = $this->db->get_where('guide_detail_data', ['guide_detail_id' => $guide_detail_id])->result();
+		$OK_Proses = $dataPub ? 1 : 0;
+
+		$this->load->library("PHPExcel");
+		$excel = new PHPExcel();
+
+		$excel->getProperties()->setCreator('SISCAL')
+			->setLastModifiedBy('SISCAL')
+			->setTitle("Data Published Documn")
+			->setSubject("SISCAL")
+			->setDescription("List Data Published Document")
+			->setKeywords("Data Published Document");
+
+		$style_col = array(
+			'font' => array('bold' => true),
+			'alignment' => array(
+				'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+				'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER
+			),
+			'borders' => array(
+				'top' => array('style' => PHPExcel_Style_Border::BORDER_THIN),
+				'right' => array('style' => PHPExcel_Style_Border::BORDER_THIN),
+				'bottom' => array('style' => PHPExcel_Style_Border::BORDER_THIN),
+				'left' => array('style' => PHPExcel_Style_Border::BORDER_THIN)
+			)
+		);
+
+		$style_row = array(
+			'alignment' => array(
+				'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER
+			),
+			'borders' => array(
+				'top' => array('style' => PHPExcel_Style_Border::BORDER_THIN),
+				'right' => array('style' => PHPExcel_Style_Border::BORDER_THIN),
+				'bottom' => array('style' => PHPExcel_Style_Border::BORDER_THIN),
+				'left' => array('style' => PHPExcel_Style_Border::BORDER_THIN)
+			)
+		);
+
+		$sheet = $excel->setActiveSheetIndex(0);
+
+		// Add logo image
+		$objDrawing = new PHPExcel_Worksheet_Drawing();
+		$objDrawing->setName('Logo');
+		$objDrawing->setDescription('Logo');
+		$objDrawing->setPath('assets/img/logo-lab.png'); // adjust the path to your logo
+		$objDrawing->setHeight(60);
+		$objDrawing->setCoordinates('A1');
+		$objDrawing->setWorksheet($sheet);
+
+		// Title in 3 rows (merged vertically across B1:E3)
+		$sheet->mergeCells('B1:E3');
+		$sheet->setCellValue('B1', 'Formulir Daftar Induk Dokumen Internal');
+		$sheet->getStyle('B1')->applyFromArray([
+			'font' => [
+				'bold' => true,
+				'size' => 18,
+			],
+			'alignment' => [
+				'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+				'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+			]
+		]);
+
+		// Add bottom-left notes
+		$sheet->setCellValue('A4', 'Jenis Dokumen : Prosedur');
+		$sheet->setCellValue('A5', 'Diperbaharui tanggal : ' . date('d-F-Y'));
+
+		$sheet->mergeCells('A4:C4');
+		$sheet->mergeCells('A5:C5');
+
+		$sheet->getStyle('A4')->getFont()->setBold(true);
+		$sheet->getStyle('A5')->getFont()->setBold(true);
+
+		// $sheet->getStyle('A5')->getFont()->setItalic(true);
+
+		// Header starts at row 6
+		$sheet->setCellValue('A6', "No.");
+		$sheet->setCellValue('B6', "No Dokumen");
+		$sheet->setCellValue('C6', "Nama Dokumen");
+		$sheet->setCellValue('D6', "Edisi/Revisi");
+		$sheet->setCellValue('E6', "Tanggal/Tahun Terbit");
+
+		$sheet->getStyle('A6')->applyFromArray($style_col);
+		$sheet->getStyle('B6')->applyFromArray($style_col);
+		$sheet->getStyle('C6')->applyFromArray($style_col);
+		$sheet->getStyle('D6')->applyFromArray($style_col);
+		$sheet->getStyle('E6')->applyFromArray($style_col);
+
+		$no = 1;
+		$numrow = 7;
+		foreach($dataPub as $data){
+			$sheet->setCellValue('A'.$numrow, $no);
+			$sheet->setCellValue('B'.$numrow, $data->number);
+			$sheet->setCellValue('C'.$numrow, $data->name);
+			$sheet->setCellValue('D'.$numrow, $data->revision_number);
+			$sheet->setCellValue('E'.$numrow, date('d-F-Y', strtotime($data->publish_date)));
+
+			$sheet->getStyle('A'.$numrow)->applyFromArray($style_row);
+			$sheet->getStyle('B'.$numrow)->applyFromArray($style_row);
+			$sheet->getStyle('C'.$numrow)->applyFromArray($style_row);
+			$sheet->getStyle('D'.$numrow)->applyFromArray($style_row);
+			$sheet->getStyle('E'.$numrow)->applyFromArray($style_row);
+
+			$no++;
+			$numrow++;
+		}
+
+		$sheet->getColumnDimension('A')->setWidth(10);
+		$sheet->getColumnDimension('B')->setWidth(20);
+		$sheet->getColumnDimension('C')->setWidth(30);
+		$sheet->getColumnDimension('D')->setWidth(10);
+		$sheet->getColumnDimension('E')->setWidth(25);
+
+		$sheet->getDefaultRowDimension()->setRowHeight(-1);
+		$sheet->getPageSetup()->setOrientation(PHPExcel_Worksheet_PageSetup::ORIENTATION_LANDSCAPE);
+		$sheet->setTitle("Detail Tools");
+		$excel->setActiveSheetIndex(0);
+
+		$file_name = 'Published IKK Selnab- ' . date('Y-m-d H_i_s');
+
+		$objWriter = PHPExcel_IOFactory::createWriter($excel, 'Excel5');
+		ob_end_clean();
+		header("Last-Modified: " . gmdate("D, d M Y") . " GMT");
+		header("Cache-Control: no-store, no-cache, must-revalidate");
+		header("Cache-Control: post-check=0, pre-check=0", false);
+		header("Pragma: no-cache");
+		header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+		header('Content-Disposition: attachment;filename="'.$file_name.'.xls"');
+		$objWriter->save("php://output");
 	}
 }

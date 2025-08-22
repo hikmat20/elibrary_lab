@@ -113,25 +113,17 @@
 															</div>
 														</div>
 													</div>
+													
 													<div class="col-md-6">
 														<div class="form-group">
-															<label class="font-size-h5"><strong>Revisi</strong></label>
+															<label class="font-size-h5"><strong>Catatan Perubahan</strong></label>
 															<div class="">
-																<input name="revision_note" id="revision_note" class="form-control" value="<?= $data->revision_note ?>" placeholder="Revisi" aria-describedby="helpId"></input>
-																<small class="text-danger invalid-feedback">Revisi</small>
-															</div>
-														</div>
-													</div>
-													<div class="col-md-6">
-														<div class="form-group">
-															<label class="font-size-h5"><strong>Riwayat Perubahan</strong></label>
-															<div class="">
-																<textarea rows="5" name="revision_history" id="revision_history" class="form-control summernote" rows="5" placeholder="Riwayat Perubahan" aria-describedby="helpId"><?= $data->revision_history ?></textarea>
+																<textarea rows="5" name="note_history" id="note_history" class="form-control summernote" rows="5" placeholder="Riwayat Perubahan" aria-describedby="helpId"><?= $data->revision_history ?></textarea>
 																<small class="text-danger invalid-feedback">Riwayat Perubahan</small>
 															</div>
 														</div>
 													</div>
-													<div class="col-md-12">
+													<div class="col-md-6">
 														<div class="form-group">
 															<label class="font-size-h5"><strong><span class="text-danger">*</span> Acuan</strong></label>
 															<div class="">
@@ -139,6 +131,9 @@
 																<small class="text-danger invalid-feedback">Acuan</small>
 															</div>
 														</div>
+													</div>
+													<div class="col-md-12">
+														
 														<div class="form-group">
 															<label class="font-size-h5"><strong><span class="text-danger">*</span> Performa Indikator</strong></label>
 															<div class="">
@@ -542,6 +537,47 @@
 														</div>
 													</div> -->
 												</div>
+											</div>
+										</div>
+									</div>
+
+									<!-- APPROVAL -->
+									<div class="card border-0 mb-3" style="border-radius: 10px;">
+										<div class="card-header bg-light border-0 py-4 cursor-pointer" role="tab" id="sectionApproval" style="border-radius: 10px;">
+											<h4 class="mb-0 font-weight-bolder" data-toggle="collapse" data-parent="#rev_history" href="#rev_history" aria-expanded="true" aria-controls="rev_history">
+												RIWAYAT PERUBAHAN
+											</h4>
+										</div>
+										<div id="rev_history" class="collapse in" role="tabpanel" aria-labelledby="sectionApproval">
+											<div class="card-body">
+												<table class="table table-sm table-bordered">
+													<thead class="text-center ">
+														<tr class="table-light">
+															<th width="80">No</th>
+															<th width="50%">Catatan</th>
+															<th width="">Oleh</th>
+															<th width="20%">Tanggal</th>
+														</tr>
+													</thead>
+													<tbody>
+														<?php if ($revision_history) :
+															$n = 0;
+															foreach ($revision_history as $key => $dtl) : $n++; ?>
+																<tr>
+																	<td style="vertical-align:middle;" class="text-center"><?= $key+1; ?></td>
+																	<td style="vertical-align:middle;" class="text-center"><?= $dtl->note_history; ?></td>
+																	<td style="vertical-align:middle;" class="text-center"><?= $dtl->created_by; ?></td>
+																	<td style="vertical-align:middle;" class="text-center"><?= $dtl->created_at; ?></td>
+
+																</tr>
+															<?php endforeach;
+														else : ?>
+															<tr>
+																<td colspan="5" class="text-center text-muted">~ No data avilable ~</td>
+															</tr>
+														<?php endif; ?>
+													</tbody>
+												</table>
 											</div>
 										</div>
 									</div>

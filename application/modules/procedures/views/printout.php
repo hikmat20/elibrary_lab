@@ -305,6 +305,32 @@
         <td colspan="2" class="text-center"><i>-Divalidasi oleh Sistem sehingga tidak perlu membubuhkan tanda tangan-</i></td>
       </tr>
     </table>
+        <?php if ($revision_history) : ?>
+<br>
+    <h4>Riwayat Perubahan</h4>
+     <table class="table-data" style="font-size: 11px;">
+      <thead>
+        <tr style="height:10px" class="table-secondary">
+          <th style="height:10px" class="py-1 text-center">No.</th>
+          <th class="py-1 text-center">Catatan</th>
+          <th class="py-1 text-center">Oleh</th>
+          <th class="py-1 text-center">Tanggal</th>
+        </tr>
+      </thead>
+      <tbody>
+          <?php foreach ($revision_history as $key => $dtl) :  ?>
+            <tr>
+              <td style="vertical-align:middle;" class="text-center"><?= $key+1; ?></td>
+              <td style="vertical-align:middle;" class="text-center"><?= $dtl->note_history; ?></td>
+              <td style="vertical-align:middle;" class="text-center"><?= $dtl->created_by; ?></td>
+              <td style="vertical-align:middle;" class="text-center"><?= $dtl->created_at; ?></td>
+
+            </tr>
+          <?php endforeach; ?>
+      </tbody>
+    </table>
+        <?php endif; ?>
+
   </div>
 </body>
 

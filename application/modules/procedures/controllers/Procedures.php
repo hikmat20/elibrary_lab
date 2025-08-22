@@ -97,6 +97,7 @@ class Procedures extends Admin_Controller
 			$getRecords	= $this->db->get_where('dir_records', ['procedure_id' => $id, 'status !=' => 'DEL', 'flag_type' => 'FOLDER', 'parent_id' => null])->result();
 			$users 		= $this->db->get_where('view_users', ['status' => 'ACT', 'id_user !=' => '1', 'company_id' => $this->company])->result();
 			$jabatan 	= $this->db->get_where('positions', ['company_id' => $this->company])->result();
+			$revision_history 	= $this->db->get_where('procedure_revision_history', ['procedure_id' => $id])->result();
 
 			$ArrForms = [];
 			foreach ($getForms as $frm) {
@@ -109,6 +110,7 @@ class Procedures extends Admin_Controller
 
 			$this->template->set([
 				'title' 		=> 'Edit Procedures',
+				'revision_history' 			=> $revision_history,
 				'data' 			=> $Data,
 				'users' 		=> $users,
 				'detail' 		=> $Data_detail,
@@ -183,9 +185,11 @@ class Procedures extends Admin_Controller
 	{
 		$Data 			= $this->input->post();
 		$Data_flow 		= $this->input->post('flow');
-
+		$note_history = $this->input->post('note_history');
+		unset($Data['note_history']);
 		unset($Data['DataTables_Table_0_length']);
 		unset($Data['DataTables_Table_1_length']);
+		unset($Data['DataTables_Table_2_length']);
 		unset($Data['DataTables_Table_2_length']);
 		if ($Data) {
 			if (isset($_FILES)) {
@@ -218,6 +222,7 @@ class Procedures extends Admin_Controller
 				$Data['modified_at'] = date('Y-m-d H:i:s');
 				$pro_id = $Data['id'];
 				$this->db->update('procedures', $Data, ['id' => $Data['id']]);
+				$this->db->insert('procedure_revision_history', ['procedure_id' => $Data['id'],'note_history' => $note_history,'created_by' =>  $this->auth->user_id()]);
 			} else {
 				$Data['created_by'] = $this->auth->user_id();
 				$Data['created_at'] = date('Y-m-d H:i:s');
@@ -1545,7 +1550,7 @@ class Procedures extends Admin_Controller
 		foreach ($getGuides as $gui) {
 			$ArrGuides[$gui->id] = $gui;
 		}
-
+		
 		$this->db->select('*')->from('view_cross_reference_details');
 		$this->db->where("find_in_set($id, procedure_id)");
 		$this->db->where("company_id", $this->company);
@@ -1562,8 +1567,10 @@ class Procedures extends Admin_Controller
 		}
 
 		$allProcedure 		= $this->db->get_where('procedures', ['company_id' => $this->company, 'status !=' => 'DEL'])->result();
+		$revision_history 	= $this->db->get_where('procedure_revision_history', ['procedure_id' => $id])->result();
 
 		$Data = [
+			'revision_history' 			=> $revision_history,
 			'procedure' => $procedure,
 			'detail' 	=> $flowDetail,
 			'ArrUsr' 	=> $ArrUsr,
@@ -1628,97 +1635,126 @@ class Procedures extends Admin_Controller
 	}
 
 	function export_publish_excel(){
-		$dataPub		= $this->db->get_where('procedures', ['company_id' => $this->company, 'deleted_at' => null, 'status' => 'PUB'])->result();
-
-		 $dataPub;
-		
-		$OK_Proses = 0;
-		if($dataPub){
-			$OK_Proses = 1;
-		}
+		$dataPub = $this->db->get_where('procedures', ['company_id' => $this->company, 'deleted_at' => null, 'status' => 'PUB'])->result();
+		$OK_Proses = $dataPub ? 1 : 0;
 
 		$this->load->library("PHPExcel");
-		$excel	= new PHPExcel();
+		$excel = new PHPExcel();
 
 		$excel->getProperties()->setCreator('SISCAL')
-		->setLastModifiedBy('SISCAL')
-		->setTitle("Data Kalibrasi")
-		->setSubject("SISCAL")
-		->setDescription("List Data Kalibrasi")
-		->setKeywords("Data Kalibrasi");
+			->setLastModifiedBy('SISCAL')
+			->setTitle("Data Published Documn")
+			->setSubject("SISCAL")
+			->setDescription("List Data Published Document")
+			->setKeywords("Data Published Document");
 
 		$style_col = array(
-		'font' => array('bold' => true),
-		'alignment' => array(
-		'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
-		'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER
-		),
-		'borders' => array(
-		'top' => array('style'  => PHPExcel_Style_Border::BORDER_THIN),
-		'right' => array('style'  => PHPExcel_Style_Border::BORDER_THIN),
-		'bottom' => array('style'  => PHPExcel_Style_Border::BORDER_THIN),
-		'left' => array('style'  => PHPExcel_Style_Border::BORDER_THIN)
-		)
+			'font' => array('bold' => true),
+			'alignment' => array(
+				'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+				'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER
+			),
+			'borders' => array(
+				'top' => array('style' => PHPExcel_Style_Border::BORDER_THIN),
+				'right' => array('style' => PHPExcel_Style_Border::BORDER_THIN),
+				'bottom' => array('style' => PHPExcel_Style_Border::BORDER_THIN),
+				'left' => array('style' => PHPExcel_Style_Border::BORDER_THIN)
+			)
 		);
-		
+
 		$style_row = array(
-		'alignment' => array(
-		'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER
-		),
-		
-		'borders' => array(
-		'top' => array('style'  => PHPExcel_Style_Border::BORDER_THIN),
-		'right' => array('style'  => PHPExcel_Style_Border::BORDER_THIN),
-		'bottom' => array('style'  => PHPExcel_Style_Border::BORDER_THIN),
-		'left' => array('style'  => PHPExcel_Style_Border::BORDER_THIN)
-		)
+			'alignment' => array(
+				'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER
+			),
+			'borders' => array(
+				'top' => array('style' => PHPExcel_Style_Border::BORDER_THIN),
+				'right' => array('style' => PHPExcel_Style_Border::BORDER_THIN),
+				'bottom' => array('style' => PHPExcel_Style_Border::BORDER_THIN),
+				'left' => array('style' => PHPExcel_Style_Border::BORDER_THIN)
+			)
 		);
 
-		$excel->setActiveSheetIndex(0)->setCellValue('A1', "No.");
-		$excel->setActiveSheetIndex(0)->setCellValue('B1', "No Dokumen");
-		$excel->setActiveSheetIndex(0)->setCellValue('C1', "Nama Dokumen");
-		$excel->setActiveSheetIndex(0)->setCellValue('D1', "Edisi/Revisi");
-		$excel->setActiveSheetIndex(0)->setCellValue('E1', "Tanggal/Tahun Terbit");
+		$sheet = $excel->setActiveSheetIndex(0);
 
-		$excel->getActiveSheet()->getStyle('A1')->applyFromArray($style_col);
-		$excel->getActiveSheet()->getStyle('B1')->applyFromArray($style_col);
-		$excel->getActiveSheet()->getStyle('C1')->applyFromArray($style_col);
-		$excel->getActiveSheet()->getStyle('D1')->applyFromArray($style_col);
-		$excel->getActiveSheet()->getStyle('E1')->applyFromArray($style_col);
+		// Add logo image
+		$objDrawing = new PHPExcel_Worksheet_Drawing();
+		$objDrawing->setName('Logo');
+		$objDrawing->setDescription('Logo');
+		$objDrawing->setPath('assets/img/logo-lab.png'); // adjust the path to your logo
+		$objDrawing->setHeight(60);
+		$objDrawing->setCoordinates('A1');
+		$objDrawing->setWorksheet($sheet);
 
-		
+		// Title in 3 rows (merged vertically across B1:E3)
+		$sheet->mergeCells('B1:E3');
+		$sheet->setCellValue('B1', 'Formulir Daftar Induk Dokumen Internal');
+		$sheet->getStyle('B1')->applyFromArray([
+			'font' => [
+				'bold' => true,
+				'size' => 18,
+			],
+			'alignment' => [
+				'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+				'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+			]
+		]);
+
+		// Add bottom-left notes
+		$sheet->setCellValue('A4', 'Jenis Dokumen : Prosedur');
+		$sheet->setCellValue('A5', 'Diperbaharui tanggal : ' . date('d-F-Y'));
+
+		$sheet->mergeCells('A4:C4');
+		$sheet->mergeCells('A5:C5');
+
+		$sheet->getStyle('A4')->getFont()->setBold(true);
+		$sheet->getStyle('A5')->getFont()->setBold(true);
+
+		// $sheet->getStyle('A5')->getFont()->setItalic(true);
+
+		// Header starts at row 6
+		$sheet->setCellValue('A6', "No.");
+		$sheet->setCellValue('B6', "No Dokumen");
+		$sheet->setCellValue('C6', "Nama Dokumen");
+		$sheet->setCellValue('D6', "Edisi/Revisi");
+		$sheet->setCellValue('E6', "Tanggal/Tahun Terbit");
+
+		$sheet->getStyle('A6')->applyFromArray($style_col);
+		$sheet->getStyle('B6')->applyFromArray($style_col);
+		$sheet->getStyle('C6')->applyFromArray($style_col);
+		$sheet->getStyle('D6')->applyFromArray($style_col);
+		$sheet->getStyle('E6')->applyFromArray($style_col);
+
 		$no = 1;
-		$numrow = 2; 
-		foreach($dataPub as $ketK=>$data){
-		
-			$excel->setActiveSheetIndex(0)->setCellValue('A'.$numrow,$no);
-			$excel->setActiveSheetIndex(0)->setCellValue('B'.$numrow, $data->nomor);
-			$excel->setActiveSheetIndex(0)->setCellValue('C'.$numrow, $data->name);
-			$excel->setActiveSheetIndex(0)->setCellValue('D'.$numrow, $data->revision);
-			$excel->setActiveSheetIndex(0)->setCellValue('E'.$numrow, $data->approved_at);
+		$numrow = 7;
+		foreach($dataPub as $data){
+			$sheet->setCellValue('A'.$numrow, $no);
+			$sheet->setCellValue('B'.$numrow, $data->nomor);
+			$sheet->setCellValue('C'.$numrow, $data->name);
+			$sheet->setCellValue('D'.$numrow, $data->revision);
+			$sheet->setCellValue('E'.$numrow, date('d-F-Y', strtotime($data->approved_at)));
 
-			$excel->getActiveSheet()->getStyle('A'.$numrow)->applyFromArray($style_row);
-			$excel->getActiveSheet()->getStyle('B'.$numrow)->applyFromArray($style_row);
-			$excel->getActiveSheet()->getStyle('C'.$numrow)->applyFromArray($style_row);
-			$excel->getActiveSheet()->getStyle('D'.$numrow)->applyFromArray($style_row);
-			$excel->getActiveSheet()->getStyle('E'.$numrow)->applyFromArray($style_row);
-			
+			$sheet->getStyle('A'.$numrow)->applyFromArray($style_row);
+			$sheet->getStyle('B'.$numrow)->applyFromArray($style_row);
+			$sheet->getStyle('C'.$numrow)->applyFromArray($style_row);
+			$sheet->getStyle('D'.$numrow)->applyFromArray($style_row);
+			$sheet->getStyle('E'.$numrow)->applyFromArray($style_row);
+
 			$no++;
 			$numrow++;
 		}
 
-		$excel->getActiveSheet()->getColumnDimension('A')->setWidth(10);
-		$excel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
-		$excel->getActiveSheet()->getColumnDimension('C')->setWidth(30);
-		$excel->getActiveSheet()->getColumnDimension('D')->setWidth(10);
-		$excel->getActiveSheet()->getColumnDimension('E')->setWidth(25);
+		$sheet->getColumnDimension('A')->setWidth(10);
+		$sheet->getColumnDimension('B')->setWidth(20);
+		$sheet->getColumnDimension('C')->setWidth(30);
+		$sheet->getColumnDimension('D')->setWidth(10);
+		$sheet->getColumnDimension('E')->setWidth(25);
 
-		$excel->getActiveSheet()->getDefaultRowDimension()->setRowHeight(-1);
-		$excel->getActiveSheet()->getPageSetup()->setOrientation(PHPExcel_Worksheet_PageSetup::ORIENTATION_LANDSCAPE);
-		$excel->getActiveSheet(0)->setTitle("Detail Tools");
+		$sheet->getDefaultRowDimension()->setRowHeight(-1);
+		$sheet->getPageSetup()->setOrientation(PHPExcel_Worksheet_PageSetup::ORIENTATION_LANDSCAPE);
+		$sheet->setTitle("Detail Tools");
 		$excel->setActiveSheetIndex(0);
 
-		$file_name = 'Published Document  - '.$Code_SO;   
+		$file_name = 'Published Document Selnab- ' . date('YmdHis');
 
 		$objWriter = PHPExcel_IOFactory::createWriter($excel, 'Excel5');
 		ob_end_clean();
@@ -1730,4 +1766,5 @@ class Procedures extends Admin_Controller
 		header('Content-Disposition: attachment;filename="'.$file_name.'.xls"');
 		$objWriter->save("php://output");
 	}
+
 }

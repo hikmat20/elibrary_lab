@@ -45,8 +45,7 @@ class Master_form extends Admin_Controller
 			$Data_detail 	= $this->db->get_where('procedure_details', ['procedure_id' => $id, 'status' => '1'])->result();
 			$grProcess	= $this->db->get_where('group_procedure', ['status' => 'ACT'])->result();
 			$getForms	= $this->db->get_where('dir_forms', ['status !=' => 'DEL'])->result();
-			$getGuides	= $this->db->get_where('dir_guides', ['procedure_id' => $id, 'status !=' => 'DEL'])->result();
-			$getRecords	= $this->db->get_where('dir_records', ['procedure_id' => $id, 'status !=' => 'DEL', 'flag_type' => 'FOLDER', 'parent_id' => null])->result();
+		
 			$users 		= $this->db->get_where('view_users', ['status' => 'ACT', 'id_user !=' => '1', 'company_id' => $this->company])->result();
 			$jabatan 	= $this->db->get_where('positions', ['company_id' => $this->company])->result();
 
@@ -54,10 +53,7 @@ class Master_form extends Admin_Controller
 			foreach ($getForms as $frm) {
 				$ArrForms[$frm->id] = $frm;
 			}
-			$ArrGuides = [];
-			foreach ($getGuides as $gui) {
-				$ArrGuides[$gui->id] = $gui;
-			}
+			
 
 			$this->template->set([
 				'title' 		=> 'Master Form',
@@ -65,11 +61,8 @@ class Master_form extends Admin_Controller
 				'users' 		=> $users,
 				'detail' 		=> $Data_detail,
 				'getForms' 		=> $getForms,
-				'getGuides' 	=> $getGuides,
-				'getRecords' 	=> $getRecords,
 				'jabatan' 		=> $jabatan,
 				'ArrForms' 		=> $ArrForms,
-				'ArrGuides' 	=> $ArrGuides,
 				'sts' 			=> $this->sts,
 			]);
 
@@ -1033,7 +1026,7 @@ class Master_form extends Admin_Controller
 			} else {
 				$data['modified_by']	= $this->auth->user_id();
 				$data['modified_at']	= date('Y-m-d H:i:s');
-				$data['note']			= 'Re-upload File';
+				$data['jmlh_revisi']	= $data['jmlh_revisi'] + 1;
 				$this->db->update('dir_forms', $data, ['id' => $id]);
 			}
 
