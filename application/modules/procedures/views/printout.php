@@ -322,7 +322,7 @@
             <tr>
               <td style="vertical-align:middle;" class="text-center"><?= $key+1; ?></td>
               <td style="vertical-align:middle;" class="text-center"><?= $dtl->note_history; ?></td>
-              <td style="vertical-align:middle;" class="text-center"><?= $dtl->created_by; ?></td>
+              <td style="vertical-align:middle;" class="text-center"><?= $dtl->full_name; ?></td>
               <td style="vertical-align:middle;" class="text-center"><?= $dtl->created_at; ?></td>
 
             </tr>

@@ -97,7 +97,12 @@ class Procedures extends Admin_Controller
 			$getRecords	= $this->db->get_where('dir_records', ['procedure_id' => $id, 'status !=' => 'DEL', 'flag_type' => 'FOLDER', 'parent_id' => null])->result();
 			$users 		= $this->db->get_where('view_users', ['status' => 'ACT', 'id_user !=' => '1', 'company_id' => $this->company])->result();
 			$jabatan 	= $this->db->get_where('positions', ['company_id' => $this->company])->result();
-			$revision_history 	= $this->db->get_where('procedure_revision_history', ['procedure_id' => $id])->result();
+			$revision_history = $this->db->select('procedure_revision_history.*,users.full_name')
+			->from('procedure_revision_history')
+			->join('users', 'users.id_user = procedure_revision_history.created_by')
+			->where('procedure_revision_history.procedure_id', $id)
+			->get()->result();
+
 
 			$ArrForms = [];
 			foreach ($getForms as $frm) {
@@ -1567,7 +1572,11 @@ class Procedures extends Admin_Controller
 		}
 
 		$allProcedure 		= $this->db->get_where('procedures', ['company_id' => $this->company, 'status !=' => 'DEL'])->result();
-		$revision_history 	= $this->db->get_where('procedure_revision_history', ['procedure_id' => $id])->result();
+		$revision_history = $this->db->select('procedure_revision_history.*,users.full_name')
+		->from('procedure_revision_history')
+		->join('users', 'users.id_user = procedure_revision_history.created_by')
+		->where('procedure_revision_history.procedure_id', $id)
+		->get()->result();
 
 		$Data = [
 			'revision_history' 			=> $revision_history,
