@@ -1,3 +1,4 @@
+
 <style>
 	.btn-opsi {
 		display: none;
@@ -45,8 +46,8 @@
 											</tr>
 										</thead>
 										<tbody>
-											<?php if (isset($getForms)) : $n = 0; ?>
-												<?php foreach ($getForms as $form) : $n++; ?>
+											<?php if (isset($getdForms)) : $n = 0; ?>
+												<?php foreach ($getdForms as $form) : $n++; ?>
 													<tr>
 														<td class="p-2 text-center"><?= $n; ?></td>
 														<td class="p-2"><?= $form->name; ?></td>
@@ -128,7 +129,7 @@
 <script>
 	$(document).ready(function() {
 
-		let id = '<?= $data->id; ?>'
+		let id = ''
 
 
 
@@ -261,6 +262,7 @@
 		})
 
 		$(document).on('click', '#add_form', function() {
+			console.log('test');
 			const id = $('#procedure_id').val() || null;
 			$('#modalRecord').modal('show')
 			// $('.modal-dialog').css('max-width', '70%')

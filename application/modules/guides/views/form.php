@@ -106,20 +106,20 @@
 								<button class="nav-link font-weight-bolder active w-100" id="IK-tab" data-toggle="tab" data-target="#IK" type="button" role="tab" aria-controls="IK" aria-selected="true">IK</button>
 							</li>
 							<li class="nav-item" role="presentation">
-								<button class="nav-link font-weight-bolder w-100" id="CMC-tab" data-toggle="tab" data-target="#CMC" type="button" role="tab" aria-controls="CMC" aria-selected="false">CMC</button>
+								<button class="nav-link font-weight-bolder w-100" id="CMC-tab" data-toggle="tab" data-target="#CMC" type="button" role="tab" aria-controls="CMC" aria-selected="false">Kaji Ulang Metode</button>
 							</li>
 							<li class="nav-item" role="presentation">
-								<button class="nav-link font-weight-bolder w-100" id="Template-tab" data-toggle="tab" data-target="#Template" type="button" role="tab" aria-controls="Template" aria-selected="false">Template</button>
+								<button class="nav-link font-weight-bolder w-100" id="Template-tab" data-toggle="tab" data-target="#Template" type="button" role="tab" aria-controls="Template" aria-selected="false">MeVer-Valtode</button>
 							</li>
 							<li class="nav-item" role="presentation">
-								<button class="nav-link font-weight-bolder w-100" id="UBLK-tab" data-toggle="tab" data-target="#UBLK" type="button" role="tab" aria-controls="UBLK" aria-selected="false">UBLK</button>
+								<button class="nav-link font-weight-bolder w-100" id="UBLK-tab" data-toggle="tab" data-target="#UBLK" type="button" role="tab" aria-controls="UBLK" aria-selected="false">UB/UP</button>
 							</li>
 							<li class="nav-item" role="presentation">
-								<button class="nav-link font-weight-bolder w-100" id="Sertifikat-tab" data-toggle="tab" data-target="#Sertifikat" type="button" role="tab" aria-controls="Sertifikat" aria-selected="false">Format Sertifikat</button>
+								<button class="nav-link font-weight-bolder w-100" id="Sertifikat-tab" data-toggle="tab" data-target="#Sertifikat" type="button" role="tab" aria-controls="Sertifikat" aria-selected="false">Uncertainty</button>
 							</li>
-							<li class="nav-item" role="presentation">
+							<!-- <li class="nav-item" role="presentation">
 								<button class="nav-link font-weight-bolder w-100" id="Analisa-tab" data-toggle="tab" data-target="#Analisa" type="button" role="tab" aria-controls="Analisa" aria-selected="false">Analisa Drift</button>
-							</li>
+							</li> -->
 							<li class="nav-item" role="presentation">
 								<button class="nav-link font-weight-bolder w-100" id="SertCalibrator-tab" data-toggle="tab" data-target="#SertCalibrator" type="button" role="tab" aria-controls="SertCalibrator" aria-selected="false">Sertifikat Calibrator</button>
 							</li>
@@ -288,26 +288,26 @@
 							<button type="button" data-target="#tab1Id" class="nav-link font-weight-bolder active" data-toggle="tab" aria-current="page">IK</button>
 						</li>
 						<li class="nav-item" role="presentation">
-							<button type="button" data-target="#tab2Id" class="nav-link font-weight-bolder" data-toggle="tab">CMC</button>
+							<button type="button" data-target="#tab2Id" class="nav-link font-weight-bolder" data-toggle="tab">Kaji Ulang Metode</button>
 						</li>
 						<li class="nav-item" role="presentation">
-							<button type="button" data-target="#tab3Id" class="nav-link font-weight-bolder" data-toggle="tab">Template</button>
+							<button type="button" data-target="#tab3Id" class="nav-link font-weight-bolder" data-toggle="tab">MeVer-Valtode</button>
 						</li>
 						<li class="nav-item" role="presentation">
-							<button type="button" data-target="#tab4Id" class="nav-link font-weight-bolder" data-toggle="tab">UBLK</button>
+							<button type="button" data-target="#tab4Id" class="nav-link font-weight-bolder" data-toggle="tab">UB/UP</button>
 						</li>
 						<li class="nav-item" role="presentation">
-							<button type="button" data-target="#tab5Id" class="nav-link font-weight-bolder" data-toggle="tab">Format Sertifikat</button>
+							<button type="button" data-target="#tab5Id" class="nav-link font-weight-bolder" data-toggle="tab">Uncertainty</button>
 						</li>
 						<li class="nav-item" role="presentation">
 							<button type="button" data-target="#tab6Id" class="nav-link font-weight-bolder" data-toggle="tab">Analisa Drift</button>
 						</li>
-						<li class="nav-item" role="presentation">
+						<!-- <li class="nav-item" role="presentation">
 							<button type="button" data-target="#tab7Id" class="nav-link font-weight-bolder" data-toggle="tab">Sertifikat Calibrator</button>
 						</li>
 						<li class="nav-item" role="presentation">
 							<button type="button" data-target="#tab8Id" class="nav-link font-weight-bolder" data-toggle="tab">Cek Antara</button>
-						</li>
+						</li> -->
 						<li class="nav-item" role="presentation">
 							<button type="button" data-target="#tab9Id" class="nav-link font-weight-bolder" data-toggle="tab">Video</button>
 						</li>

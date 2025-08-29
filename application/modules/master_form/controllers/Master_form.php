@@ -40,15 +40,12 @@ class Master_form extends Admin_Controller
 	{
 				$id = 373;
 
-		$Data 			= $this->db->get_where('procedures', ['company_id' => $this->company, 'id' => $id])->row();
-		if ($Data) {
-			$Data_detail 	= $this->db->get_where('procedure_details', ['procedure_id' => $id, 'status' => '1'])->result();
+		if ($id) {
 			$grProcess	= $this->db->get_where('group_procedure', ['status' => 'ACT'])->result();
-			$getForms	= $this->db->get_where('dir_forms', ['status !=' => 'DEL'])->result();
+			$getForms	= $this->db->get_where('dir_forms', ['status !=' => 'DEL','company_id' => $this->company])->result();
 		
 			$users 		= $this->db->get_where('view_users', ['status' => 'ACT', 'id_user !=' => '1', 'company_id' => $this->company])->result();
 			$jabatan 	= $this->db->get_where('positions', ['company_id' => $this->company])->result();
-
 			$ArrForms = [];
 			foreach ($getForms as $frm) {
 				$ArrForms[$frm->id] = $frm;
@@ -57,15 +54,13 @@ class Master_form extends Admin_Controller
 
 			$this->template->set([
 				'title' 		=> 'Master Form',
-				'data' 			=> $Data,
 				'users' 		=> $users,
-				'detail' 		=> $Data_detail,
-				'getForms' 		=> $getForms,
+				'getdForms' 		=> $getForms,
 				'jabatan' 		=> $jabatan,
 				'ArrForms' 		=> $ArrForms,
 				'sts' 			=> $this->sts,
 			]);
-
+				
 			$this->template->set('grProcess', $grProcess);
 			$this->template->render('index');
 		} else {
@@ -101,7 +96,7 @@ class Master_form extends Admin_Controller
 		if ($Data) {
 			$Data_detail 	= $this->db->get_where('procedure_details', ['procedure_id' => $id, 'status' => '1'])->result();
 			$grProcess	= $this->db->get_where('group_procedure', ['status' => 'ACT'])->result();
-			$getForms	= $this->db->get_where('dir_forms', ['status !=' => 'DEL'])->result();
+			$getForms	= $this->db->get_where('dir_fodrms', ['status !=' => 'DEL'])->result();
 			$getGuides	= $this->db->get_where('dir_guides', ['procedure_id' => $id, 'status !=' => 'DEL'])->result();
 			$getRecords	= $this->db->get_where('dir_records', ['procedure_id' => $id, 'status !=' => 'DEL', 'flag_type' => 'FOLDER', 'parent_id' => null])->result();
 			$users 		= $this->db->get_where('view_users', ['status' => 'ACT', 'id_user !=' => '1', 'company_id' => $this->company])->result();
@@ -470,7 +465,7 @@ class Master_form extends Admin_Controller
 		$Data_detail = '';
 		if ($id) {
 			$Data_detail 	= $this->db->order_by('number asc')->get_where('procedure_details', ['procedure_id' => $id, 'status' => '1'])->result();
-			$getForms	= $this->db->get_where('dir_forms', ['status !=' => 'DEL'])->result();
+			$getForms	= $this->db->get_where('dir_forms', ['status !=' => 'DEL','company_id' => $this->company])->result();
 			$getguides	= $this->db->get_where('dir_guides', ['procedure_id' => $id, 'status !=' => 'DEL'])->result();
 			$ArrForms = [];
 			foreach ($getForms as $frm) {
@@ -1059,7 +1054,7 @@ class Master_form extends Admin_Controller
 
 	public function loadDataForm()
 	{
-		$getForms	= $this->db->get_where('dir_forms', ['status !=' => 'DEL'])->result();
+		$getForms	= $this->db->get_where('dir_forms', ['status !=' => 'DEL','company_id' => $this->company])->result();
 		$this->template->set('getForms', $getForms);
 		$this->template->render('data-forms');
 	}

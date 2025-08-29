@@ -87,26 +87,7 @@
 														</div>
 													</div>
 												</div>
-												<div class="row">
-													<div class="col-md-6">
-														<div class="form-group">
-															<label class="font-size-h5"><strong>Revisi</strong></label>
-															<div class="">
-																<input name="revision_note" id="revision_note" class="form-control" placeholder="Revisi" aria-describedby="helpId"></input>
-																<small class="text-danger invalid-feedback">Revisi</small>
-															</div>
-														</div>
-													</div>
-													<div class="col-md-6">
-														<div class="form-group">
-															<label class="font-size-h5"><strong>Riwayat Perubahan</strong></label>
-															<div class="">
-																<textarea rows="5" name="revision_history" id="revision_history" class="form-control summernote" rows="5" placeholder="Riwayat Perubahan" aria-describedby="helpId"></textarea>
-																<small class="text-danger invalid-feedback">Riwayat Perubahan</small>
-															</div>
-														</div>
-													</div>
-												</div>
+												
 												<div class="row">
 													<div class="col-md-6">
 														<div class="form-group">
