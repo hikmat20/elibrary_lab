@@ -27,13 +27,13 @@
 						<div class="row pb-5">
 							<div class="col-md-6">
 								<div class="row mb-3">
-									<label class="col-4 col-form-label">Nomor <span class="text-danger">*</span></label>
+									<label class="col-4 col-form-label">Nomor IK <span class="text-danger">*</span></label>
 									<div class="col-8">
-										<input type="text" name="number" id="number" value="<?= $data->number; ?>" placeholder="Nomor" class="form-control">
+										<input type="text" name="number" id="number" value="<?= $data->number; ?>" placeholder="Nomor IK" class="form-control">
 									</div>
 								</div>
 								<div class="row mb-3">
-									<label class="col-4 col-form-label">Kelompok <span class="text-danger">*</span></label>
+									<label class="col-4 col-form-label">Bidang Pengujian <span class="text-danger">*</span></label>
 									<div class="col-8">
 										<select name="group_id" id="group_id" disabled class="form-control form-control-solid">
 											<option value=""></option>
@@ -44,13 +44,13 @@
 									</div>
 								</div>
 								<div class="row mb-3">
-									<label class="col-4 col-form-label">Jenis Alat <span class="text-danger">*</span></label>
+									<label class="col-4 col-form-label">Produk Uji <span class="text-danger">*</span></label>
 									<div class="col-8">
 										<input type="text" name="name" id="name" value="<?= $data->name; ?>" placeholder="Jenis Alat" class="form-control">
 									</div>
 								</div>
 								<div class="row mb-3">
-									<label class="col-4 col-form-label">Metode <span class="text-danger">*</span></label>
+									<label class="col-4 col-form-label">Teknik Pengujian <span class="text-danger">*</span></label>
 									<div class="col-8">
 										<select name="methode[]" id="methode" class="form-control select2" multiple data-placeholder="Choose an options" data-allow-clear="true">
 											<option value="INS" <?= (in_array('INS', json_decode($data->methode))) ? 'selected' : ''; ?>>Insitu</option>
@@ -59,13 +59,9 @@
 									</div>
 								</div>
 								<div class="row mb-3">
-									<label class="col-4 col-form-label">Reference <span class="text-danger">*</span></label>
+									<label class="col-4 col-form-label">Standar Metode * <span class="text-danger">*</span></label>
 									<div class="col-8">
-										<select name="reference[]" id="reference" class="form-control select2" multiple data-placeholder="Choose an options" data-allow-clear="true">
-											<?php if ($references) foreach ($references as $ref) : ?>
-												<option value="<?= $ref->id; ?>" <?= (in_array($ref->id, json_decode($data->reference))) ? 'selected' : ''; ?>><?= $ref->alias; ?></option>
-											<?php endforeach; ?>
-										</select>
+										<input type="text" name="reference" value="<?= ($data->reference) ?: ''; ?>" id="reference" placeholder="Standar Metode" class="form-control">
 									</div>
 								</div>
 
@@ -127,20 +123,20 @@
 								<button class="nav-link font-weight-bolder active w-100" id="IK-tab" data-toggle="tab" data-target="#IK" type="button" role="tab" aria-controls="IK" aria-selected="true">IK</button>
 							</li>
 							<li class="nav-item" role="presentation">
-								<button class="nav-link font-weight-bolder w-100" id="CMC-tab" data-toggle="tab" data-target="#CMC" type="button" role="tab" aria-controls="CMC" aria-selected="false">CMC</button>
+								<button class="nav-link font-weight-bolder w-100" id="CMC-tab" data-toggle="tab" data-target="#CMC" type="button" role="tab" aria-controls="CMC" aria-selected="false">Kaji Ulang Metode</button>
 							</li>
 							<li class="nav-item" role="presentation">
-								<button class="nav-link font-weight-bolder w-100" id="Template-tab" data-toggle="tab" data-target="#Template" type="button" role="tab" aria-controls="Template" aria-selected="false">Template</button>
+								<button class="nav-link font-weight-bolder w-100" id="Template-tab" data-toggle="tab" data-target="#Template" type="button" role="tab" aria-controls="Template" aria-selected="false">MeVer-Valtode</button>
 							</li>
 							<li class="nav-item" role="presentation">
-								<button class="nav-link font-weight-bolder w-100" id="UBLK-tab" data-toggle="tab" data-target="#UBLK" type="button" role="tab" aria-controls="UBLK" aria-selected="false">UBLK</button>
+								<button class="nav-link font-weight-bolder w-100" id="UBLK-tab" data-toggle="tab" data-target="#UBLK" type="button" role="tab" aria-controls="UBLK" aria-selected="false">UB/UP</button>
 							</li>
 							<li class="nav-item" role="presentation">
-								<button class="nav-link font-weight-bolder w-100" id="Sertifikat-tab" data-toggle="tab" data-target="#Sertifikat" type="button" role="tab" aria-controls="Sertifikat" aria-selected="false">Format Sertifikat</button>
+								<button class="nav-link font-weight-bolder w-100" id="Sertifikat-tab" data-toggle="tab" data-target="#Sertifikat" type="button" role="tab" aria-controls="Sertifikat" aria-selected="false">Uncertainty</button>
 							</li>
-							<li class="nav-item" role="presentation">
+							<!-- <li class="nav-item" role="presentation">
 								<button class="nav-link font-weight-bolder w-100" id="Analisa-tab" data-toggle="tab" data-target="#Analisa" type="button" role="tab" aria-controls="Analisa" aria-selected="false">Analisa Drift</button>
-							</li>
+							</li> -->
 							<li class="nav-item" role="presentation">
 								<button class="nav-link font-weight-bolder w-100" id="SertCalibrator-tab" data-toggle="tab" data-target="#SertCalibrator" type="button" role="tab" aria-controls="SertCalibrator" aria-selected="false">Sertifikat Calibrator</button>
 							</li>
@@ -442,26 +438,26 @@
 							<button type="button" data-target="#tab1Id" class="nav-link font-weight-bolder active" data-toggle="tab" aria-current="page">IK</button>
 						</li>
 						<li class="nav-item" role="presentation">
-							<button type="button" data-target="#tab2Id" class="nav-link font-weight-bolder" data-toggle="tab">CMC</button>
+							<button type="button" data-target="#tab2Id" class="nav-link font-weight-bolder" data-toggle="tab">Kaji Ulang Metode</button>
 						</li>
 						<li class="nav-item" role="presentation">
-							<button type="button" data-target="#tab3Id" class="nav-link font-weight-bolder" data-toggle="tab">Template</button>
+							<button type="button" data-target="#tab3Id" class="nav-link font-weight-bolder" data-toggle="tab">MeVer-Valtode</button>
 						</li>
 						<li class="nav-item" role="presentation">
-							<button type="button" data-target="#tab4Id" class="nav-link font-weight-bolder" data-toggle="tab">UBLK</button>
+							<button type="button" data-target="#tab4Id" class="nav-link font-weight-bolder" data-toggle="tab">UB/UP</button>
 						</li>
 						<li class="nav-item" role="presentation">
-							<button type="button" data-target="#tab5Id" class="nav-link font-weight-bolder" data-toggle="tab">Format Sertifikat</button>
+							<button type="button" data-target="#tab5Id" class="nav-link font-weight-bolder" data-toggle="tab">Uncertainty</button>
 						</li>
 						<li class="nav-item" role="presentation">
 							<button type="button" data-target="#tab6Id" class="nav-link font-weight-bolder" data-toggle="tab">Analisa Drift</button>
 						</li>
-						<li class="nav-item" role="presentation">
+						<!-- <li class="nav-item" role="presentation">
 							<button type="button" data-target="#tab7Id" class="nav-link font-weight-bolder" data-toggle="tab">Sertifikat Calibrator</button>
 						</li>
 						<li class="nav-item" role="presentation">
 							<button type="button" data-target="#tab8Id" class="nav-link font-weight-bolder" data-toggle="tab">Cek Antara</button>
-						</li>
+						</li> -->
 						<li class="nav-item" role="presentation">
 							<button type="button" data-target="#tab9Id" class="nav-link font-weight-bolder" data-toggle="tab">Video</button>
 						</li>

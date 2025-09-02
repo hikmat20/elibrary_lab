@@ -44,13 +44,8 @@
 								</div>
 								<div class="row mb-3">
 									<label class="col-4 col-form-label">Standar Metode <span class="text-danger">*</span></label>
-									<div class="col-8">
-										<select name="reference[]" id="reference" data-allow-clear="true" multiple="multiple" class="form-select select2">
-											<option value=""></option>
-											<?php if ($references) foreach ($references as $ref) : ?>
-												<option value="<?= $ref->id; ?>"><?= $ref->alias; ?></option>
-											<?php endforeach; ?>
-										</select>
+									<div class="col-8">									
+										<input type="text" name="reference" id="reference" placeholder="Standar Metode" class="form-control">
 									</div>
 								</div>
 							</div>

@@ -369,28 +369,7 @@
 							<button type="button" data-target="#tab1Id" class="nav-link font-weight-bolder active" data-toggle="tab" aria-current="page">IK</button>
 						</li>
 						<li class="nav-item" role="presentation">
-							<button type="button" data-target="#tab2Id" class="nav-link font-weight-bolder" data-toggle="tab">CMC</button>
-						</li>
-						<li class="nav-item" role="presentation">
-							<button type="button" data-target="#tab3Id" class="nav-link font-weight-bolder" data-toggle="tab">Template</button>
-						</li>
-						<li class="nav-item" role="presentation">
-							<button type="button" data-target="#tab4Id" class="nav-link font-weight-bolder" data-toggle="tab">UBLK</button>
-						</li>
-						<li class="nav-item" role="presentation">
-							<button type="button" data-target="#tab5Id" class="nav-link font-weight-bolder" data-toggle="tab">Format Sertifikat</button>
-						</li>
-						<li class="nav-item" role="presentation">
-							<button type="button" data-target="#tab6Id" class="nav-link font-weight-bolder" data-toggle="tab">Analisa Drift</button>
-						</li>
-						<li class="nav-item" role="presentation">
-							<button type="button" data-target="#tab7Id" class="nav-link font-weight-bolder" data-toggle="tab">Sertifikat Calibrator</button>
-						</li>
-						<li class="nav-item" role="presentation">
-							<button type="button" data-target="#tab8Id" class="nav-link font-weight-bolder" data-toggle="tab">Cek Antara</button>
-						</li>
-						<li class="nav-item" role="presentation">
-							<button type="button" data-target="#tab9Id" class="nav-link font-weight-bolder" data-toggle="tab">Video</button>
+							<button type="button" data-target="#tab2Id" class="nav-link font-weight-bolder" data-toggle="tab">IK Lainnya</button>
 						</li>
 					</ul>
 

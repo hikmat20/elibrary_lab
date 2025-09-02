@@ -237,9 +237,7 @@
 														</td>
 														<td style="vertical-align: top;">
 															<ul style="list-style-type: none;" class="px-0">
-																<?php foreach (json_decode($dtDtl->reference) as $ref) : ?>
-																	<li class="px-0"><?= $ArrRef[$ref]; ?></li>
-																<?php endforeach; ?>
+																	<li class="px-0"><?= $dtDtl->reference ?></li>
 															</ul>
 														</td>
 														<td style="vertical-align: top;">

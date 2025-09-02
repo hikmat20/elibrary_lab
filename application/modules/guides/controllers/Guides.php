@@ -391,7 +391,7 @@ class Guides extends Admin_Controller
 				$data['range_measure']	= isset($data['range_measure']) ? json_encode($data['range_measure']) : '';
 				$data['uncertainty']	= isset($data['uncertainty']) ? json_encode($data['uncertainty']) : '';
 				$data['methode']		= isset($data['methode']) ? json_encode($data['methode']): '';
-				$data['reference']		= isset($data['reference']) ? json_encode($data['reference']) : '';
+				$data['reference']		= isset($data['reference']) ? $data['reference']: '';
 
 				unset($data['documents']);
 				if (intval($check) == '0') {
