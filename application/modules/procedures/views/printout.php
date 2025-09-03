@@ -204,7 +204,7 @@
     </table>
     <br>
 
-    <h4>FLOW PROCEDURE</h4>
+    <h4>ALUR PROSES</h4>
     <?php if ($procedure->image_flow_1 || $procedure->image_flow_2 || $procedure->image_flow_3) : ?>
       <?php if ($procedure->image_flow_1) : ?>
         <img height="600px" src="<?= base_url("directory/FLOW_IMG/$procedure->company_id/$procedure->image_flow_1"); ?>" alt="image_flow_1" class="img-fluid">
@@ -224,7 +224,7 @@
       <a href="<?= ($procedure->link_video); ?>">Link Video</a>
     <?php endif; ?>
     <br>
-    <h4>FLOW DETAIL</h4>
+    <h4>DETAIL PROSEDUR</h4>
     <table class="table-data" style="font-size: 11px;">
       <thead>
         <tr class="table-secondary">
@@ -323,7 +323,7 @@
               <td style="vertical-align:middle;" class="text-center"><?= $key+1; ?></td>
               <td style="vertical-align:middle;" class="text-center"><?= $dtl->note_history; ?></td>
               <td style="vertical-align:middle;" class="text-center"><?= $dtl->full_name; ?></td>
-              <td style="vertical-align:middle;" class="text-center"><?= $dtl->created_at; ?></td>
+              <td style="vertical-align:middle;" class="text-center"><?= date('d M Y', strtotime($dtl->tanggal_revisi)); ?></td>
 
             </tr>
           <?php endforeach; ?>

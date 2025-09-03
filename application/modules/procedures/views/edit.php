@@ -118,7 +118,7 @@
 														<div class="form-group">
 															<label class="font-size-h5"><strong>Catatan Perubahan</strong></label>
 															<div class="">
-																<textarea rows="5" name="note_history" id="note_history" class="form-control summernote" rows="5" placeholder="Riwayat Perubahan" aria-describedby="helpId"><?= $data->revision_history ?></textarea>
+																<textarea rows="5" name="note_history" id="note_history" class="form-control summernote" rows="5" placeholder="Riwayat Perubahan" aria-describedby="helpId"></textarea>
 																<small class="text-danger invalid-feedback">Riwayat Perubahan</small>
 															</div>
 														</div>
@@ -149,7 +149,15 @@
 															</div>
 														</div>
 													</div>
-
+													<div class="col-md-6">
+														<div class="form-group">
+															<label class="font-size-h5"><strong><span class="text-danger">*</span> Tanggal Revisi</strong></label>
+															<div class="">
+																<input name="tanggal_revisi" id="tanggal_revisi" required class="form-control" placeholder="Nomor" aria-describedby="helpId" value="" type="date">
+																<small class="text-danger invalid-feedback">Tanggal Revisi</small>
+															</div>
+														</div>
+													</div>
 												</div>
 											</div>
 										</div>
@@ -566,8 +574,8 @@
 																<tr>
 																	<td style="vertical-align:middle;" class="text-center"><?= $key+1; ?></td>
 																	<td style="vertical-align:middle;" class="text-center"><?= $dtl->note_history; ?></td>
-																	<td style="vertical-align:middle;" class="text-center"><?= $dtl->full_name;; ?></td>
-																	<td style="vertical-align:middle;" class="text-center"><?= $dtl->created_at; ?></td>
+																	<td style="vertical-align:middle;" class="text-center"><?= $dtl->full_name; ?></td>
+																	<td style="vertical-align:middle;" class="text-center"><?= date('d M Y', strtotime($dtl->tanggal_revisi)); ?></td>
 
 																</tr>
 															<?php endforeach;

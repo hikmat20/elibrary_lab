@@ -115,7 +115,7 @@ class Procedures extends Admin_Controller
 
 			$this->template->set([
 				'title' 		=> 'Edit Procedures',
-				'revision_history' 			=> $revision_history,
+				'revision_history' => $revision_history,
 				'data' 			=> $Data,
 				'users' 		=> $users,
 				'detail' 		=> $Data_detail,
@@ -191,7 +191,9 @@ class Procedures extends Admin_Controller
 		$Data 			= $this->input->post();
 		$Data_flow 		= $this->input->post('flow');
 		$note_history = $this->input->post('note_history');
+		$tanggal_revisi = $this->input->post('tanggal_revisi');
 		unset($Data['note_history']);
+		unset($Data['tanggal_revisi']);
 		unset($Data['DataTables_Table_0_length']);
 		unset($Data['DataTables_Table_1_length']);
 		unset($Data['DataTables_Table_2_length']);
@@ -227,7 +229,7 @@ class Procedures extends Admin_Controller
 				$Data['modified_at'] = date('Y-m-d H:i:s');
 				$pro_id = $Data['id'];
 				$this->db->update('procedures', $Data, ['id' => $Data['id']]);
-				$this->db->insert('procedure_revision_history', ['procedure_id' => $Data['id'],'note_history' => $note_history,'created_by' =>  $this->auth->user_id()]);
+				$this->db->insert('procedure_revision_history', ['procedure_id' => $Data['id'],'note_history' => $note_history,'tanggal_revisi'=>$tanggal_revisi,'created_by' =>  $this->auth->user_id()]);
 			} else {
 				$Data['created_by'] = $this->auth->user_id();
 				$Data['created_at'] = date('Y-m-d H:i:s');
