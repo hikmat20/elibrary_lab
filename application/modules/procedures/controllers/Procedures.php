@@ -229,7 +229,9 @@ class Procedures extends Admin_Controller
 				$Data['modified_at'] = date('Y-m-d H:i:s');
 				$pro_id = $Data['id'];
 				$this->db->update('procedures', $Data, ['id' => $Data['id']]);
-				$this->db->insert('procedure_revision_history', ['procedure_id' => $Data['id'],'note_history' => $note_history,'tanggal_revisi'=>$tanggal_revisi,'created_by' =>  $this->auth->user_id()]);
+				if($note_history != null && $tanggal_revisi != null){
+					$this->db->insert('procedure_revision_history', ['procedure_id' => $Data['id'],'note_history' => $note_history,'tanggal_revisi'=>$tanggal_revisi,'created_by' =>  $this->auth->user_id()]);
+				}
 			} else {
 				$Data['created_by'] = $this->auth->user_id();
 				$Data['created_at'] = date('Y-m-d H:i:s');

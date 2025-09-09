@@ -2,7 +2,7 @@
 
 use Mpdf\Mpdf;
 
-class Master_form extends Admin_Controller
+class Rekaman extends Admin_Controller
 {
 	protected $status;
 	protected $sts;
@@ -53,7 +53,7 @@ class Master_form extends Admin_Controller
 			
 
 			$this->template->set([
-				'title' 		=> 'Master Form',
+				'title' 		=> 'Rekaman',
 				'users' 		=> $users,
 				'getdForms' 		=> $getForms,
 				'jabatan' 		=> $jabatan,

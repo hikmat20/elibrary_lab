@@ -242,7 +242,7 @@
 														</td>
 														<td style="vertical-align: top;">
 															<ul style="list-style-type:none  ;" class="px-0">
-																<?php foreach (json_decode($dtDtl->range_measure) as $range) : ?>
+																<?php foreach (json_decode($dtDtl->methode) as $range) : ?>
 																	<li class="px-0"><?= $range; ?></li>
 																<?php endforeach; ?>
 															</ul>

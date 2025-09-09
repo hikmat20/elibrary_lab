@@ -151,9 +151,9 @@
 													</div>
 													<div class="col-md-6">
 														<div class="form-group">
-															<label class="font-size-h5"><strong><span class="text-danger">*</span> Tanggal Revisi</strong></label>
+															<label class="font-size-h5"><strong>Tanggal Revisi</strong></label>
 															<div class="">
-																<input name="tanggal_revisi" id="tanggal_revisi" required class="form-control" placeholder="Nomor" aria-describedby="helpId" value="" type="date">
+																<input name="tanggal_revisi" id="tanggal_revisi"  class="form-control" placeholder="Nomor" aria-describedby="helpId" value="" type="date">
 																<small class="text-danger invalid-feedback">Tanggal Revisi</small>
 															</div>
 														</div>
