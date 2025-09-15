@@ -7,7 +7,7 @@
 					<input type="hidden" id="id" name="forms[id]" class="form-control" value="<?= isset($data) ? $data->id : ''; ?>" />
 					<input type="hidden" id="id" name="forms[jmlh_revisi]" class="form-control" value="<?= isset($data) ? $data->jmlh_revisi : ''; ?>" />
 
-					<!-- <input type="hidden" name="forms[procedure_id]" class="form-control" value="<?= $procedure_id; ?>" /> -->
+					<!-- <input type="hidden" name="forms[procedure_id]" class="form-control" value="" /> -->
 					<input type="text" class="form-control" id="description" placeholder="Document Name" name="forms[description]" value="<?= isset($data) ? $data->name : ''; ?>" autocomplete="off" />
 					<span class="form-text text-danger invalid-feedback">Deskripsi harus di isi</span>
 				</div>

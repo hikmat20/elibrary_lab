@@ -1539,7 +1539,7 @@ class Procedures extends Admin_Controller
 		$mpdf->curlAllowUnsafeSslRequests = true;
 		$procedure 			= $this->db->get_where('procedures', ['id' => $id])->row();
 		$flowDetail 		= $this->db->get_where('procedure_details', ['procedure_id' => $id, 'status' => '1'])->result();
-		$getForms			= $this->db->get_where('dir_forms', ['procedure_id' => $id, 'status !=' => 'DEL'])->result();
+		$getForms			= $this->db->get_where('dir_forms', ['status !=' => 'DEL'])->result();
 		$getGuides			= $this->db->get_where('dir_guides', ['procedure_id' => $id, 'status !=' => 'DEL'])->result();
 		$users 				= $this->db->get_where('view_users', ['status' => 'ACT', 'id_user !=' => '1', 'company_id' => $this->company])->result();
 		$jabatan 			= $this->db->get('positions')->result();
@@ -1619,7 +1619,7 @@ class Procedures extends Admin_Controller
 						</tr>
 						<tr>
 							<td class="tx-12">Revisi</td>
-							<td class="tx-12">: '.(($procedure->revision_date) ? date_format(date_create($procedure->revision_date), 'd F Y') : '~'). '</td>
+							<td class="tx-12">: '.COUNT($revision_history). '</td>
 							<td class="tx-12">Halaman</td>
 							<td class="tx-12">: {PAGENO} dari {nbpg}</td>
 							</tr>

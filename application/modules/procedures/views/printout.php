@@ -139,6 +139,9 @@
               <h2>PT SENTRAL SISTEM LABORATORY</h2>
               <br><br>
               <h2>PROSEDUR BISNIS</h2>
+               <br><br>
+              <h2 style="color:red">"<?= strtoupper($procedure->name); ?>"</h2>
+              <br><br><br><br><br><br>
           </th>
         </tr>
           <tr style="height:10px" class="table-secondary">

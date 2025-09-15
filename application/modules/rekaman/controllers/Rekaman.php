@@ -42,7 +42,7 @@ class Rekaman extends Admin_Controller
 
 		if ($id) {
 			$grProcess	= $this->db->get_where('group_procedure', ['status' => 'ACT'])->result();
-			$getForms	= $this->db->get_where('dir_forms', ['status !=' => 'DEL','company_id' => $this->company])->result();
+			$getForms	= $this->db->get_where('rekaman', ['status !=' => 'DEL','company_id' => $this->company])->result();
 		
 			$users 		= $this->db->get_where('view_users', ['status' => 'ACT', 'id_user !=' => '1', 'company_id' => $this->company])->result();
 			$jabatan 	= $this->db->get_where('positions', ['company_id' => $this->company])->result();
@@ -96,7 +96,7 @@ class Rekaman extends Admin_Controller
 		if ($Data) {
 			$Data_detail 	= $this->db->get_where('procedure_details', ['procedure_id' => $id, 'status' => '1'])->result();
 			$grProcess	= $this->db->get_where('group_procedure', ['status' => 'ACT'])->result();
-			$getForms	= $this->db->get_where('dir_fodrms', ['status !=' => 'DEL'])->result();
+			$getForms	= $this->db->get_where('rekaman', ['status !=' => 'DEL'])->result();
 			$getGuides	= $this->db->get_where('dir_guides', ['procedure_id' => $id, 'status !=' => 'DEL'])->result();
 			$getRecords	= $this->db->get_where('dir_records', ['procedure_id' => $id, 'status !=' => 'DEL', 'flag_type' => 'FOLDER', 'parent_id' => null])->result();
 			$users 		= $this->db->get_where('view_users', ['status' => 'ACT', 'id_user !=' => '1', 'company_id' => $this->company])->result();
@@ -140,7 +140,7 @@ class Rekaman extends Admin_Controller
 	{
 		$Data 				= $this->db->get_where('procedures', ['id' => $id, 'company_id' => $this->company])->row();
 		$users 				= $this->db->get_where('view_users')->result();
-		$getForms			= $this->db->get_where('dir_forms', ['procedure_id' => $id])->result();
+		$getForms			= $this->db->get_where('rekaman', ['procedure_id' => $id])->result();
 		$getGuides			= $this->db->get_where('dir_guides', ['procedure_id' => $id])->result();
 		$jabatan 			= $this->db->get('positions')->result();
 		$ArrUsr 			= $ArrJab = $ArrForms = $ArrGuides = [];
@@ -565,7 +565,7 @@ class Rekaman extends Admin_Controller
 	public function view_form($id = null)
 	{
 		if ($id) {
-			$file 		= $this->db->get_where('dir_forms', ['id' => $id])->row();
+			$file 		= $this->db->get_where('rekaman', ['id' => $id])->row();
 			// $dir_name 	= $this->db->get_where('dir_form', ['id' => $file->parent_id])->row()->name;
 			$history	= $this->db->order_by('updated_at', 'ASC')->get_where('view_directory_log', ['directory_id' => $id])->result();
 			// $this->template->set('dir_name', $dir_name);
@@ -597,13 +597,13 @@ class Rekaman extends Admin_Controller
 	{
 		$users 		= $this->db->get_where('view_users', ['status' => 'ACT', 'id_user !=' => '1', 'company_id' => $this->company])->result();
 		$jabatan 	= $this->db->get('positions')->result();
-		$data = $this->db->get_where('dir_forms', ['id' => $id])->row();
+		$data = $this->db->get_where('rekaman', ['id' => $id])->row();
 
 
 		$this->template->set([
 			'data' 			=> $data,
 			'jabatan' 		=> $jabatan,
-			'procedure_id' 	=> $data->procedure_id,
+			// 'procedure_id' 	=> $data->procedure_id,
 			'users' 		=> $users,
 			'type' 			=> "form",
 		]);
@@ -619,8 +619,8 @@ class Rekaman extends Admin_Controller
 				'deleted_by' => $this->auth->user_id(),
 				'deleted_at' => date('Y-m-d H:i:s'),
 			];
-			$this->db->update('dir_forms', $data, ['id' => $id]);
-			$file_name = $this->db->get_where('dir_forms', ['id' => $id])->row()->file_name;
+			$this->db->update('rekaman', $data, ['id' => $id]);
+			$file_name = $this->db->get_where('rekaman', ['id' => $id])->row()->file_name;
 			$this->_delete_file('FORMS', $file_name);
 			if ($this->db->trans_status() === FALSE) {
 				$this->db->trans_rollback();
@@ -653,7 +653,7 @@ class Rekaman extends Admin_Controller
 			$data['id']	    		= $id;
 			$data['name']	    	= $data['description'];
 			$data['company_id']		= $this->company;
-			$check 					= $this->db->get_where('dir_forms', ['id' => $id])->num_rows();
+			$check 					= $this->db->get_where('rekaman', ['id' => $id])->num_rows();
 			$note 					= isset($data['note']) ? $data['note'] : null;
 			$data['status']			= isset($data['status']) ? $data['status'] : 'OPN';
 			unset($data['note']);
@@ -704,12 +704,12 @@ class Rekaman extends Admin_Controller
 				$data['created_by']		= $this->auth->user_id();
 				$data['created_at']		= date('Y-m-d H:i:s');
 				$data['note']			= 'First Upload File';
-				$this->db->insert('dir_forms', $data);
+				$this->db->insert('rekaman', $data);
 			} else {
 				$data['modified_by']	= $this->auth->user_id();
 				$data['modified_at']	= date('Y-m-d H:i:s');
 				$data['jmlh_revisi']	= $data['jmlh_revisi'] + 1;
-				$this->db->update('dir_forms', $data, ['id' => $id]);
+				$this->db->update('rekaman', $data, ['id' => $id]);
 			}
 
 			$dataLog = [
@@ -741,7 +741,7 @@ class Rekaman extends Admin_Controller
 
 	public function loadDataForm()
 	{
-		$getForms	= $this->db->get_where('dir_forms', ['status !=' => 'DEL','company_id' => $this->company])->result();
+		$getForms	= $this->db->get_where('rekaman', ['status !=' => 'DEL','company_id' => $this->company])->result();
 		$this->template->set('getForms', $getForms);
 		$this->template->render('data-forms');
 	}
