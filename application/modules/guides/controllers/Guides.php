@@ -624,7 +624,7 @@ class Guides extends Admin_Controller
 		}
 		$ArrRange = (json_decode($data->range_measure));
 		$ArrUncert = (json_decode($data->uncertainty));
-		$ArrCombine = array_combine($ArrRange, $ArrUncert);
+		// $ArrCombine = array_combine($ArrRange, $ArrUncert);
 		$ArrSubTools = (json_decode($data->sub_tools));
 
 		$DocIK 			= $this->db->get_where('guide_documents', ['guide_detail_data_id' => $id, 'file_type' => '1', 'status' => '1'])->result();
@@ -644,7 +644,7 @@ class Guides extends Admin_Controller
 			'file'				=> $file,
 			'ArrStd'			=> $ArrStd,
 			'methode'			=> $methode,
-			'ArrCombine' 		=> $ArrCombine,
+			// 'ArrCombine' 		=> $ArrCombine,
 			'ArrSubTools' 		=> $ArrSubTools,
 			'DocIK' 			=> $DocIK,
 			'DocCMC' 			=> $DocCMC,
@@ -657,7 +657,20 @@ class Guides extends Admin_Controller
 			'DocVID' 			=> $DocVID,
 		]);
 
-		$this->template->render('view-file');
+		switch ($data->guide_name) {
+			case 'IKM':
+				 $this->template->render('view-file-ikm');
+				break;
+			case 'IKK':
+				$this->template->render('view-file-ikk');
+				break;
+			case 'IKA':
+				return $this->template->render('view-file-ikk');
+				break;
+			default:
+				$this->template->render('view-file');
+		}
+
 	}
 
 	public function view_video($id)

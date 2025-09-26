@@ -216,38 +216,80 @@
     <br>
 
     <h4>SIPOCOR</h4>
-    <table width="100%">
-      <tr>
-        <td width="50%">
-          <h5 style="padding-bottom:10px;">1. Supplier</h5>
-          <p><?= $procedure->supplier; ?></p>
-          <br><br>
-          <h5 style="padding-bottom:10px;">3. Process</h5>
-          <?= $procedure->process; ?>
-          <br><br>
-           <h5 style="padding-bottom:10px;">5. Customer</h5>
-          <?= $procedure->customer; ?>
-          <br><br>
-          <h5 style="padding-bottom:10px;">7. Risk</h5>
-          <?= $procedure->risk; ?>
-          <br><br>
-        </td>
-        <td width="50%">
-          <h5 style="padding-bottom:10px;">2. Input</h5>
-          <?= $procedure->input; ?>
-          <br><br>
-          <h5 style="padding-bottom:10px;">4. Output</h5>
-          <?= $procedure->output; ?>
-          <br><br>
-          <h5 style="padding-bottom:10px;">6. Objective</h5>
-          <?= $procedure->objective; ?>
-          <br><br>
-          <h5 style="padding-bottom:10px;">8. Mitigation</h5>
-          <?= $procedure->mitigation; ?>
-          <br><br>
-        </td>
-      </tr>
-    </table>
+     <table class="table-data" style="font-size: 11px;">
+        <thead>
+  
+        </thead>
+        <tbody>
+              <tr>
+                <td style="width:50%" class="">
+                     <div>
+                        <h3 style="padding-bottom:10px;">1. Supplier</h3><br>
+                        <p ><?= $procedure->supplier; ?></p>
+                        <br><br>
+                    </div>
+                </td>
+                <td style="" class="">
+                     <div>
+                        <h3 style="padding-bottom:10px;">2. Input</h3><br>
+                        <?= $procedure->input; ?>
+                        <br><br>
+                    </div>
+                </td>
+
+              </tr>
+               <tr>
+                <td style="" class="">
+                     <div>
+                        <h3 style="padding-bottom:10px;">3. Process</h3><br>
+                          <?= $procedure->process; ?>
+                          <br><br>
+                    </div>
+                </td>
+                <td style="" class="">   
+                  <div>
+                    <h3 style="padding-bottom:10px;">4. Output</h3><br>
+                    <?= $procedure->output; ?>
+                    <br><br>
+                  </div>
+                </td>
+              </tr>
+               <tr>
+                <td style="" class="">
+                    <div>
+                      <h3 style="padding-bottom:10px;">5. Customer</h3><br>
+                      <?= $procedure->customer; ?>
+                      <br><br>
+                    </div>
+                </td>
+                <td style="" class="">   
+                  <div>
+                    <h3 style="padding-bottom:10px;">6. Objective</h3><br>
+                    <?= $procedure->objective; ?>
+                    <br><br>
+                  </div>
+                </td>
+              </tr>
+
+               <tr>
+                <td style="" class="">
+                  <div>
+                    <h3 style="padding-bottom:10px;">7. Resources</h3><br>
+                    <?= $procedure->risk; ?>
+                    <br><br>
+                  </div>
+                </td>
+                <td style="" class="">   
+                    <div>
+                    <h3 style="padding-bottom:10px;">8. Mitigation</h3><br>
+                    <?= $procedure->mitigation; ?>
+                    <br><br>
+                  </div>
+                </td>
+              </tr>
+        </tbody>
+      </table>
+
     <br>
 
     <h4>ALUR PROSES</h4>

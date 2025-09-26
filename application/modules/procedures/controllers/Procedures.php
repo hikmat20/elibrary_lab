@@ -93,15 +93,24 @@ class Procedures extends Admin_Controller
 			$Data_detail 	= $this->db->get_where('procedure_details', ['procedure_id' => $id, 'status' => '1'])->result();
 			$grProcess	= $this->db->get_where('group_procedure', ['status' => 'ACT'])->result();
 			$getForms	= $this->db->get_where('dir_forms', ['status !=' => 'DEL'])->result();
-			$getGuides	= $this->db->get_where('dir_guides', ['procedure_id' => $id, 'status !=' => 'DEL'])->result();
+			$getGuides	=  $this->db->select('guide_detail_data.*, guides.name as gide_name')
+						->from('guide_detail_data')
+						->join('guide_details', 'guide_detail_data.guide_detail_id = guide_details.id')
+						->join('guides', 'guide_details.guide_id = guides.id')
+						->where('guide_detail_data.company_id', $this->company)
+						->where('guide_detail_data.status !=', 0)
+						// ->where('guides.name','IKK')
+						->get()
+						->result();
+
 			$getRecords	= $this->db->get_where('dir_records', ['procedure_id' => $id, 'status !=' => 'DEL', 'flag_type' => 'FOLDER', 'parent_id' => null])->result();
 			$users 		= $this->db->get_where('view_users', ['status' => 'ACT', 'id_user !=' => '1', 'company_id' => $this->company])->result();
 			$jabatan 	= $this->db->get_where('positions', ['company_id' => $this->company])->result();
 			$revision_history = $this->db->select('procedure_revision_history.*,users.full_name')
-			->from('procedure_revision_history')
-			->join('users', 'users.id_user = procedure_revision_history.created_by')
-			->where('procedure_revision_history.procedure_id', $id)
-			->get()->result();
+							->from('procedure_revision_history')
+							->join('users', 'users.id_user = procedure_revision_history.created_by')
+							->where('procedure_revision_history.procedure_id', $id)
+							->get()->result();
 
 
 			$ArrForms = [];
@@ -112,7 +121,7 @@ class Procedures extends Admin_Controller
 			foreach ($getGuides as $gui) {
 				$ArrGuides[$gui->id] = $gui;
 			}
-
+			// return var_dump($ArrGuides);
 			$this->template->set([
 				'title' 		=> 'Edit Procedures',
 				'revision_history' => $revision_history,
@@ -143,8 +152,16 @@ class Procedures extends Admin_Controller
 	{
 		$Data 				= $this->db->get_where('procedures', ['id' => $id, 'company_id' => $this->company])->row();
 		$users 				= $this->db->get_where('view_users')->result();
-		$getForms			= $this->db->get_where('dir_forms', ['procedure_id' => $id])->result();
-		$getGuides			= $this->db->get_where('dir_guides', ['procedure_id' => $id])->result();
+		$getForms			= $this->db->get_where('dir_forms', ['company_id' => $this->company])->result();
+		$getGuides			=  $this->db->select('guide_detail_data.*, guides.name as gide_name')
+								->from('guide_detail_data')
+								->join('guide_details', 'guide_detail_data.guide_detail_id = guide_details.id')
+								->join('guides', 'guide_details.guide_id = guides.id')
+								->where('guide_detail_data.company_id', $this->company)
+								->where('guide_detail_data.status !=', 0)
+								// ->where('guides.name','IKK')
+								->get()
+								->result();
 		$jabatan 			= $this->db->get('positions')->result();
 		$ArrUsr 			= $ArrJab = $ArrForms = $ArrGuides = [];
 
@@ -441,7 +458,17 @@ class Procedures extends Admin_Controller
 	{
 		$flow 		= '';
 		$forms 		= $this->db->get_where('dir_forms', ['company_id' => $this->company, 'active' => 'Y', 'status !=' => 'DEL'])->result();
-		$guides 	= $this->db->get_where('dir_guides', ['procedure_id' => $id, 'company_id' => $this->company, 'active' => 'Y', 'status !=' => 'DEL'])->result();
+		$guides 	=    $this->db->select('guide_detail_data.*, guides.name as gide_name')
+						->from('guide_detail_data')
+						->join('guide_details', 'guide_detail_data.guide_detail_id = guide_details.id')
+						->join('guides', 'guide_details.guide_id = guides.id')
+						->where('guide_detail_data.company_id', $this->company)
+						->where('guide_detail_data.status !=', 0)
+						->where('guides.name','IKK')
+						->get()
+						->result();
+
+
 
 		$this->template->set([
 			'procedure_id' 	=>$id,
@@ -458,7 +485,16 @@ class Procedures extends Admin_Controller
 		if ($proc_id && $id) {
 			$flow 		= $this->db->get_where('procedure_details', ['id' => $id])->row();
 			$forms 		= $this->db->get_where('dir_forms', [ 'company_id' => $this->company, 'active' => 'Y', 'status !=' => 'DEL'])->result();
-			$guides 	= $this->db->get_where('dir_guides', ['procedure_id' => $proc_id, 'company_id' => $this->company, 'active' => 'Y', 'status !=' => 'DEL'])->result();
+			$guides 	=  $this->db->select('guide_detail_data.*, guides.name as gide_name')
+						->from('guide_detail_data')
+						->join('guide_details', 'guide_detail_data.guide_detail_id = guide_details.id')
+						->join('guides', 'guide_details.guide_id = guides.id')
+						->where('guide_detail_data.company_id', $this->company)
+						->where('guide_detail_data.status !=', 0)
+						->where('guides.name','IKK')
+						->get()
+						->result();
+
 		}
 
 		$this->template->set([
@@ -476,7 +512,15 @@ class Procedures extends Admin_Controller
 		if ($id) {
 			$Data_detail 	= $this->db->order_by('number asc')->get_where('procedure_details', ['procedure_id' => $id, 'status' => '1'])->result();
 			$getForms	= $this->db->get_where('dir_forms', ['status !=' => 'DEL'])->result();
-			$getguides	= $this->db->get_where('dir_guides', ['procedure_id' => $id, 'status !=' => 'DEL'])->result();
+			$getguides	=  $this->db->select('guide_detail_data.*, guides.name as gide_name')
+						->from('guide_detail_data')
+						->join('guide_details', 'guide_detail_data.guide_detail_id = guide_details.id')
+						->join('guides', 'guide_details.guide_id = guides.id')
+						->where('guide_detail_data.company_id', $this->company)
+						->where('guide_detail_data.status !=', 0)
+						->where('guides.name','IKK')
+						->get()
+						->result();
 			$ArrForms = [];
 			foreach ($getForms as $frm) {
 				$ArrForms[$frm->id] = $frm;
@@ -1540,7 +1584,15 @@ class Procedures extends Admin_Controller
 		$procedure 			= $this->db->get_where('procedures', ['id' => $id])->row();
 		$flowDetail 		= $this->db->get_where('procedure_details', ['procedure_id' => $id, 'status' => '1'])->result();
 		$getForms			= $this->db->get_where('dir_forms', ['status !=' => 'DEL'])->result();
-		$getGuides			= $this->db->get_where('dir_guides', ['procedure_id' => $id, 'status !=' => 'DEL'])->result();
+		$getGuides			=  $this->db->select('guide_detail_data.*, guides.name as gide_name')
+								->from('guide_detail_data')
+								->join('guide_details', 'guide_detail_data.guide_detail_id = guide_details.id')
+								->join('guides', 'guide_details.guide_id = guides.id')
+								->where('guide_detail_data.company_id', $this->company)
+								->where('guide_detail_data.status !=', 0)
+								->where('guides.name','IKK')
+								->get()
+								->result();
 		$users 				= $this->db->get_where('view_users', ['status' => 'ACT', 'id_user !=' => '1', 'company_id' => $this->company])->result();
 		$jabatan 			= $this->db->get('positions')->result();
 		$ArrUsr 			= $ArrJab = $ArrForms = $ArrGuides = [];
@@ -1595,7 +1647,7 @@ class Procedures extends Admin_Controller
 			'ArrStd' 		=> $ArrStd,
 			'allProcedure' 	=> $allProcedure,
 		];
-
+		$tgl_apv =  $procedure->approved_at ? date('d M Y', strtotime($procedure->approved_at)) : '-'  ;
 		$this->template->set($Data);
 		$header = '<table border="1" width="100%">
 						<tr>
@@ -1615,7 +1667,7 @@ class Procedures extends Admin_Controller
 							<td width="120" class="tx-12">No. Dockumen</td>
 							<td class="tx-12" width="200">: '. $procedure->nomor.'</td>
 							<td width="110" class="tx-12">Tgl. Efektif</td>
-							<td class="tx-12">: </td>
+							<td class="tx-12">: '.$tgl_apv.'</td>
 						</tr>
 						<tr>
 							<td class="tx-12">Revisi</td>
