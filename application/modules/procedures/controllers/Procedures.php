@@ -1124,7 +1124,7 @@ class Procedures extends Admin_Controller
 
 	/* upload ik */
 
-	public function view_guide($id = null)
+	public function view_guide_($id = null)
 	{
 		if ($id) {
 			$file 		= $this->db->get_where('dir_guides', ['id' => $id])->row();
@@ -1830,6 +1830,60 @@ class Procedures extends Admin_Controller
 		header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
 		header('Content-Disposition: attachment;filename="'.$file_name.'.xls"');
 		$objWriter->save("php://output");
+	}
+
+
+	public function view_guide($id)
+	{
+		$data 			= $this->db->get_where('view_guides_detail_data', ['id' => $id])->row();
+		$file 			= './directory/MASTER_GUIDES/' . $data->company_id . '/' . $data->document;
+		$methode 		= ['INS' => 'Insitu', 'LAB' => 'Inlab'];
+		$standards 		= $this->db->get_where('view_standards', ['status' => 'PUB'])->result();
+		$ArrStd 		= [];
+		foreach ($standards as $std) {
+			$ArrStd[$std->id] = $std->alias;
+		}
+		$ArrRange = (json_decode($data->range_measure));
+		$ArrUncert = (json_decode($data->uncertainty));
+		// $ArrCombine = array_combine($ArrRange, $ArrUncert);
+		$ArrSubTools = (json_decode($data->sub_tools));
+
+		$DocIK 			= $this->db->get_where('guide_documents', ['guide_detail_data_id' => $id, 'file_type' => '1', 'status' => '1'])->result();
+			$DocCMC 		= $this->db->get_where('guide_documents', ['guide_detail_data_id' => $id, 'file_type' => '2', 'status' => '1'])->result();
+			$DocTEMP 		= $this->db->get_where('guide_documents', ['guide_detail_data_id' => $id, 'file_type' => '3', 'status' => '1'])->result();
+			$DocUBLK 		= $this->db->get_where('guide_documents', ['guide_detail_data_id' => $id, 'file_type' => '4', 'status' => '1'])->result();
+			$DocSERT 		= $this->db->get_where('guide_documents', ['guide_detail_data_id' => $id, 'file_type' => '5', 'status' => '1'])->result();
+			$DocDRIFT 		= $this->db->get_where('guide_documents', ['guide_detail_data_id' => $id, 'file_type' => '6', 'status' => '1'])->result();
+			$DocSERTCAL 	= $this->db->get_where('guide_documents', ['guide_detail_data_id' => $id, 'file_type' => '7', 'status' => '1'])->result();
+			$DocCEK 		= $this->db->get_where('guide_documents', ['guide_detail_data_id' => $id, 'file_type' => '8', 'status' => '1'])->result();
+			$DocVID 		= $this->db->get_where('guide_documents', ['guide_detail_data_id' => $id, 'file_type' => '9', 'status' => '1'])->result();
+			
+
+		// $file 			= $this->db->get_where('guide_detail_data', ['id' => $id])->row();
+		$this->template->set([
+			'data' 				=> $data,
+			'file'				=> $file,
+			'ArrStd'			=> $ArrStd,
+			'methode'			=> $methode,
+			// 'ArrCombine' 		=> $ArrCombine,
+			'ArrSubTools' 		=> $ArrSubTools,
+			'DocIK' 			=> $DocIK,
+			'DocCMC' 			=> $DocCMC,
+			'DocTEMP' 			=> $DocTEMP,
+			'DocUBLK' 			=> $DocUBLK,
+			'DocSERT' 			=> $DocSERT,
+			'DocDRIFT' 			=> $DocDRIFT,
+			'DocSERTCAL' 		=> $DocSERTCAL,
+			'DocCEK' 			=> $DocCEK,
+			'DocVID' 			=> $DocVID,
+		]);
+
+			
+			
+		$this->template->render('view-file-ikk');
+			
+		
+
 	}
 
 }

@@ -758,7 +758,7 @@
 				</button>
 			</div>
 			<form id="form-flow-detail">
-				<div id="content_modal">
+				<div id="content_modal" style="	padding: 20px;">
 				</div>
 			</form>
 		</div>

@@ -369,7 +369,7 @@
 					<span aria-hidden="true">&times;</span>
 				</button>
 			</div>
-			<div id="content_modal">
+			<div id="content_modal" style="padding:20px;">
 			</div>
 		</div>
 	</div>
