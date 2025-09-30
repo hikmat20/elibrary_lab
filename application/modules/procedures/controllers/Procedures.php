@@ -1626,7 +1626,6 @@ class Procedures extends Admin_Controller
 		foreach ($Data as $dtstd) {
 			$ArrStd[$dtstd->requirement_id] = $dtstd;
 		}
-
 		$allProcedure 		= $this->db->get_where('procedures', ['company_id' => $this->company, 'status !=' => 'DEL'])->result();
 		$revision_history = $this->db->select('procedure_revision_history.*,users.full_name')
 		->from('procedure_revision_history')

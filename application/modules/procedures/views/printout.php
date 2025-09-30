@@ -337,8 +337,8 @@
                       <li><?= $ArrForms[$relDoc]->name; ?></li>
                     <?php } ?>
                   </ul>
-
-                  <?php $relIk = json_decode($dtl->relate_ik_doc); ?>
+                <?php endif; ?>
+                 <?php $relIk = json_decode($dtl->relate_ik_doc); ?>
                   <?php if (is_array($relIk)) : ?>
                     <ul>
                       <?php foreach ($relIk as $ik) { ?>
@@ -346,7 +346,6 @@
                       <?php } ?>
                     </ul>
                   <?php endif; ?>
-                <?php endif; ?>
               </td>
             </tr>
           <?php endforeach;
