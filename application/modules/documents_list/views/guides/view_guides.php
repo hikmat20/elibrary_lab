@@ -1,29 +1,54 @@
 <div class="">
+    
     <ul class="nav nav-tabs nav-fill nav-success nav-pills mb-3 border-0" id="myTab" role="tablist">
-        <li class="nav-item" role="presentation">
-            <button class="nav-link font-weight-bolder w-100 active" id="IK-tab" data-toggle="tab" data-target="#IK" type="button" role="tab" aria-controls="IK" aria-selected="true">IK</button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link font-weight-bolder w-100" id="CMC-tab" data-toggle="tab" data-target="#CMC" type="button" role="tab" aria-controls="CMC" aria-selected="false">CMC</button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link font-weight-bolder w-100" id="Template-tab" data-toggle="tab" data-target="#Template" type="button" role="tab" aria-controls="Template" aria-selected="false">Template</button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link font-weight-bolder w-100" id="UBLK-tab" data-toggle="tab" data-target="#UBLK" type="button" role="tab" aria-controls="UBLK" aria-selected="false">UBLK</button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link font-weight-bolder w-100" id="Sertifikat-tab" data-toggle="tab" data-target="#Sertifikat" type="button" role="tab" aria-controls="Sertifikat" aria-selected="false">Format Sertifikat</button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link font-weight-bolder w-100" id="Analisa-tab" data-toggle="tab" data-target="#Analisa" type="button" role="tab" aria-controls="Analisa" aria-selected="false">Analisa Drift</button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link font-weight-bolder w-100" id="SertCalibrator-tab" data-toggle="tab" data-target="#SertCalibrator" type="button" role="tab" aria-controls="SertCalibrator" aria-selected="false">Sertifikat Calibrator</button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link font-weight-bolder w-100" id="CekAntara-tab" data-toggle="tab" data-target="#CekAntara" type="button" role="tab" aria-controls="CekAntara" aria-selected="false">Cek Antara</button>
-        </li>
+        <?php if ($guide_name === 'IKM'): ?>
+             <li class="nav-item" role="presentation">
+                <button class="nav-link font-weight-bolder active w-100" id="IK-tab" data-toggle="tab" data-target="#IK" type="button" role="tab" aria-controls="IK" aria-selected="true">IK</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link font-weight-bolder w-100" id="CMC-tab" data-toggle="tab" data-target="#CMC" type="button" role="tab" aria-controls="CMC" aria-selected="false">Kaji Ulang Metode</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link font-weight-bolder w-100" id="Template-tab" data-toggle="tab" data-target="#Template" type="button" role="tab" aria-controls="Template" aria-selected="false">Ver-Val Metode</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link font-weight-bolder w-100" id="UBLK-tab" data-toggle="tab" data-target="#UBLK" type="button" role="tab" aria-controls="UBLK" aria-selected="false">UB/UP</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link font-weight-bolder w-100" id="Sertifikat-tab" data-toggle="tab" data-target="#Sertifikat" type="button" role="tab" aria-controls="Sertifikat" aria-selected="false">Uncertainty</button>
+            </li>
+            <!-- <li class="nav-item" role="presentation">
+                <button class="nav-link font-weight-bolder w-100" id="Analisa-tab" data-toggle="tab" data-target="#Analisa" type="button" role="tab" aria-controls="Analisa" aria-selected="false">Analisa Drift</button>
+            </li> -->
+            <li class="nav-item" role="presentation">
+                <button class="nav-link font-weight-bolder w-100" id="SertCalibrator-tab" data-toggle="tab" data-target="#SertCalibrator" type="button" role="tab" aria-controls="SertCalibrator" aria-selected="false">Sertifikat Calibrator</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link font-weight-bolder w-100" id="CekAntara-tab" data-toggle="tab" data-target="#CekAntara" type="button" role="tab" aria-controls="CekAntara" aria-selected="false">Cek Antara</button>
+            </li>
+            <!-- <li class="nav-item" role="presentation">
+                <button class="nav-link font-weight-bolder w-100" id="Video-tab" data-toggle="tab" data-target="#Video" type="button" role="tab" aria-controls="Video" aria-selected="false">Video</button>
+            </li> -->
+        <?php elseif ($guide_name === 'IKK'): ?>
+            <ul class="nav nav-tabs nav-fill nav-success nav-pills mb-3 border-0" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link font-weight-bolder active w-100" id="IK-tab" data-toggle="tab" data-target="#IK" type="button" role="tab" aria-controls="IK" aria-selected="true">IK</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link font-weight-bolder w-100" id="CMC-tab" data-toggle="tab" data-target="#CMC" type="button" role="tab" aria-controls="CMC" aria-selected="false">IK Lain-lain</button>
+                </li>
+            </ul>
+        <?php elseif ($guide_name === 'IKA'): ?>
+            <ul class="nav nav-tabs nav-fill nav-success nav-pills mb-3 border-0" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link font-weight-bolder active w-100" id="IK-tab" data-toggle="tab" data-target="#IK" type="button" role="tab" aria-controls="IK" aria-selected="true">IK</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link font-weight-bolder w-100" id="CMC-tab" data-toggle="tab" data-target="#CMC" type="button" role="tab" aria-controls="CMC" aria-selected="false">IK Lain-lain</button>
+                </li>
+            </ul>
+        <?php endif; ?>
+       
     </ul>
 
     <div class="tab-content ">

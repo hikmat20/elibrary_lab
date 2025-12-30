@@ -52,6 +52,7 @@
                     <?php endif; ?>
                     <div class="tab-content " id="myTabContent2">
                         <a href="<?= base_url($this->uri->segment(1) . '/guides/'); ?>"><i class="fa fa-arrow-left"></i></a>
+                        
                         <?php $n = 0;
                         if ($guide_details) :
                             foreach ($guide_details as $k => $dtl) :  $n++; ?>
@@ -59,14 +60,54 @@
                                     <table class="table datatable table-hover table-sm">
                                         <thead>
                                             <tr>
-                                                <th>#</th>
-                                                <th>Parameter</th>
-                                                <th>Produk Uji</th>
-                                                <th>Standar Metode</th>
-                                                <th>Bidang Penguji</th>
-                                                <th>Nomor IK</th>
-                                                <th>Terbit</th>
-                                                <th>Opsi</th>
+                                                <?php if ($ArrDtlData): ?>
+                                                    <?php if ($ArrDtlData[$dtl->id][0]->guide_name === 'IKM'): ?>
+
+                                                        <th>#</th>
+                                                        <th>Produk Uji</th>
+                                                        <th>Biodang Pengujian</th>
+                                                        <th>Standar Metode</th>
+                                                        <th>Teknik Penguji</th>
+                                                        <th>Nomor IK</th>
+                                                        <th>Terbit</th>
+                                                        <th>Opsi</th>
+
+                                                    <?php elseif ($ArrDtlData[$dtl->id][0]->guide_name === 'IKK'): ?>
+
+                                                        <th>#</th>
+                                                        <th>Nama IK</th>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th>Nomor IK</th>
+                                                        <th>Terbit</th>
+                                                        <th>Opsi</th>
+
+                                                    <?php elseif ($ArrDtlData[$dtl->id][0]->guide_name === 'IKA'): ?>
+
+                                                        <th>#</th>
+                                                        <th>Nama IK</th>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th>Nomor IK</th>
+                                                        <th>Terbit</th>
+                                                        <th>Opsi</th>
+
+                                                    <?php else: ?>
+
+                                                        <th>#</th>
+                                                        <th>Parameter</th>
+                                                        <th>Produk Uji</th>
+                                                        <th>Standar Metode</th>
+                                                        <th>Bidang Penguji</th>
+                                                        <th>Nomor IK</th>
+                                                        <th>Terbit</th>
+                                                        <th>Opsi</th>
+
+                                                    <?php endif; ?>
+                                                 <?php endif; ?>
+                                               
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -116,7 +157,7 @@
     <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
         <div class="modal-content" data-scroll="true">
             <div class="modal-header">
-                <h5 class="modal-title">View Document</h5>
+                <h5 class="modal-title">Vissssew Document</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -134,7 +175,7 @@
 <script>
     function show(id) {
         $('#modelId').modal('show')
-        $('#data-file').load(siteurl + active_controller + 'view_guides/' + id)
+        $('#data-file').load(siteurl + active_controller + 'view_guides/' + id + '-<?= $dtl->name ? $ArrDtlData[$dtl->id][0]->guide_name : ''; ?>/')
     }
 
     function show_video(id) {

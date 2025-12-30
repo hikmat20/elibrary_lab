@@ -89,7 +89,7 @@
 		<button class="nav-link font-weight-bolder w-100" id="CMC-tab" data-toggle="tab" data-target="#CMC" type="button" role="tab" aria-controls="CMC" aria-selected="false">Kaji Ulang Metode</button>
 	</li>
 	<li class="nav-item" role="presentation">
-		<button class="nav-link font-weight-bolder w-100" id="Template-tab" data-toggle="tab" data-target="#Template" type="button" role="tab" aria-controls="Template" aria-selected="false">MeVer-Valtode</button>
+		<button class="nav-link font-weight-bolder w-100" id="Template-tab" data-toggle="tab" data-target="#Template" type="button" role="tab" aria-controls="Template" aria-selected="false">Ver-Val Metode</button>
 	</li>
 	<li class="nav-item" role="presentation">
 		<button class="nav-link font-weight-bolder w-100" id="UBLK-tab" data-toggle="tab" data-target="#UBLK" type="button" role="tab" aria-controls="UBLK" aria-selected="false">UB/UP</button>

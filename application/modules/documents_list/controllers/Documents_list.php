@@ -415,6 +415,10 @@ class Documents_list extends Admin_Controller
 
 	public function view_guides($id = null)
 	{
+		// Split $id by '-' to get $id and $jenis
+		$parts = explode('-', $id, 2);
+		$id = isset($parts[0]) ? $parts[0] : null;
+		$guide_name = isset($parts[1]) ? $parts[1] : null;
 		$data 			= $this->db->get_where('guide_documents', ['guide_detail_data_id' => $id,'status'=>'1'])->result();
 		$ArrDoc = [];
 		foreach ($data as $d) {
@@ -424,6 +428,7 @@ class Documents_list extends Admin_Controller
 		$methode 		= ['INS' => 'Insitu', 'LAB' => 'Inlab'];
 		$this->template->set([
 			'data' 		=> $data,
+			'guide_name'=> $guide_name,
 			'ArrDoc'	=> $ArrDoc,
 			'file'		=> $file,
 			'methode'	=> $methode
