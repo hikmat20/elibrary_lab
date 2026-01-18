@@ -42,6 +42,8 @@ class Update_controls extends Admin_Controller
     public function management_sys()
     {
         $data = $this->db->get_where('update_controls', ['type' => 'SMS'])->result();
+         $manage       = $this->db->get_where('requirements', ['status' => '1'])->result();
+         $this->template->set('manage', $manage);
         $this->template->set('data', $data);
         $this->template->set('status', $this->status);
         $this->template->render('index');
@@ -49,16 +51,23 @@ class Update_controls extends Admin_Controller
 
     public function regulations()
     {
+        $regulation       = $this->db->get_where('regulations', ['status !=' => 'DEL'])->result();
         $data = $this->db->get_where('update_controls', ['type' => 'REG'])->result();
-        $this->template->set('data', $data);
+        $standards = $this->db->get_where('standards', ['status !=' => 'DEL'])->result();
+        $this->template->set('regulation', $regulation);
+         $this->template->set('data', $data);
+         $this->template->set('standards', $standards);
         $this->template->set('status', $this->status);
+        $this->template->set('regulation', $regulation);
         $this->template->render('index_reg');
     }
 
     public function standards()
     {
         $data = $this->db->get_where('update_controls', ['type' => 'STD'])->result();
+         $standards  = $this->db->get_where('standards', ['status !=' => 'DEL'])->result();
         $this->template->set('data', $data);
+        $this->template->set('standards', $standards);
         $this->template->set('status', $this->status);
         $this->template->render('index_std');
     }
@@ -86,7 +95,7 @@ class Update_controls extends Admin_Controller
     public function add()
     {
         $data       = $this->db->get_where('requirements', ['status' => '1'])->result();
-        $type       = 'REG';
+        $type       = 'SMS';
         $label_name = 'Std. Management System';
         $this->template->set([
             'data'          => $data,
@@ -98,8 +107,10 @@ class Update_controls extends Admin_Controller
 
     public function add_update_reg()
     {
-        $data       = $this->db->get_where('regulations', ['status !=' => 'DEL'])->result();
+       
         $type       = 'REG';
+        $data = $this->db->get_where('update_controls', ['type' => 'REG'])->result();
+
         $label_name = 'Regulation Name';
         $this->template->set([
             'type'          => $type,
@@ -125,6 +136,23 @@ class Update_controls extends Admin_Controller
     public function save()
     {
         $data       = $this->input->post();
+         $regulationChecks=null;
+         $stdChecks=null;
+        if (isset($data['regulationChecks']) && is_string($data['regulationChecks'])) {
+            $regulationChecks = json_decode($data['regulationChecks'], true);
+            unset($data['regulationChecks']);
+        }
+
+        if (isset($data['stdChecks']) && is_string($data['stdChecks'])) {
+            $stdChecks = json_decode($data['stdChecks'], true);
+            unset($data['stdChecks']);
+        }
+
+        if (isset($data['manageChecks']) && is_string($data['manageChecks'])) {
+            $manageChecks = json_decode($data['manageChecks'], true);
+            unset($data['manageChecks']);
+        }
+
 
         $this->db->trans_begin();
         if ($data) {
@@ -133,10 +161,30 @@ class Update_controls extends Admin_Controller
                 $data['modified_by'] = $this->auth->user_id();
                 $this->db->update('update_controls', $data, ['id' => $data['id']]);
             } else {
-                $data['id'] = $this->_getId();
-                $data['created_at'] = date('Y-m-d H:i:s');
-                $data['created_by'] = $this->auth->user_id();
-                $this->db->insert('update_controls', $data);
+                if($regulationChecks){
+                    $update_data = $regulation;
+                }else if($stdChecks){
+                    $update_data = $stdChecks;
+                }else if($manageChecks){
+                    $update_data = $manageChecks;
+                }
+                foreach ($update_data as $row) {
+                    if($regulationChecks){
+                        $standar = $this->db->get_where('regulations', ['id' => $row])->row();
+                    }else if($stdChecks){
+                        $standar = $this->db->get_where('standards', ['id' => $row])->row();
+                    }else if($manageChecks){
+                        $standar = $this->db->get_where('requirements', ['id' => $row])->row();
+                    }
+
+                    $data['id'] = $this->_getId();
+                    $data['data_id'] = $row;
+                    $data['name'] = $standar->name;
+                    $data['year'] = $standar->year;
+                    $data['created_at'] = date('Y-m-d H:i:s');
+                    $data['created_by'] = $this->auth->user_id();
+                    $this->db->insert('update_controls', $data);
+                }
             }
             if ($this->db->trans_status() === FALSE) {
                 $this->db->trans_rollback();

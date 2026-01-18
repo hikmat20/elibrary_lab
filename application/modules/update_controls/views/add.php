@@ -1,20 +1,5 @@
 <form id="form">
-  <div class="mb-3 row flex-nowrap">
-    <label for="" class="col-3 col-form-label font-weight-bold"><?= $label_name; ?></label>
-    <div class="col-9">
-      <input type="hidden" name="type" id="type" value="<?= $type; ?>">
-      <select id="data_id" name="data_id" class="form-control form-select select2">
-        <option value=""></option>
-        <?php if ($data) : ?>
-          <?php foreach ($data as $dt) : ?>
-            <option value="<?= $dt->id; ?>"><?= $dt->name; ?></option>
-          <?php endforeach; ?>
-        <?php endif; ?>
-      </select>
-      <span class="invalid-feedback"><?= $label_name; ?> can't be empty</span>
-
-    </div>
-  </div>
+  <input type="hidden" name="type" id="type" value="<?= $type; ?>">
   <div class="mb-3 row flex-nowrap d-none">
     <label for="" class="col-3 col-form-label font-weight-bold">Name</label>
     <div class="col-9">
@@ -25,12 +10,9 @@
   <div class="mb-3 row flex-nowrap">
     <label for="" class="col-3 col-form-label font-weight-bold">Year</label>
     <div class="col-3">
-      <input type="text" name="year" class="form-control form-control-solid" readonly id="year" placeholder="Year" />
-      <span class="invalid-feedback">Year can't be empty</span>
-    </div>
-    <label for="" class="col-2 col-form-label font-weight-bold">Latest Version</label>
-    <div class="col-3">
       <input type="text" name="latest_version" class="form-control" id="latest_version" placeholder="Latest Version" />
+    </div>
+    <div class="col-3">
     </div>
   </div>
   <div class="mb-3 row flex-nowrap">

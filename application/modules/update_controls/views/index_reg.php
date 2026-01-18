@@ -1,4 +1,4 @@
-<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+ <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
 	<div class="d-flex flex-column-fluid">
 		<div class="container">
 			<div class="card card-stretch shadow card-custom">
@@ -63,11 +63,58 @@
 				<h5 class="modal-title" id="staticBackdropLabel">View Standard</h5>
 				<span class="close btn-cls" data-dismiss="modal" aria-label="Close"></span>
 			</div>
+			<div style="padding:20px;" >
+				<table id="regulation-table" class="table table-bordered table-hover">
+					<thead>
+						<tr>
+							<th style="width:40px;" class="text-center">
+								<input type="checkbox" id="checkAll" />
+							</th>
+							<th>Name</th>
+						</tr>
+					</thead>
+					<tbody>
+						<?php foreach($regulation as $dt): ?>
+							<tr>
+								<td class="text-center">
+									<input type="checkbox" class="row-check regulation-check"  value="<?= $dt->id; ?>" />
+								</td>
+								<td><?= $dt->name; ?></td>
+							</tr>
+						<?php endforeach; ?>
+					</tbody>
+				</table>
+				<script>
+					// Check/uncheck all checkboxes
+					$('#checkAll').on('change', function() {
+						$('.row-check').prop('checked', this.checked);
+					});
+				</script>
+				
+			</div>
+			<div class="modal-footer justify-content-end">
+				<button type="button" class="btn btn-primary" id="addNewUpdate" title="Add New Update">
+							<i class="fa fa-plus mr-1"></i>Next
+						</button>
+				<button type="button" class="btn btn-danger text-end" onclick="clear($('.modal-body'));setTimeout(()=>{$('.save').removeClass('d-none')},500)" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Second Modal -->
+<div class="modal fade" id="modalView2" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel2" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="staticBackdropLabel2">Second Modal</h5>
+				<span class="close btn-cls" data-dismiss="modal" aria-label="Close"></span>
+			</div>
 			<div class="modal-body">
 			</div>
 			<div class="modal-footer justify-content-end">
 				<button type="button" class="btn btn-primary save w-100px"><i class="fa fa-save"></i>Save</button>
-				<button type="button" class="btn btn-danger text-end" onclick="clear($('.modal-body'));setTimeout(()=>{$('.save').removeClass('d-none')},500)" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-danger text-end" onclick="clear($('#modalView2 .modal-body'));setTimeout(()=>{$('.save2').removeClass('d-none')},500)" data-dismiss="modal">Close</button>
 			</div>
 		</div>
 	</div>
@@ -100,6 +147,16 @@
 			// info: false
 		});
 
+		$('#regulation-table').DataTable({
+			orderCellsTop: false,
+			ordering: false,
+			columnDefs: [
+				{ width: "10px", targets: 0 }, // Make the first column (checkbox) even smaller
+				{ className: "text-center", targets: 0 }
+			],
+			autoWidth: false
+		});
+
 		$(document).on('change', '#data_id', function() {
 			const id = $(this).val()
 			if (id) {
@@ -123,9 +180,15 @@
 		})
 
 		$(document).on('click', '#add', function() {
+			$('#modalView').modal('show')
+
+		})
+
+		$(document).on('click', '#addNewUpdate', function() {
 			const url = siteurl + active_controller + 'add_update_reg';
 			$('.modal-title').html('Add New Update')
-			$('#modalView').modal('show')
+			$('#modalView2').modal('show')
+
 			$('.modal-body').load(url)
 		})
 
@@ -133,18 +196,18 @@
 			const id = $(this).data('id')
 			const url = siteurl + active_controller + 'edit_reg/' + id;
 			$('.modal-title').html('Edit Update Controls')
-			$('#modalView').modal('show')
+			$('#modalView2').modal('show')
 			$('.modal-body').load(url)
 		})
 
 
 		$(document).on('click', '.save', function(e) {
 			var c = 0;
-			if ($('#data_id').val() == '' || $('#data_id').val() == null) {
-				c = c + 1
-				$('#data_id').addClass('is-invalid')
-				$('#data_id').next().find('span.select2-selection').addClass('is-invalid')
-			} else if ($('#source').val() == '' || $('#source').val() == null) {
+			var regulationChecks = [];
+			$('.regulation-check:checked').each(function() {
+				regulationChecks.push($(this).val());
+			});
+			if ($('#source').val() == '' || $('#source').val() == null) {
 				$('#source').addClass('is-invalid')
 				c = c + 1
 			} else if ($('#checking_date').val() == '' || $('#checking_date').val() == null) {
@@ -169,7 +232,8 @@
 			}
 
 			if (c <= 0) {
-				let formdata = new FormData($('#form')[0])
+				let formdata = new FormData($('#form')[0]);
+				formdata.append('regulationChecks', JSON.stringify(regulationChecks));
 				let btn = $(this)
 				$.ajax({
 					url: siteurl + active_controller + 'save',

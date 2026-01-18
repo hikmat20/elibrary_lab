@@ -482,10 +482,12 @@ class Documents_list extends Admin_Controller
 
 	public function manual()
 	{
-		$thisData 		= $this->db->get_where('directory', ['description' => 'MANUAL', 'status !=' => 'DEL', 'company_id' => $this->company])->row();
-		$Data 			= $this->db->get_where('directory', ['parent_id' => $thisData->id, 'flag_type' => 'FOLDER', 'status !=' => 'DEL', 'company_id' => $this->company])->result();
-		$DataFile 			= $this->db->get_where('directory', ['parent_id' => $thisData->id, 'flag_type' => 'FILE', 'status !=' => 'DEL', 'company_id' => $this->company])->result();
-
+		// $thisData 		= $this->db->get_where('directory', ['description' => 'MANUAL', 'status !=' => 'DEL', 'company_id' => $this->company])->row();
+		// $Data 			= $this->db->get_where('directory', ['parent_id' => $thisData->id, 'flag_type' => 'FOLDER', 'status !=' => 'DEL', 'company_id' => $this->company])->result();
+		// $DataFile 			= $this->db->get_where('directory', ['parent_id' => $thisData->id, 'flag_type' => 'FILE', 'status !=' => 'DEL', 'company_id' => $this->company])->result();
+		 $requirements 			= $this->db->get_where('requirements',  ['status !=' => 'DEL'])->result();
+		 $standar_referance 	= $this->db->get_where('standards',  ['status !=' => 'DEL'])->result();
+		 $regulations 			= $this->db->get_where('regulations',  ['status !=' => 'DEL'])->result();
 		$listDataFolder = $this->db->get_where('directory', ['flag_type' => 'FOLDER', 'status !=' => 'DEL', 'company_id' => $this->company])->result();
 		$listDataFile 	= $this->db->get_where('directory', ['flag_type' => 'FILE', 'status' => 'PUB', 'status !=' => 'DEL', 'company_id' => $this->company])->result();
 		$listDataLink 	= $this->db->get_where('directory', ['flag_type' => 'LINK', 'status !=' => 'DEL', 'company_id' => $this->company])->result();
@@ -509,9 +511,9 @@ class Documents_list extends Admin_Controller
 		$this->template->set('MainData', $this->MainData);
 		$this->template->set('company', $this->company);
 		$this->template->set('Breadcumb', $buildBreadcumb);
-		$this->template->set('thisData', $thisData);
-		$this->template->set('Data', $Data);
-		$this->template->set('DataFile', $DataFile);
+		$this->template->set('requirements', $requirements);
+		$this->template->set('standar_referance', $standar_referance);
+		$this->template->set('regulations', $regulations);
 		$this->template->set('ArrDataFolder', $ArrDataFolder);
 		$this->template->set('ArrDataFile', $ArrDataFile);
 		$this->template->set('ArrDataLink', $ArrDataLink);
