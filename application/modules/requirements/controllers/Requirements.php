@@ -94,6 +94,31 @@ class Requirements extends Admin_Controller
 		$Data_list 	= (isset($Data['list'])) ? $Data['list'] : '';
 		unset($Data['DataTables_Table_0_length']);
 		$this->db->trans_begin();
+		if (!empty($_FILES['pdf_file']['name'])) {
+
+            $custom_filename = 'file_requirment' . time();
+
+            $config['upload_path'] = FCPATH . 'directory/';
+            $config['max_size'] = 100000000;
+            $config['allowed_types'] = 'pdf|xls|xlsx|jpg|jpeg|png';
+            $config['file_name'] = $custom_filename; // <-- custom name here
+            $config['overwrite'] = TRUE; // overwrite if same name (optional)
+            // $config['encrypt_name'] = TRUE; // disable if using custom name
+            $this->upload->initialize($config);
+            $this->load->library('upload', $config);
+
+            if (!$this->upload->do_upload('pdf_file')) {
+             
+                echo json_encode(['status' => 'error', 'pesan' => $this->upload->display_errors()]);
+                return;
+            }
+
+            $uploadData = $this->upload->data();
+            $Data['pdf_file'] = $uploadData['file_name']; // new name
+			// return var_dump($update_quotation);
+		
+
+      	} 
 		if ($Data) {
 			$Data['company_id'] = $this->company;
 			unset($Data['list']);

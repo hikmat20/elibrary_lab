@@ -5,6 +5,9 @@
 				<div class="card-header">
 					<h2 class="mt-5"><i class="<?= $icon; ?> mr-2"></i><?= $title; ?></h2>
 					<div class="mt-4 float-right ">
+						<a href="<?= base_url($this->uri->segment(1) . '/export_publish_excel'); ?>" class="btn btn-primary" data-guide_detail_id="7" data-cat="MAT" title="Upload New File">
+							<i class="fa fa-print"></i> Cetak Daftar Induk 
+						</a>
 						<a href="<?= base_url($this->uri->segment(1) . '/add'); ?>" class="btn btn-primary" data-toggle="tooltip" title="Add New">
 							<i class="fa fa-plus mr-1"></i>Add New
 						</a>

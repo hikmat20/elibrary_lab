@@ -482,6 +482,45 @@ class Documents_list extends Admin_Controller
 
 	public function manual()
 	{
+		$thisData 		= $this->db->get_where('directory', ['description' => 'MANUAL', 'status !=' => 'DEL', 'company_id' => $this->company])->row();
+		$Data 			= $this->db->get_where('directory', ['parent_id' => $thisData->id, 'flag_type' => 'FOLDER', 'status !=' => 'DEL', 'company_id' => $this->company])->result();
+		$DataFile 			= $this->db->get_where('directory', ['parent_id' => $thisData->id, 'flag_type' => 'FILE', 'status !=' => 'DEL', 'company_id' => $this->company])->result();
+
+		$listDataFolder = $this->db->get_where('directory', ['flag_type' => 'FOLDER', 'status !=' => 'DEL', 'company_id' => $this->company])->result();
+		$listDataFile 	= $this->db->get_where('directory', ['flag_type' => 'FILE', 'status' => 'PUB', 'status !=' => 'DEL', 'company_id' => $this->company])->result();
+		$listDataLink 	= $this->db->get_where('directory', ['flag_type' => 'LINK', 'status !=' => 'DEL', 'company_id' => $this->company])->result();
+
+		$ArrDataFolder = [];
+		foreach ($listDataFolder as $listFolder) {
+			$ArrDataFolder[$listFolder->parent_id][] = $listFolder;
+		}
+		$ArrDataFile = [];
+		foreach ($listDataFile as $listFile) {
+			$ArrDataFile[$listFile->parent_id][] = $listFile;
+		}
+		$ArrDataLink = [];
+		foreach ($listDataLink as $listLink) {
+			$ArrDataLink[$listLink->parent_id][] = $listLink;
+		}
+
+		$dt 		= $this->db->get_where('directory', ['id' => '00062c7fd13bd121'])->row_array();
+		$buildBreadcumb = $this->buildBreadcumb($dt);
+
+		$this->template->set('MainData', $this->MainData);
+		$this->template->set('company', $this->company);
+		$this->template->set('Breadcumb', $buildBreadcumb);
+		$this->template->set('thisData', $thisData);
+		$this->template->set('Data', $Data);
+		$this->template->set('DataFile', $DataFile);
+		$this->template->set('ArrDataFolder', $ArrDataFolder);
+		$this->template->set('ArrDataFile', $ArrDataFile);
+		$this->template->set('ArrDataLink', $ArrDataLink);
+
+		$this->template->render('manual/index');
+	}
+
+	public function standard()
+	{
 		// $thisData 		= $this->db->get_where('directory', ['description' => 'MANUAL', 'status !=' => 'DEL', 'company_id' => $this->company])->row();
 		// $Data 			= $this->db->get_where('directory', ['parent_id' => $thisData->id, 'flag_type' => 'FOLDER', 'status !=' => 'DEL', 'company_id' => $this->company])->result();
 		// $DataFile 			= $this->db->get_where('directory', ['parent_id' => $thisData->id, 'flag_type' => 'FILE', 'status !=' => 'DEL', 'company_id' => $this->company])->result();
@@ -518,7 +557,7 @@ class Documents_list extends Admin_Controller
 		$this->template->set('ArrDataFile', $ArrDataFile);
 		$this->template->set('ArrDataLink', $ArrDataLink);
 
-		$this->template->render('manual/index');
+		$this->template->render('standard/index');
 	}
 
 	public function show_manual($id = null)

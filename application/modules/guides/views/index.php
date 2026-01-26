@@ -199,7 +199,7 @@
 									<div class="d-flex justify-content-between align-items-center">
 										<div class="tools pr-3">
 											<a href="<?= base_url($this->uri->segment(1) . '/new_file/' . $sub); ?>" class="btn btn-outline-primary btn-sm new-file" data-guide_detail_id="<?= $sub; ?>" data-cat="MAT" title="Upload New File"><i class="fa fa-upload"></i> New File</a>
-											<a href="<?= base_url($this->uri->segment(1) . '/export_publish_excel/' . $sub); ?>" class="btn btn-outline-success btn-sm new-file" data-guide_detail_id="<?= $sub; ?>" data-cat="MAT" title="Upload New File"><i class="fa fa-print"></i> Ceta Daftar Induk </a>
+											<a href="<?= base_url($this->uri->segment(1) . '/export_publish_excel/' . $sub); ?>" class="btn btn-outline-success btn-sm new-file" data-guide_detail_id="<?= $sub; ?>" data-cat="MAT" title="Upload New File"><i class="fa fa-print"></i> Cetak Daftar Induk </a>
 
 										</div>
 									</div>

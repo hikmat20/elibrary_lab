@@ -785,7 +785,7 @@ class Guides extends Admin_Controller
 
 		$excel->getProperties()->setCreator('SISCAL')
 			->setLastModifiedBy('SISCAL')
-			->setTitle("Data Published Documn")
+			->setTitle("Data Published Document")
 			->setSubject("SISCAL")
 			->setDescription("List Data Published Document")
 			->setKeywords("Data Published Document");

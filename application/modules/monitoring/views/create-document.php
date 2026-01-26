@@ -4,7 +4,7 @@
 			<div class="row">
 				<!-- <div class="col-xl-3">
 					<div class="card card-custom card-stretch gutter-b bg-transparent shadow-none">
-						<button type="button" class="btn btn-light-primary">Create Documnets</button>
+						<button type="button" class="btn btn-light-primary">Create Documentets</button>
 					</div>
 				</div> -->
 			</div>

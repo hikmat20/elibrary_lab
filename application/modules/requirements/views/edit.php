@@ -40,6 +40,12 @@
 									</div>
 								</div>
 								<div class="mb-3 row flex-nowrap">
+									<label for="" class="col-2 col-form-label font-weight-bold">Upload Pdf</label>
+									<div class="col-4">
+										<input type="file" name="pdf_file" id="pdf_file" class="form-control" />
+									</div>
+								</div>
+								<div class="mb-3 row flex-nowrap">
 									<label for="" class="col-2 col-form-label font-weight-bold"></label>
 									<div class="col-4">
 										<button type="submit" class="btn btn-primary w- save"><i class="fa fa-save"></i>Save</button>

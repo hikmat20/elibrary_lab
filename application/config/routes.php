@@ -82,6 +82,10 @@ $route['list/guides/(:any)'] = 'documents_list/guides/$1';
 $route['list/manual'] = 'documents_list/manual';
 $route['list/manual/(:any)'] = 'documents_list/find_manual/$1';
 
+/* MATERI GUIDES */
+$route['list/standard'] = 'documents_list/standard';
+$route['list/standard/(:any)'] = 'documents_list/find_manual/$1';
+
 /* CROSS REFERENCE */
 $route['list/cross'] = 'documents_list/cross';
 $route['list/cross/(:any)'] = 'documents_list/$1';

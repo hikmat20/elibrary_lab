@@ -482,4 +482,137 @@ class Regulations extends Admin_Controller
 
 		echo json_encode($Return);
 	}
+
+	function export_publish_excel($guide_detail_id){
+		$dataPub = $this->db->get_where('regulations', ['status' => 'PUB'])->result();
+		$OK_Proses = $dataPub ? 1 : 0;
+
+		$this->load->library("PHPExcel");
+		$excel = new PHPExcel();
+
+		$excel->getProperties()->setCreator('SISCAL')
+			->setLastModifiedBy('SISCAL')
+			->setTitle("Data Published Document")
+			->setSubject("SISCAL")
+			->setDescription("List Data Published Regulation")
+			->setKeywords("Data Published Regulation");
+
+		$style_col = array(
+			'font' => array('bold' => true),
+			'alignment' => array(
+				'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+				'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER
+			),
+			'borders' => array(
+				'top' => array('style' => PHPExcel_Style_Border::BORDER_THIN),
+				'right' => array('style' => PHPExcel_Style_Border::BORDER_THIN),
+				'bottom' => array('style' => PHPExcel_Style_Border::BORDER_THIN),
+				'left' => array('style' => PHPExcel_Style_Border::BORDER_THIN)
+			)
+		);
+
+		$style_row = array(
+			'alignment' => array(
+				'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER
+			),
+			'borders' => array(
+				'top' => array('style' => PHPExcel_Style_Border::BORDER_THIN),
+				'right' => array('style' => PHPExcel_Style_Border::BORDER_THIN),
+				'bottom' => array('style' => PHPExcel_Style_Border::BORDER_THIN),
+				'left' => array('style' => PHPExcel_Style_Border::BORDER_THIN)
+			)
+		);
+
+		$sheet = $excel->setActiveSheetIndex(0);
+
+		// Add logo image
+		$objDrawing = new PHPExcel_Worksheet_Drawing();
+		$objDrawing->setName('Logo');
+		$objDrawing->setDescription('Logo');
+		$objDrawing->setPath('assets/img/logo-lab.png'); // adjust the path to your logo
+		$objDrawing->setHeight(60);
+		$objDrawing->setCoordinates('A1');
+		$objDrawing->setWorksheet($sheet);
+
+		// Title in 3 rows (merged vertically across B1:E3)
+		$sheet->mergeCells('B1:E3');
+		$sheet->setCellValue('B1', 'Formulir Daftar Induk Dokumen Internal');
+		$sheet->getStyle('B1')->applyFromArray([
+			'font' => [
+				'bold' => true,
+				'size' => 18,
+			],
+			'alignment' => [
+				'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+				'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+			]
+		]);
+
+		// Add bottom-left notes
+		$sheet->setCellValue('A4', 'Jenis Dokumen : Prosedur');
+		$sheet->setCellValue('A5', 'Diperbaharui tanggal : ' . date('d-F-Y'));
+
+		$sheet->mergeCells('A4:C4');
+		$sheet->mergeCells('A5:C5');
+
+		$sheet->getStyle('A4')->getFont()->setBold(true);
+		$sheet->getStyle('A5')->getFont()->setBold(true);
+
+		// $sheet->getStyle('A5')->getFont()->setItalic(true);
+
+		// Header starts at row 6
+		$sheet->setCellValue('A6', "No.");
+		$sheet->setCellValue('B6', "No Dokumen");
+		$sheet->setCellValue('C6', "Nama Dokumen");
+		$sheet->setCellValue('D6', "Edisi/Revisi");
+		$sheet->setCellValue('E6', "Tanggal/Tahun Terbit");
+
+		$sheet->getStyle('A6')->applyFromArray($style_col);
+		$sheet->getStyle('B6')->applyFromArray($style_col);
+		$sheet->getStyle('C6')->applyFromArray($style_col);
+		$sheet->getStyle('D6')->applyFromArray($style_col);
+		$sheet->getStyle('E6')->applyFromArray($style_col);
+
+		$no = 1;
+		$numrow = 7;
+		foreach($dataPub as $data){
+			$sheet->setCellValue('A'.$numrow, $no);
+			$sheet->setCellValue('B'.$numrow, $data->number);
+			$sheet->setCellValue('C'.$numrow, $data->name);
+			$sheet->setCellValue('D'.$numrow, $data->revision_desc);
+			$sheet->setCellValue('E'.$numrow, date('d-F-Y', strtotime($data->modified_at)));
+
+			$sheet->getStyle('A'.$numrow)->applyFromArray($style_row);
+			$sheet->getStyle('B'.$numrow)->applyFromArray($style_row);
+			$sheet->getStyle('C'.$numrow)->applyFromArray($style_row);
+			$sheet->getStyle('D'.$numrow)->applyFromArray($style_row);
+			$sheet->getStyle('E'.$numrow)->applyFromArray($style_row);
+
+			$no++;
+			$numrow++;
+		}
+
+		$sheet->getColumnDimension('A')->setWidth(10);
+		$sheet->getColumnDimension('B')->setWidth(20);
+		$sheet->getColumnDimension('C')->setWidth(30);
+		$sheet->getColumnDimension('D')->setWidth(10);
+		$sheet->getColumnDimension('E')->setWidth(25);
+
+		$sheet->getDefaultRowDimension()->setRowHeight(-1);
+		$sheet->getPageSetup()->setOrientation(PHPExcel_Worksheet_PageSetup::ORIENTATION_LANDSCAPE);
+		$sheet->setTitle("Detail Tools");
+		$excel->setActiveSheetIndex(0);
+
+		$file_name = 'Published Regulation Selnab- ' . date('Y-m-d H_i_s');
+
+		$objWriter = PHPExcel_IOFactory::createWriter($excel, 'Excel5');
+		ob_end_clean();
+		header("Last-Modified: " . gmdate("D, d M Y") . " GMT");
+		header("Cache-Control: no-store, no-cache, must-revalidate");
+		header("Cache-Control: post-check=0, pre-check=0", false);
+		header("Pragma: no-cache");
+		header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+		header('Content-Disposition: attachment;filename="'.$file_name.'.xls"');
+		$objWriter->save("php://output");
+	}
 }
