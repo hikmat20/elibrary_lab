@@ -130,7 +130,7 @@
 					</div>
 				</div>
 
-				<div class="col-md-3">
+				<!-- <div class="col-md-3">
 					<div class="card mt-15 border-0 shadow-lg" style="background-color: srgba(255,255,255,0.85);">
 						<div class="card-body pt-5 px-5">
 								<?php foreach ($MainData as $main) : ?>
@@ -143,7 +143,7 @@
 							<?php endforeach; ?>
 						</div>
 					</div>
-				</div>
+				</div> -->
 			</div>
 		</div>
 	</div>

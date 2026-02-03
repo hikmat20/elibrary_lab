@@ -87,6 +87,9 @@
 										<select name="status" id="status" class="form-control select2">
 											<option value="PUB">Publish</option>
 											<option value="DFT">Draft</option>
+											<option value="BLK">Berlaku</option>
+											<option value="DCBT">Dicabut</option>
+											<option value="CHG">Diubah</option>
 										</select>
 									</div>
 								</div>
