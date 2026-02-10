@@ -135,8 +135,15 @@ class Documents_list extends Admin_Controller
 	{
 		$docs 			= $this->db->get_where('view_procedures', ['id' => $id])->row();
 		$detail 		= $this->db->get_where('procedure_details', ['procedure_id' => $id, 'status' => '1'])->result();
-		$forms 			= $this->db->get_where('dir_forms', ['procedure_id' => $id, 'active' => 'Y'])->result();
-		$guides 		= $this->db->get_where('dir_guides', ['procedure_id' => $id, 'active' => 'Y'])->result();
+		$forms 			=$this->db->get_where('dir_forms', ['company_id' => $this->company])->result();
+		$guides 		=  $this->db->select('guide_detail_data.*, guides.name as gide_name')
+							->from('guide_detail_data')
+							->join('guide_details', 'guide_detail_data.guide_detail_id = guide_details.id')
+							->join('guides', 'guide_details.guide_id = guides.id')
+							->where('guide_detail_data.company_id', $this->company)
+							->where('guide_detail_data.status !=', 0)
+							->get()
+							->result();
 		$users 			= $this->db->get_where('view_users', ['status' => 'ACT', 'id_user !=' => '1', 'company_id' => $this->company])->result();
 		$jabatan 		= $this->db->get('positions')->result();
 		$ArrUsr 		= $ArrJab = $ArrForms = $ArrGuides = [];
