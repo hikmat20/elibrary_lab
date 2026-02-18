@@ -1,7 +1,7 @@
 <h1 class="text-center px-10 mb-10"><?= $Data->name; ?></h1>
 <hr>
   <?php if ($Data->document) : ?>
-    <iframe src="<?= base_url("directory/REGULATIONS/1/$Data->document"); ?>#toolbar=0&navpanes=0" scrolling="yes" width="100%" height="550"></iframe>
+    <iframe src="<?= base_url("directory/REGULATIONS/21/$Data->document"); ?>#toolbar=0&navpanes=0" scrolling="yes" width="100%" height="550"></iframe>
   <?php else : ?>
       <h5 class="text-center mt-5"></h5>
   <?php endif; ?>
