@@ -64,7 +64,7 @@
                                                     <?php if ($ArrDtlData[$dtl->id][0]->guide_name === 'IKM'): ?>
 
                                                         <th>#</th>
-                                                        <th>Produk Uji</th>
+                                                        <th>Parameter</th>
                                                         <th>Biodang Pengujian</th>
                                                         <th>Standar Metode</th>
                                                         <th>Teknik Penguji</th>

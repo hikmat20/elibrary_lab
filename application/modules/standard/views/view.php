@@ -88,6 +88,7 @@
       <div class="col-10">
 
         <?php if ($Data->document && file_exists($exists_file)) : ?>
+          <iframe src="<?= base_url($exists_file); ?>#toolbar=0&navpanes=0" scrolling="yes" width="100%" height="550"></iframe>
           <div class="d-flex justify-content-between align-items-center">
             <a target="_blank" href="<?= base_url($exists_file); ?>">
               <div class="d-flex align-items-center">

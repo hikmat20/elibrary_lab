@@ -532,7 +532,7 @@ class Documents_list extends Admin_Controller
 		// $Data 			= $this->db->get_where('directory', ['parent_id' => $thisData->id, 'flag_type' => 'FOLDER', 'status !=' => 'DEL', 'company_id' => $this->company])->result();
 		// $DataFile 			= $this->db->get_where('directory', ['parent_id' => $thisData->id, 'flag_type' => 'FILE', 'status !=' => 'DEL', 'company_id' => $this->company])->result();
 		 $requirements 			= $this->db->get_where('requirements',  ['status !=' => 'DEL'])->result();
-		 $standar_referance 	= $this->db->get_where('standards',  ['status !=' => 'DEL'])->result();
+		 $standar_referance 	= $this->db->get_where('view_standards', ['status' => 'PUB', 'company_id' => $this->company])->result();
 		 $regulations 			= $this->db->get_where('regulations',  ['status !=' => 'DEL'])->result();
 		$listDataFolder = $this->db->get_where('directory', ['flag_type' => 'FOLDER', 'status !=' => 'DEL', 'company_id' => $this->company])->result();
 		$listDataFile 	= $this->db->get_where('directory', ['flag_type' => 'FILE', 'status' => 'PUB', 'status !=' => 'DEL', 'company_id' => $this->company])->result();

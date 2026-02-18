@@ -95,10 +95,10 @@
 												</tr>
 											</thead>
 											<tbody>
-												<?php $no=0; foreach ($regulations as $row) : $no++; ?>
-													<tr class="cursor-pointer" onclick="show('<?= $row->id; ?>','regulations')">
+												<?php $no=0; foreach ($regulations as $row1) : $no++; ?>
+													<tr class="cursor-pointer" onclick="show('<?= $row1->id; ?>','regulations')">
 														<td class="h6 text-dark"><?= $no; ?></td>
-														<td class="h6 text-dark"><?= $row->name; ?></td>
+														<td class="h6 text-dark"><?= $row1->name; ?></td>
 														<td class="h6 text-center"><i class="fa fa-eye text-dark"></i></td>
 													</tr>
 												<?php endforeach; ?>	
@@ -115,10 +115,10 @@
 											</tr>
 										</thead>
 										<tbody>
-											<?php $no=0; foreach ($standar_referance as $row) : $no++; ?>
-												<tr class="cursor-pointer" onclick="show('<?= $row->id; ?>','standar_referance')">
+											<?php $no=0; foreach ($standar_referance as $row2) : $no++; ?>
+												<tr class="cursor-pointer" onclick="show('<?= $row2->id; ?>','standar_referance')">
 													<td class="h6 text-dark"><?= $no; ?></td>
-													<td class="h6 text-dark"><?= $row->name; ?></td>
+													<td class="h6 text-dark"><?= $row2->name; ?></td>
 													<td class="h6 text-center"><i class="fa fa-eye text-dark"></i></td>
 												</tr>
 											<?php endforeach; ?>	
@@ -175,7 +175,7 @@
 			if(type=='requirements'){
 				$('#data-file').load(siteurl + '/requirements/view/' + id)
 			}else if(type=='standar_referance'){
-				$('#data-file').load(siteurl + '/standards/view/' + id)
+				$('#data-file').load(siteurl + '/standard/view/' + id)
 			}else if(type=='regulations'){
 				$('#data-file').load(siteurl + '/regulations/view/' + id)		
 			}
