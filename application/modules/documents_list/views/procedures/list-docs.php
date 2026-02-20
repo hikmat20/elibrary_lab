@@ -465,7 +465,7 @@
 		const id = $(this).data('id')
 		if (id) {
 			$('#modelId2 .modal-title').html('View IK')
-			$('#modelId2 .modal-body').load(siteurl + active_controller + 'view_guide/' + id)
+			$('#modelId2 .modal-body').load(siteurl + '/Procedures/view_guide/' + id)
 			$('#modelId2').modal('show')
 		} else {
 			Swal.fire('Warning!!', 'Not available data to process', 'waring', 2000);

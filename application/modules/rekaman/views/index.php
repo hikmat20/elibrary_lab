@@ -87,7 +87,7 @@
 <div class="content d-flex flex-column flex-column-fluid p-0">
 	<div class="d-flex flex-column-fluid justify-content-between align-items-top">
 		<div class="container mt-10">
-			<h1 class="text-white mb-5"><i class="fa fa-folder-open h1"></i> DOKUMEN MATERI TRAINING</h1>
+			<h1 class="text-white mb-5"><i class="fa fa-folder-open h1"></i> REKAMAN</h1>
 			<div class="card">
 				<div class="row">
 					<div class="col-md-3 pr-0">

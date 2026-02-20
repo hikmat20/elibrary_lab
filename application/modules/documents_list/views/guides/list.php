@@ -64,7 +64,7 @@
                                                     <?php if ($ArrDtlData[$dtl->id][0]->guide_name === 'IKM'): ?>
 
                                                         <th>#</th>
-                                                        <th>Parameter</th>
+                                                        <th style="width: 30%;">Parameter</th>
                                                         <th>Biodang Pengujian</th>
                                                         <th>Standar Metode</th>
                                                         <th>Teknik Penguji</th>
@@ -117,7 +117,20 @@
                                                         <i class="fa fa-file-alt fa-2x text-success"></i>
                                                     </td>
                                                     <td style="vertical-align: top;" class="font-weight-bold pl-0 h6">
-                                                        <a href="#"><?= $list->guide_detail_data_name; ?></a>
+                                                        <a href="#">
+                                                        <?php if ($ArrDtlData[$dtl->id][0]->guide_name === 'IKM'): ?>
+                                                            <?php if ($list->sub_tools) : ?>
+                                                                <ul style="list-style-type: none ;" class="px-0">
+                                                                    <?php foreach (json_decode($list->sub_tools) as $st) : ?>
+                                                                        <li class="px-0"><?= ($st) ?: '&nbsp;'; ?></li>
+                                                                    <?php endforeach; ?>
+                                                                </ul>
+                                                            <?php endif; ?>
+                                                        <?php else : ?>
+                                                         <?= $list->guide_detail_data_name; ?>
+                                                        <?php endif; ?>
+                                                        
+                                                        </a>
                                                     </td>
                                                     <td style="vertical-align: top;" class="text-dark">
                                                         <?= $list->group_name; ?>
