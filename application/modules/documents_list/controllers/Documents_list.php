@@ -387,7 +387,7 @@ class Documents_list extends Admin_Controller
 			// $sub 			= $this->input->get('sub');
 			$guide_details 		= $this->db->get_where('guide_details', ['id' => $f, 'company_id' => $this->company])->result();
 			$methode 		= ['INS' => 'Insitu', 'LAB' => 'Inlab'];
-			$dtlData 	= $this->db->get_where('view_guides_detail_data', ['guide_detail_id' => $f, 'company_id' => $this->company])->result();
+			$dtlData 	= $this->db->get_where('view_guides_detail_data', ['guide_detail_id' => $f, 'company_id' => $this->company,'status'=>'1'])->result();
 
 			$ArrDtlData = [];
 			foreach ($dtlData as $dtl) {
