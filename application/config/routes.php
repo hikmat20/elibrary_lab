@@ -102,3 +102,6 @@ $route['docs/(:any)/(:any)/(:any)'] = 'manage_documents/$1/$2/$3';
 $route['docs/(:any)/(:any)'] = 'manage_documents/$1/$2';
 $route['docs/(:any)'] = 'manage_documents/$1';
 $route['docs'] = 'manage_documents/index';
+
+/* API ROUTES */
+$route['api/regulations'] = 'api/regulations';
